@@ -12,6 +12,7 @@ import os.path
 import pkg_resources
 from random import choice
 import uuid
+import json
 
 import numpy as np
 from numpy.linalg.linalg import LinAlgError
@@ -573,6 +574,45 @@ def _add_metric_to_metadata(table, metadata, metric):
     return metadata
 
 
+def _create_vega_lite_spec(output_dir, data, coloring_field, time_field,
+                           metric_field):
+    spec = {
+        '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
+        'config': {
+            'view': {
+                'width': 400,
+                'height': 400,
+            },
+        },
+        'layer': [
+            {
+                'mark': 'line',
+                'encoding': {
+                    'color': {
+                        'type': 'nominal',
+                        'field': coloring_field,
+                    },
+                    'x': {
+                        'type': 'quantitative',
+                        'field': time_field,
+                    },
+                    'y': {
+                        'type': 'quantitative',
+                        'aggregate': 'mean',
+                        'axis': {
+                            'title': metric_field,
+                        },
+                        'field': metric_field,
+                    },
+                },
+            }
+        ],
+    }
+
+    return (json.dumps(spec)[:-1] + ',"data":{"values":' +
+            data.to_json(orient='records') + '}}')
+
+
 def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
                paired_difference_tests=False, plot=False, summary=False,
                errors=False, model_summary=False, model_results=False,
@@ -593,10 +633,6 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
                               sep='\t')
         pairwise_tests = q2templates.df_to_html(pairwise_tests)
 
-    if raw_data is not False:
-        raw_data.to_csv(os.path.join(output_dir, 'raw-data.tsv'), sep='\t')
-        raw_data = True
-
     if paired_difference_tests is not False:
         paired_difference_tests.to_csv(os.path.join(
             output_dir, 'paired_difference_tests.tsv'), sep='\t')
@@ -614,9 +650,16 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
         model_results = q2templates.df_to_html(model_results)
 
     if plot is not False:
+        # TODO: dynamic field names
+        spec = _create_vega_lite_spec(output_dir, raw_data, 'delivery',
+                                      'month', 'shannon')
         plot.savefig(os.path.join(output_dir, 'plot.png'), bbox_inches='tight')
         plot.savefig(os.path.join(output_dir, 'plot.pdf'), bbox_inches='tight')
         plt.close('all')
+
+    if raw_data is not False:
+        raw_data.to_csv(os.path.join(output_dir, 'raw-data.tsv'), sep='\t')
+        raw_data = True
 
     index = os.path.join(TEMPLATES, 'index.html')
     q2templates.render(index, output_dir, context={
@@ -631,6 +674,7 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
         'plot_name': plot_name,
         'raw_data': raw_data,
         'pairwise_test_name': pairwise_test_name,
+        'spec': spec if spec else None,
     })
 
 
