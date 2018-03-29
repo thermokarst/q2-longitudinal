@@ -3,10 +3,16 @@
 {% block title %}q2-longitudinal : {{ plot_name }}{% endblock %}
 
 {% block head %}
-  <!-- TODO: need to bundle these in the viz -->
-  <script src="https://cdn.jsdelivr.net/npm/vega@3"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+  <script src="vega.min.js"></script>
+  <script src="vega-lite.min.js"></script>
+  <script src="vega-embed.min.js"></script>
+{% endblock %}
+
+{% block footer %}
+<script type="text/javascript">
+  var spec = {{ spec }};
+  vegaEmbed('#spaghet', spec);
+</script>
 {% endblock %}
 
 {% block content %}
@@ -59,7 +65,10 @@
     {% endif %}
     {% if plot %}
     <h2>{{ plot_name }}</h1>
-    <div id="viz"></div>
+    <div class="text-center">
+      <span id="peanutButterJellyTime"></span>
+    </div>
+    <div class="text-center" id="spaghet"></div>
     <div class="text-center">
       <a href="plot.pdf">
         <img src="plot.png">
@@ -105,10 +114,4 @@
   </div>
 </div>
 
-<script type="text/javascript">
-  var spec = {{ spec }};
-  vegaEmbed('#viz', spec).then(function(result) {
-    // access view as result.view
-  }).catch(console.error);
-</script>
 {% endblock %}

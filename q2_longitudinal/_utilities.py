@@ -13,6 +13,7 @@ import pkg_resources
 from random import choice
 import uuid
 import json
+import shutil
 
 import numpy as np
 from numpy.linalg.linalg import LinAlgError
@@ -575,16 +576,18 @@ def _add_metric_to_metadata(table, metadata, metric):
 
 
 def _create_vega_lite_spec(output_dir, data, coloring_field, time_field,
-                           metric_field):
+                           metric_field, individual_id_field):
+    mouse_down = '[mousedown, window:mouseup] > window:mousemove!'
     spec = {
         '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
         'config': {
             'view': {
-                'width': 400,
-                'height': 400,
+                'width': 600,
+                'height': 600,
             },
         },
         'layer': [
+            # Layer 1: averages, grouped by `coloring_field`
             {
                 'mark': 'line',
                 'encoding': {
@@ -605,7 +608,103 @@ def _create_vega_lite_spec(output_dir, data, coloring_field, time_field,
                         'field': metric_field,
                     },
                 },
-            }
+                # This could happen on any layer, but sticking it here because
+                # this feels like the "main" layer
+                'selection': {
+                    'makeItInteractive': {
+                        'type': 'interval',
+                        'bind': 'scales',
+                        'encodings': ['x', 'y'],
+                        'on': mouse_down,
+                        'translate': mouse_down,
+                        'zoom': 'wheel!',
+                        'mark': {
+                          'fill': '#333',
+                          'fillOpacity': 0.125,
+                          'stroke': 'white',
+                        },
+                        'resolve': 'global',
+                    },
+                },
+            },
+            # Layer 2: error bars
+            {
+                'mark': 'rule',
+                'encoding': {
+                    'color': {
+                        'type': 'nominal',
+                        'field': coloring_field,
+                    },
+                    'x': {
+                        'type': 'quantitative',
+                        'field': time_field,
+                    },
+                    'y': {
+                        'type': 'quantitative',
+                        'aggregate': 'ci0',
+                        'field': metric_field,
+                    },
+                    'y2': {
+                        'type': 'quantitative',
+                        'aggregate': 'ci1',
+                        'field': metric_field,
+                    },
+                },
+            },
+            # Layer 3: global mean
+            {
+                'mark': 'rule',
+                'encoding': {
+                    'y': {
+                        'type': 'quantitative',
+                        'aggregate': 'mean',
+                        'field': metric_field,
+                    },
+                },
+            },
+            # Layer 4: spaghettis
+            # TODO: make this conditional
+            {
+                'mark': {
+                    'type': 'line',
+                    'orient': 'vertical',
+                },
+                'selection': {
+                    'spaghet': {
+                        'type': 'single',
+                        'bind': {
+                            'input': 'checkbox',
+                            'element': '#peanutButterJellyTime',
+                            'name': 'spaghetify me',
+                        },
+                    },
+                },
+                'encoding': {
+                    'opacity': {
+                        'condition': {
+                            'selection': 'spaghet',
+                            'value': 0,
+                        },
+                        'value': 0.15
+                    },
+                    'color': {
+                        'type': 'nominal',
+                        'field': coloring_field,
+                    },
+                    'x': {
+                        'type': 'quantitative',
+                        'field': time_field,
+                    },
+                    'y': {
+                        'type': 'quantitative',
+                        'field': metric_field,
+                    },
+                    'detail': {
+                        'field': individual_id_field,
+                        'type': 'nominal',
+                    },
+                },
+            },
         ],
     }
 
@@ -620,6 +719,20 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
                pairwise_test_name='Pairwise group comparison tests'):
 
     pd.set_option('display.max_colwidth', -1)
+
+    if plot is not False:
+        spec = _create_vega_lite_spec(output_dir, raw_data,
+                                      summary['Group column'],
+                                      summary['State column'],
+                                      summary['Metric'],
+                                      summary['Individual ID column'])
+        plot.savefig(os.path.join(output_dir, 'plot.png'), bbox_inches='tight')
+        plot.savefig(os.path.join(output_dir, 'plot.pdf'), bbox_inches='tight')
+        plt.close('all')
+
+    if raw_data is not False:
+        raw_data.to_csv(os.path.join(output_dir, 'raw-data.tsv'), sep='\t')
+        raw_data = True
 
     if summary is not False:
         summary = q2templates.df_to_html(summary.to_frame())
@@ -649,18 +762,6 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
                              sep='\t')
         model_results = q2templates.df_to_html(model_results)
 
-    if plot is not False:
-        # TODO: dynamic field names
-        spec = _create_vega_lite_spec(output_dir, raw_data, 'delivery',
-                                      'month', 'shannon')
-        plot.savefig(os.path.join(output_dir, 'plot.png'), bbox_inches='tight')
-        plot.savefig(os.path.join(output_dir, 'plot.pdf'), bbox_inches='tight')
-        plt.close('all')
-
-    if raw_data is not False:
-        raw_data.to_csv(os.path.join(output_dir, 'raw-data.tsv'), sep='\t')
-        raw_data = True
-
     index = os.path.join(TEMPLATES, 'index.html')
     q2templates.render(index, output_dir, context={
         'errors': errors,
@@ -676,6 +777,11 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
         'pairwise_test_name': pairwise_test_name,
         'spec': spec if spec else None,
     })
+
+    # TODO: add licenses to assets, make sure to copy them into output_dir
+    for asset in ['vega', 'vega-lite', 'vega-embed']:
+        shutil.copy(os.path.join(TEMPLATES, 'js/%s.min.js' % asset),
+                    output_dir)
 
 
 def _stats_and_visuals(output_dir, pairs, metric, group_column,
