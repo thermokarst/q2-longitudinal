@@ -12,7 +12,6 @@ import os.path
 import pkg_resources
 from random import choice
 import uuid
-import json
 import shutil
 
 import numpy as np
@@ -29,6 +28,8 @@ from statsmodels.formula.api import mixedlm
 from skbio import DistanceMatrix
 from skbio.stats.distance import MissingIDError
 import q2templates
+
+from ._vega import _create_volatility_spec
 
 
 TEMPLATES = pkg_resources.resource_filename('q2_longitudinal', 'assets')
@@ -406,10 +407,11 @@ def _regplot_subplots_from_dataframe(state_column, metric, metadata,
     return f
 
 
+# TODO: trace this
 def _control_chart_subplots(state_column, metric, metadata, group_column,
                             individual_id_column, ci=95, palette='Set1',
                             plot_control_limits=True, xtick_interval=None,
-                            yscale='linear', spaghetti='no'):
+                            yscale='linear'):
 
     groups = metadata[group_column].unique()
     states = sorted(metadata[state_column].unique())
@@ -427,13 +429,6 @@ def _control_chart_subplots(state_column, metric, metadata, group_column,
             color=cmap[group], plot_control_limits=plot_control_limits,
             ax=axes[num], palette=None, xtick_interval=xtick_interval)
         c.set_title('{0}: {1}'.format(group_column, group))
-        if spaghetti != 'no':
-            # plot group's sphaghetti on main plot and current subplot
-            for ax in [0, num]:
-                c = _make_spaghetti(
-                    group_md, state_column, metric, individual_id_column,
-                    states, ax=axes[ax], color=cmap[group], alpha=0.3,
-                    spaghetti=spaghetti)
         c = _set_xticks(c, group_md, state_column, states, xtick_interval)
         axes[num].set_yscale(yscale)
         num += 1
@@ -451,25 +446,6 @@ def _control_chart_subplots(state_column, metric, metadata, group_column,
     plt.tight_layout()
 
     return chart, global_mean, global_std
-
-
-def _make_spaghetti(metadata, state_column, metric, individual_id_column,
-                    states, ax, color=None, alpha=1.0, spaghetti='no'):
-    for ind, ind_data in metadata.groupby(individual_id_column):
-        # optionally plot mean of replicates
-        if spaghetti == 'mean':
-            ind_data = ind_data.groupby(state_column).mean()
-            ind_data[state_column] = ind_data.index
-        altered_states = ind_data[state_column]
-        # Adjust xticks so that it follows a pseudo-categorical scale
-        # (e.g., 0, 1, 7, 200 would be plotted at even intervals on x axis)
-        # so that spaghetti aligns with seaborn pointplot x axis.
-        if states is not None:
-            altered_states = altered_states.apply(states.index)
-
-        ax.plot(altered_states, ind_data[metric], alpha=alpha, c=color,
-                label='_nolegend_')
-    return ax
 
 
 def _set_xtick_interval(xtick_interval, states):
@@ -575,143 +551,6 @@ def _add_metric_to_metadata(table, metadata, metric):
     return metadata
 
 
-def _create_vega_lite_spec(output_dir, data, coloring_field, time_field,
-                           metric_field, individual_id_field):
-    mouse_down = '[mousedown, window:mouseup] > window:mousemove!'
-    spec = {
-        '$schema': 'https://vega.github.io/schema/vega-lite/v2.json',
-        'config': {
-            'view': {
-                'width': 600,
-                'height': 600,
-            },
-        },
-        'layer': [
-            # Layer 1: averages, grouped by `coloring_field`
-            {
-                'mark': 'line',
-                'encoding': {
-                    'color': {
-                        'type': 'nominal',
-                        'field': coloring_field,
-                    },
-                    'x': {
-                        'type': 'quantitative',
-                        'field': time_field,
-                    },
-                    'y': {
-                        'type': 'quantitative',
-                        'aggregate': 'mean',
-                        'axis': {
-                            'title': metric_field,
-                        },
-                        'field': metric_field,
-                    },
-                },
-                # This could happen on any layer, but sticking it here because
-                # this feels like the "main" layer
-                'selection': {
-                    'makeItInteractive': {
-                        'type': 'interval',
-                        'bind': 'scales',
-                        'encodings': ['x', 'y'],
-                        'on': mouse_down,
-                        'translate': mouse_down,
-                        'zoom': 'wheel!',
-                        'mark': {
-                          'fill': '#333',
-                          'fillOpacity': 0.125,
-                          'stroke': 'white',
-                        },
-                        'resolve': 'global',
-                    },
-                },
-            },
-            # Layer 2: error bars
-            {
-                'mark': 'rule',
-                'encoding': {
-                    'color': {
-                        'type': 'nominal',
-                        'field': coloring_field,
-                    },
-                    'x': {
-                        'type': 'quantitative',
-                        'field': time_field,
-                    },
-                    'y': {
-                        'type': 'quantitative',
-                        'aggregate': 'ci0',
-                        'field': metric_field,
-                    },
-                    'y2': {
-                        'type': 'quantitative',
-                        'aggregate': 'ci1',
-                        'field': metric_field,
-                    },
-                },
-            },
-            # Layer 3: global mean
-            {
-                'mark': 'rule',
-                'encoding': {
-                    'y': {
-                        'type': 'quantitative',
-                        'aggregate': 'mean',
-                        'field': metric_field,
-                    },
-                },
-            },
-            # Layer 4: spaghettis
-            # TODO: make this conditional
-            {
-                'mark': {
-                    'type': 'line',
-                    'orient': 'vertical',
-                },
-                'selection': {
-                    'spaghet': {
-                        'type': 'single',
-                        'bind': {
-                            'input': 'checkbox',
-                            'element': '#peanutButterJellyTime',
-                            'name': 'spaghetify me',
-                        },
-                    },
-                },
-                'encoding': {
-                    'opacity': {
-                        'condition': {
-                            'selection': 'spaghet',
-                            'value': 0,
-                        },
-                        'value': 0.15
-                    },
-                    'color': {
-                        'type': 'nominal',
-                        'field': coloring_field,
-                    },
-                    'x': {
-                        'type': 'quantitative',
-                        'field': time_field,
-                    },
-                    'y': {
-                        'type': 'quantitative',
-                        'field': metric_field,
-                    },
-                    'detail': {
-                        'field': individual_id_field,
-                        'type': 'nominal',
-                    },
-                },
-            },
-        ],
-    }
-
-    return (json.dumps(spec)[:-1] + ',"data":{"values":' +
-            data.to_json(orient='records') + '}}')
-
-
 def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
                paired_difference_tests=False, plot=False, summary=False,
                errors=False, model_summary=False, model_results=False,
@@ -721,11 +560,11 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
     pd.set_option('display.max_colwidth', -1)
 
     if plot is not False:
-        spec = _create_vega_lite_spec(output_dir, raw_data,
-                                      summary['Group column'],
-                                      summary['State column'],
-                                      summary['Metric'],
-                                      summary['Individual ID column'])
+        spec = _create_volatility_spec(raw_data, summary['Group column'],
+                                       summary['State column'],
+                                       summary['Metric'],
+                                       summary['Individual ID column'])
+        # TODO: drop these when volatility charts
         plot.savefig(os.path.join(output_dir, 'plot.png'), bbox_inches='tight')
         plot.savefig(os.path.join(output_dir, 'plot.pdf'), bbox_inches='tight')
         plt.close('all')
@@ -779,6 +618,7 @@ def _visualize(output_dir, multiple_group_test=False, pairwise_tests=False,
     })
 
     # TODO: add licenses to assets, make sure to copy them into output_dir
+    # TODO: only copy this if volatility
     for asset in ['vega', 'vega-lite', 'vega-embed']:
         shutil.copy(os.path.join(TEMPLATES, 'js/%s.min.js' % asset),
                     output_dir)
