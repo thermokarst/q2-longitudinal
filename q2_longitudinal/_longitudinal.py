@@ -18,9 +18,8 @@ from ._utilities import (_get_group_pairs, _extract_distance_distribution,
                          _add_metric_to_metadata, _linear_effects,
                          _regplot_subplots_from_dataframe, _load_metadata,
                          _validate_input_values, _validate_input_columns,
-                         _control_chart_subplots, _nmit,
-                         _validate_is_numeric_column, _tabulate_matrix_ids,
-                         _first_differences)
+                         _nmit, _validate_is_numeric_column,
+                         _tabulate_matrix_ids, _first_differences)
 
 
 def pairwise_differences(output_dir: str, metadata: qiime2.Metadata,
@@ -164,9 +163,7 @@ def linear_mixed_effects(output_dir: str, metadata: qiime2.Metadata,
 
 def volatility(output_dir: str, metadata: qiime2.Metadata, group_column: str,
                metric: str, state_column: str, individual_id_column: str,
-               table: pd.DataFrame=None, palette: str='Set1', ci: int=95,
-               plot_control_limits: bool=True, xtick_interval: int=None,
-               yscale: str='linear') -> None:
+               table: pd.DataFrame=None) -> None:
 
     # find metric in metadata or derive from table and merge into metadata
     metadata = _add_metric_to_metadata(table, metadata, metric)
