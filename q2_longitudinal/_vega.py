@@ -11,7 +11,10 @@ import json
 import pandas as pd
 
 
-def _render_volatility_spec(data: pd.DataFrame, individual_id: str, state: str,
+def _render_volatility_spec(is_feat_vol_plot: bool,
+                            control_chart_data: pd.DataFrame,
+                            importances_chart_data: pd.DataFrame,
+                            individual_id: str, state: str,
                             default_group: str, group_columns: list,
                             default_metric: str, metric_columns: list,
                             yscale: str) -> str:
@@ -784,7 +787,7 @@ def _render_volatility_spec(data: pd.DataFrame, individual_id: str, state: str,
         'data': [
             {
                 'name': 'individual',
-                'values': data.to_dict('record'),
+                'values': control_chart_data.to_dict('record'),
                 'transform': [
                     {
                         'type': 'formula',
@@ -913,5 +916,4 @@ def _render_volatility_spec(data: pd.DataFrame, individual_id: str, state: str,
             },
         ],
     }
-
     return json.dumps(spec)
