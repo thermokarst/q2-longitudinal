@@ -11,6 +11,7 @@ import json
 import pandas as pd
 
 
+# TODO: do I need the feature flag?
 def _render_volatility_spec(is_feat_vol_plot: bool,
                             control_chart_data: pd.DataFrame,
                             importances_chart_data: pd.DataFrame,
@@ -367,12 +368,18 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
             'value': 400,
         },
         {
-            'name': 'chartPadding',
-            'value': 50,
+            'name': 'importancesChartHeight',
+            # TODO: make this a vega expression
+            'value': 10 * len(importances_chart_data.index),
         },
         {
             'name': 'height',
-            'update': '(controlChartHeight + chartPadding) * 2',
+            'update': 'controlChartHeight + importancesChartHeight'
+        },
+        {
+            # WHO YOU CALLIN' A HALFWIDTH?!
+            'name': 'halfWidth',
+            'update': 'width / 2',
         },
         {
             'name': 'grouper',
@@ -727,9 +734,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 'encode': {
                     'enter': {
                         'y': {
-                            'scale': 'layoutY',
-                            'value': 'row1',
-                            'offset': 20,
+                            'value': 0,
                         },
                         'width': {
                             'signal': 'width',
@@ -754,9 +759,10 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                     },
                     {
                         'name': 'y',
-                        # Signal registration on this param is currently blocked by
-                        # https://github.com/vega/vega/issues/525, which is why this
-                        # setting is still a QIIME 2 param to this viz.
+                        # Signal registration on this param is currently
+                        # blocked by https://github.com/vega/vega/issues/525,
+                        # which is why this setting is still a QIIME 2 param to
+                        # this viz.
                         'type': yscale,
                         'range': [
                             {
@@ -977,4 +983,98 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
             },
         ],
     }
+    if is_feat_vol_plot:
+        importances_subplot = {
+            'description': 'Feature Importances',
+            'name': 'importance_chart',
+            'type': 'group',
+            'encode': {
+                'enter': {
+                    'y': {
+                        'signal': 'controlChartHeight',
+                        'offset': 75,
+                    },
+                    'width': {
+                        'signal': 'halfWidth',
+                    },
+                    'height': {
+                        'signal': 'importancesChartHeight',
+                    },
+                },
+            },
+            'scales': [
+                # TODO: sort y axis
+                {
+                    'name': 'y',
+                    'type': 'band',
+                    'domain': {
+                        'data': 'importances',
+                        'field': 'id',
+                    },
+                    'range': [
+                        0,
+                        {
+                            'signal': 'importancesChartHeight',
+                        },
+                    ],
+                },
+                {
+                    'name': 'x',
+                    'domain': {
+                        'data': 'importances',
+                        'field': 'importance',
+                    },
+                    'nice': True,
+                    'range': [
+                        0,
+                        {
+                            'signal': 'halfWidth',
+                        },
+                    ],
+                },
+            ],
+            'axes': [
+                {
+                    'orient': 'top',
+                    'scale': 'x',
+                    'title': 'Importance',
+                },
+            ],
+            'marks': [
+                {
+                    'type': 'rect',
+                    'from': {
+                        'data': 'importances',
+                    },
+                    'encode': {
+                        'enter': {
+                            'x': {
+                                'scale': 'x',
+                                'value': 0,
+                            },
+                            'y': {
+                                'scale': 'y',
+                                'field': 'id',
+                            },
+                            'width': {
+                                'scale': 'x',
+                                'field': 'importance',
+                            },
+                            'height': {
+                                'scale': 'y',
+                                'band': 1,
+                            },
+                            'fill': {
+                                'value': 'black',
+                            },
+                        },
+                    },
+                },
+            ],
+        }
+        spec['marks'].append(importances_subplot)
+        spec['data'].append({
+            'name': 'importances',
+            'values': importances_chart_data.to_dict('records'),
+        })
     return json.dumps(spec)
