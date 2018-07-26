@@ -14,7 +14,7 @@ import pandas as pd
 # TODO: do I need the feature flag?
 def _render_volatility_spec(is_feat_vol_plot: bool,
                             control_chart_data: pd.DataFrame,
-                            importances_chart_data: pd.DataFrame,
+                            features_chart_data: pd.DataFrame,
                             individual_id: str, state: str,
                             default_group: str, group_columns: list,
                             default_metric: str, metric_columns: list,
@@ -370,16 +370,19 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
         {
             'name': 'importancesChartHeight',
             # TODO: make this a vega expression
-            'value': 10 * len(importances_chart_data.index),
+            'value': 10 * len(features_chart_data.index),
         },
         {
             'name': 'height',
             'update': 'controlChartHeight + importancesChartHeight'
         },
         {
-            # WHO YOU CALLIN' A HALFWIDTH?!
             'name': 'halfWidth',
             'update': 'width / 2',
+        },
+        {
+            'name': 'quarterWidth',
+            'update': 'halfWidth / 2',
         },
         {
             'name': 'grouper',
@@ -799,6 +802,8 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                     {
                         'orient': 'left',
                         'scale': 'y',
+                        # TODO: for feature volatility, include the fact
+                        # that this is the relative abundance
                         'title': metric_signal,
                     },
                 ],
@@ -995,7 +1000,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                         'offset': 75,
                     },
                     'width': {
-                        'signal': 'halfWidth',
+                        'signal': 'halfWidth - 25',
                     },
                     'height': {
                         'signal': 'importancesChartHeight',
@@ -1008,7 +1013,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                     'name': 'y',
                     'type': 'band',
                     'domain': {
-                        'data': 'importances',
+                        'data': 'features',
                         'field': 'id',
                     },
                     'range': [
@@ -1021,14 +1026,14 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 {
                     'name': 'x',
                     'domain': {
-                        'data': 'importances',
+                        'data': 'features',
                         'field': 'importance',
                     },
                     'nice': True,
                     'range': [
                         0,
                         {
-                            'signal': 'halfWidth',
+                            'signal': 'halfWidth - 25',
                         },
                     ],
                 },
@@ -1044,7 +1049,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 {
                     'type': 'rect',
                     'from': {
-                        'data': 'importances',
+                        'data': 'features',
                     },
                     'encode': {
                         'enter': {
@@ -1073,8 +1078,129 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
             ],
         }
         spec['marks'].append(importances_subplot)
+        first_diff_subplot = {
+            'description': 'Feature First Differences',
+            'name': 'first_diff_chart',
+            'type': 'group',
+            'encode': {
+                'enter': {
+                    'x': {
+                        'signal': 'halfWidth',
+                        'offset': 25,
+                    },
+                    'y': {
+                        'signal': 'controlChartHeight',
+                        'offset': 75,
+                    },
+                    'width': {
+                        'signal': 'halfWidth - 25',
+                    },
+                    'height': {
+                        'signal': 'importancesChartHeight',
+                    },
+                },
+            },
+            'scales': [
+                # TODO: sort y axis
+                {
+                    'name': 'y',
+                    'type': 'band',
+                    'domain': {
+                        'data': 'features',
+                        'field': 'id',
+                    },
+                    'range': [
+                        0,
+                        {
+                            'signal': 'importancesChartHeight',
+                        },
+                    ],
+                },
+                {
+                    'name': 'x',
+                    'domain': [
+                        -1,
+                        1
+                    ],
+                    'range': [
+                        0,
+                        {
+                            'signal': 'halfWidth - 25',
+                        },
+                    ],
+                },
+            ],
+            'axes': [
+                {
+                    'orient': 'top',
+                    'scale': 'x',
+                    'title': 'First Differences',
+                },
+            ],
+            'marks': [
+                {
+                    'type': 'rect',
+                    'from': {
+                        'data': 'features',
+                    },
+                    'encode': {
+                        'enter': {
+                            'x': {
+                                'scale': 'x',
+                                'value': 0,
+                            },
+                            'y': {
+                                'scale': 'y',
+                                'field': 'id',
+                            },
+                            'x2': {
+                                'scale': 'x',
+                                'field': 'pos_first_diff',
+                            },
+                            'height': {
+                                'scale': 'y',
+                                'band': 1,
+                            },
+                            'fill': {
+                                'value': 'black',
+                            },
+                        },
+                    },
+                },
+                {
+                    'type': 'rect',
+                    'from': {
+                        'data': 'features',
+                    },
+                    'encode': {
+                        'enter': {
+                            'x': {
+                                'scale': 'x',
+                                'value': 0,
+                            },
+                            'y': {
+                                'scale': 'y',
+                                'field': 'id',
+                            },
+                            'x2': {
+                                'scale': 'x',
+                                'field': 'neg_first_diff',
+                            },
+                            'height': {
+                                'scale': 'y',
+                                'band': 1,
+                            },
+                            'fill': {
+                                'value': 'black',
+                            },
+                        },
+                    },
+                },
+            ],
+        }
+        spec['marks'].append(first_diff_subplot)
         spec['data'].append({
-            'name': 'importances',
-            'values': importances_chart_data.to_dict('records'),
+            'name': 'features',
+            'values': features_chart_data.to_dict('records'),
         })
     return json.dumps(spec)

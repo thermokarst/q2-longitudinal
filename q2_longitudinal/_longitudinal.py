@@ -285,14 +285,16 @@ def _volatility(metadata, table, importances, output_dir, state_column,
     # TODO: ID match table and importances
     # TODO: do i need to set the id column label? or pass it through?
     # TODO: drop zero imp?
-    importances = importances.reset_index(drop=False)
+    feature_data = importances.reset_index(drop=False)
+    # TODO: Drop this, just for prototyping the UI
+    feature_data['neg_first_diff'] = -0.5
+    feature_data['pos_first_diff'] = 0.5
 
     vega_spec = _render_volatility_spec(is_feat_vol_plot, control_chart_data,
-                                        # TODO: think of a better name
-                                        importances,
-                                        individual_id_column, state_column,
-                                        default_group_column, group_columns,
-                                        default_metric, metric_columns, yscale)
+                                        feature_data, individual_id_column,
+                                        state_column, default_group_column,
+                                        group_columns, default_metric,
+                                        metric_columns, yscale)
 
     # Order matters here - need to render the template *after* copying the
     # directory tree, otherwise we will overwrite the index.html
