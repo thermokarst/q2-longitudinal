@@ -363,6 +363,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
     ]
 
     signals = [
+        # TODO: add sorting signal
         {
             'name': 'controlChartHeight',
             'value': 400,
@@ -378,11 +379,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
         },
         {
             'name': 'halfWidth',
-            'update': 'width / 2',
-        },
-        {
-            'name': 'quarterWidth',
-            'update': 'halfWidth / 2',
+            'update': 'width / 7',
         },
         {
             'name': 'grouper',
@@ -1070,7 +1067,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                                 'band': 1,
                             },
                             'fill': {
-                                'value': 'black',
+                                'value': '#AAAAAA',
                             },
                         },
                     },
@@ -1079,7 +1076,8 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
         }
         spec['marks'].append(importances_subplot)
         first_diff_subplot = {
-            'description': 'Feature First Differences',
+            # TODO: make this dynamic?
+            'description': '',
             'name': 'first_diff_chart',
             'type': 'group',
             'encode': {
@@ -1134,8 +1132,9 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 {
                     'orient': 'top',
                     'scale': 'x',
-                    'title': 'First Differences',
+                    'title': 'Cumulative Avg Change',
                 },
+
             ],
             'marks': [
                 {
@@ -1147,7 +1146,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                         'enter': {
                             'x': {
                                 'scale': 'x',
-                                'value': 0,
+                                'field': 'Cumulative Avg Increase',
                             },
                             'y': {
                                 'scale': 'y',
@@ -1155,49 +1154,21 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                             },
                             'x2': {
                                 'scale': 'x',
-                                'field': 'pos_first_diff',
+                                'field': 'Cumulative Avg Decrease',
                             },
                             'height': {
                                 'scale': 'y',
                                 'band': 1,
                             },
                             'fill': {
-                                'value': 'black',
-                            },
-                        },
-                    },
-                },
-                {
-                    'type': 'rect',
-                    'from': {
-                        'data': 'features',
-                    },
-                    'encode': {
-                        'enter': {
-                            'x': {
-                                'scale': 'x',
-                                'value': 0,
-                            },
-                            'y': {
-                                'scale': 'y',
-                                'field': 'id',
-                            },
-                            'x2': {
-                                'scale': 'x',
-                                'field': 'neg_first_diff',
-                            },
-                            'height': {
-                                'scale': 'y',
-                                'band': 1,
-                            },
-                            'fill': {
-                                'value': 'black',
+                                'value': '#AAAAAA',
                             },
                         },
                     },
                 },
             ],
         }
+        # CUMULATIVE AVG CHANGE
         spec['marks'].append(first_diff_subplot)
         spec['data'].append({
             'name': 'features',

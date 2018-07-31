@@ -224,6 +224,7 @@ def _volatility(metadata, table, importances, output_dir, state_column,
 
         # Compile first differences and other stats on feature data
         feature_md = _summarize_feature_stats(table, state_md_col)
+        # TODO: use metadata API
         feature_md.to_csv(
             os.path.join(output_dir, 'feature_metadata.tsv'), sep='\t')
 
@@ -285,10 +286,8 @@ def _volatility(metadata, table, importances, output_dir, state_column,
     # TODO: ID match table and importances
     # TODO: do i need to set the id column label? or pass it through?
     # TODO: drop zero imp?
-    feature_data = importances.reset_index(drop=False)
-    # TODO: Drop this, just for prototyping the UI
-    feature_data['neg_first_diff'] = -0.5
-    feature_data['pos_first_diff'] = 0.5
+    feature_data = importances.join(feature_md, how='left')
+    feature_data = feature_data.reset_index(drop=False)
 
     vega_spec = _render_volatility_spec(is_feat_vol_plot, control_chart_data,
                                         feature_data, individual_id_column,
