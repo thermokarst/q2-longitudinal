@@ -12,6 +12,8 @@ import pandas as pd
 
 
 # TODO: do I need the feature flag?
+# TODO: break out more placeholder values (like signal dicts)
+# TODO: split this spec composition up a bit more
 def _render_volatility_spec(is_feat_vol_plot: bool,
                             control_chart_data: pd.DataFrame,
                             features_chart_data: pd.DataFrame,
@@ -43,10 +45,12 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                    "data('globalVals')[0].maxY)]")
 
     # These templates customize the tooltips
+    # TODO: new template names
     mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
                    ' "state": datum["%s"], "count": datum.count,'
                    ' "mean": datum.mean, "ci0": datum.ci0, "ci1": datum.ci1}'
                    % state)
+    feature_tooltip_signal = 'datum'
 
     spaghetti_marks = [
         {
@@ -1104,6 +1108,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 },
             ],
             'marks': [
+                # TODO: add background highlight
                 {
                     'type': 'rect',
                     'from': {
@@ -1132,6 +1137,15 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                                 'scale': 'y',
                                 'field': 'id',
                             },
+                            'fill': [
+                                {
+                                    'test': 'metric === datum.id',
+                                    'value': '#FF0000',
+                                },
+                                {
+                                    'value': '#AAAAAA',
+                                }
+                            ],
                         },
                     },
                 },
@@ -1223,11 +1237,11 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                                 'scale': 'y',
                                 'band': 1,
                             },
-                            'fill': {
-                                'value': '#AAAAAA',
-                            },
                         },
                         'update': {
+                            'tooltip': {
+                                'signal': feature_tooltip_signal,
+                            },
                             'x': [
                                 {
                                     'test': feature_stats_test,
@@ -1252,6 +1266,47 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                                 {
                                     'scale': 'x',
                                     'field': feature_stats_signal,
+                                },
+                            ],
+                            'fill': [
+                                {
+                                    'test': 'metric === datum.id',
+                                    'value': '#FF0000',
+                                },
+                                {
+                                    'value': '#AAAAAA',
+                                }
+                            ],
+                        },
+                    },
+                },
+                {
+                    'type': 'rule',
+                    'encode': {
+                        'enter': {
+                            'x': {
+                                'scale': 'x',
+                                'value': 0,
+                            },
+                            'x2': {
+                                'scale': 'x',
+                                'value': 0,
+                            },
+                            'y': {
+                                'value': 0,
+                            },
+                            'y2': {
+                                'signal': 'importancesChartHeight',
+                            },
+                        },
+                        'update': {
+                            'opacity': [
+                                {
+                                    'test': feature_stats_test,
+                                    'value': 1,
+                                },
+                                {
+                                    'value': 0,
                                 },
                             ],
                         },

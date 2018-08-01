@@ -286,6 +286,7 @@ def _volatility(metadata, table, importances, output_dir, state_column,
     # TODO: ID match table and importances
     # TODO: do i need to set the id column label? or pass it through?
     # TODO: drop zero imp?
+    # TODO: make importances label title case
     feature_data = importances.join(feature_md, how='left')
     feature_data = feature_data.reset_index(drop=False)
 
