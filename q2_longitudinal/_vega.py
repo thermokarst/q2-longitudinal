@@ -453,6 +453,19 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 'element': '#metric-column',
                 'options': metric_columns,
             },
+            'on': [
+                # I couldn't get event merging to work correctly here.
+                {
+                    'events': '@feature_importances:click',
+                    'update': 'datum.id',
+                    'force': True,
+                },
+                {
+                    'events': '@descriptive_stats:click',
+                    'update': 'datum.id',
+                    'force': True,
+                },
+            ],
         },
         {
             'name': 'width',
@@ -594,7 +607,8 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                     'force': True,
                 },
             ],
-        }]
+        },
+    ]
 
     if individual_id:
         spaghetti_signal = ('{"title": "spaghetti", "individual_id": '
@@ -1109,7 +1123,9 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
             ],
             'marks': [
                 # TODO: add background highlight
+                # TODO: JS variable name style
                 {
+                    'name': 'feature_importances',
                     'type': 'rect',
                     'from': {
                         'data': 'features',
@@ -1227,6 +1243,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
             ],
             'marks': [
                 {
+                    'name': 'descriptive_stats',
                     'type': 'rect',
                     'from': {
                         'data': 'features',
