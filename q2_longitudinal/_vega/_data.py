@@ -7,6 +7,16 @@
 # ----------------------------------------------------------------------------
 
 
+_GLOBAL_VALS = 'globalVals'
+_MIN_X = 'minX'
+_MAX_X = 'maxX'
+_MEAN = 'mean'
+_CL0 = 'cl0'
+_CL1 = 'cl1'
+_CL2 = 'cl2'
+_CL3 = 'cl3'
+
+
 def _control_chart_data(control_chart_data, metric_signal, state):
     return [
         {

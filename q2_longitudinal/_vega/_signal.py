@@ -6,9 +6,14 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-
+# TODO: ag for these
+METRIC_SIGNAL = {'signal': 'metric'}
+GROUP_SIGNAL = {'signal': 'grouper'}
 FEATURE_STATS_SIGNAL = {'signal': 'feature_stats'}
 FEATURE_TOOLTIP_SIGNAL = 'datum'
+
+_SHOW_GLOBAL_MEAN_SIGNAL = 'showGlobalMean'
+_SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL = 'showGlobalControlLimits'
 
 
 def _volatility_signals(features_chart_data, default_group, group_columns,

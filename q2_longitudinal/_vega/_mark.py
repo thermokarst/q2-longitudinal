@@ -6,6 +6,19 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+from ._data import _GLOBAL_VALS, _MIN_X, _MAX_X, _MEAN, _CL0, _CL1, _CL2, _CL3
+# from ._test import GROUP_TEST, ERROR_BAR_TEST
+from ._scale import _CONTROL_X_SCALE, _CONTROL_Y_SCALE
+from ._signal import (_SHOW_GLOBAL_MEAN_SIGNAL,
+                      _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL)
+
+
+_GLOBAL_STROKE = 2
+_GLOBAL_3X_DASH = [8, 8]
+_GLOBAL_2X_DASH = [6, 2]
+_OPACITY_0 = 0.0
+_OPACITY_1 = 1.0
+
 
 # This looks grosser than it is (you can't do variable assignment in a
 # vega expr, so no temp helper vars) - basically find the min and max
@@ -17,326 +30,225 @@ domain_expr = ("[min(data('globalVals')[0].cl0,"
                "max(data('globalVals')[0].cl3,"
                "data('globalVals')[0].maxY)]")
 
+# # TODO: new template names
+# mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
+#                ' "state": datum["%s"], "count": datum.count,'
+#                ' "mean": datum.mean, "ci0": datum.ci0, "ci1": datum.ci1}'
+#                % state)
 
-def _spaghetti_marks(state, group_test, mean_signal, error_bar_test):
+
+def _control_chart_global_marks():
     return [
-        {
-            'type': 'rule',
-            'from': {
-                'data': 'globalVals',
-            },
-            'encode': {
-                'update': {
-                    'strokeWidth': {
-                        'value': 2,
-                    },
-                    'x': {
-                        'scale': 'x',
-                        'field': 'minX',
-                    },
-                    'x2': {
-                        'scale': 'x',
-                        'field': 'maxX',
-                    },
-                    'y': {
-                        'scale': 'y',
-                        'field': 'mean',
-                    },
-                    'strokeOpacity': [
-                        {
-                            'test': 'showGlobalMean',
-                            'value': 1.0,
-                        },
-                        {
-                            'value': 0.0,
-                        },
-                    ],
-                },
-            },
-        },
-        {
-            'type': 'rule',
-            'from': {
-                'data': 'globalVals',
-            },
-            'encode': {
-                'update': {
-                    'strokeWidth': {
-                        'value': 2,
-                    },
-                    'strokeDash': {
-                        'value': [8, 8],
-                    },
-                    'x': {
-                        'scale': 'x',
-                        'field': 'minX',
-                    },
-                    'x2': {
-                        'scale': 'x',
-                        'field': 'maxX',
-                    },
-                    'y': {
-                        'scale': 'y',
-                        'field': 'cl0',
-                    },
-                    'strokeOpacity': [
-                        {
-                            'test': 'showGlobalControlLimits',
-                            'value': 1.0,
-                        },
-                        {
-                            'value': 0.0,
-                        },
-                    ],
-                },
-            },
-        },
-        {
-            'type': 'rule',
-            'from': {
-                'data': 'globalVals',
-            },
-            'encode': {
-                'update': {
-                    'strokeWidth': {
-                        'value': 2,
-                    },
-                    'strokeDash': {
-                        'value': [6, 2],
-                    },
-                    'x': {
-                        'scale': 'x',
-                        'field': 'minX',
-                    },
-                    'x2': {
-                        'scale': 'x',
-                        'field': 'maxX',
-                    },
-                    'y': {
-                        'scale': 'y',
-                        'field': 'cl1',
-                    },
-                    'strokeOpacity': [
-                        {
-                            'test': 'showGlobalControlLimits',
-                            'value': 1.0,
-                        },
-                        {
-                            'value': 0.0,
-                        },
-                    ],
-                },
-            },
-        },
-        {
-            'type': 'rule',
-            'from': {
-                'data': 'globalVals',
-            },
-            'encode': {
-                'update': {
-                    'strokeWidth': {
-                        'value': 2,
-                    },
-                    'strokeDash': {
-                        'value': [6, 2],
-                    },
-                    'x': {
-                        'scale': 'x',
-                        'field': 'minX',
-                    },
-                    'x2': {
-                        'scale': 'x',
-                        'field': 'maxX',
-                    },
-                    'y': {
-                        'scale': 'y',
-                        'field': 'cl2',
-                    },
-                    'strokeOpacity': [
-                        {
-                            'test': 'showGlobalControlLimits',
-                            'value': 1.0,
-                        },
-                        {
-                            'value': 0.0,
-                        },
-                    ],
-                },
-            },
-        },
-        {
-            'type': 'rule',
-            'from': {
-                'data': 'globalVals',
-            },
-            'encode': {
-                'update': {
-                    'strokeWidth': {
-                        'value': 2,
-                    },
-                    'strokeDash': {
-                        'value': [8, 8],
-                    },
-                    'x': {
-                        'scale': 'x',
-                        'field': 'minX',
-                    },
-                    'x2': {
-                        'scale': 'x',
-                        'field': 'maxX',
-                    },
-                    'y': {
-                        'scale': 'y',
-                        'field': 'cl3',
-                    },
-                    'strokeOpacity': [
-                        {
-                            'test': 'showGlobalControlLimits',
-                            'value': 1.0,
-                        },
-                        {
-                            'value': 0.0,
-                        },
-                    ],
-                },
-            },
-        },
-        {
-            'type': 'group',
-            'from': {
-                'facet': {
-                    'name': 'series',
-                    'data': 'aggBy',
-                    'groupby': 'groupByVal',
-                },
-            },
-            'marks': [
-                {
-                    'type': 'line',
-                    'from': {
-                        'data': 'series',
-                    },
-                    'sort': {
-                        'field': 'datum.%s' % state,
-                        'order': 'ascending',
-                    },
-                    'encode': {
-                        'update': {
-                            'x': {
-                                'scale': 'x',
-                                'field': state,
-                            },
-                            'y': {
-                                'scale': 'y',
-                                'field': 'mean',
-                            },
-                            'stroke': {
-                                'scale': 'color',
-                                'field': 'groupByVal',
-                            },
-                            'strokeWidth': {
-                                'signal': 'meanLineThickness',
-                            },
-                            'opacity': [
-                                {
-                                    'test': group_test,
-                                    'signal': 'meanLineOpacity',
-                                },
-                                {
-                                    'value': 0.0,
-                                },
-                            ],
-                        },
-                    },
-                },
-                # Need to add symbols into plot for mouseover
-                # https://github.com/vega/vega-tooltip/issues/120
-                {
-                    'type': 'symbol',
-                    'from': {
-                        'data': 'series',
-                    },
-                    'encode': {
-                        'update': {
-                            'tooltip': {
-                                'signal': mean_signal,
-                            },
-                            'x': {
-                                'scale': 'x',
-                                'field': state,
-                            },
-                            'y': {
-                                'scale': 'y',
-                                'field': 'mean',
-                            },
-                            'stroke': {
-                                'scale': 'color',
-                                'field': 'groupByVal',
-                            },
-                            'fill': {
-                                'scale': 'color',
-                                'field': 'groupByVal',
-                            },
-                            'size': {
-                                'signal': 'meanSymbolSize',
-                            },
-                            'opacity': [
-                                {
-                                    'test': group_test,
-                                    'signal': 'meanSymbolOpacity',
-                                },
-                                {
-                                    'value': 0.0,
-                                },
-                            ],
-                        },
-                    },
-                },
-                {
-                    'type': 'rect',
-                    'from': {
-                        'data': 'series',
-                    },
-                    'encode': {
-                        'update': {
-                            'width': {
-                                'value': 2.0,
-                            },
-                            'x': {
-                                'scale': 'x',
-                                'field': state,
-                                'band': 0.5,
-                            },
-                            'y': {
-                                'scale': 'y',
-                                'field': 'ci0',
-                            },
-                            'y2': {
-                                'scale': 'y',
-                                'field': 'ci1',
-                            },
-                            'fill': {
-                                'scale': 'color',
-                                'field': 'groupByVal',
-                            },
-                            'opacity': [
-                                {
-                                    'test': error_bar_test,
-                                    'value': 1.0,
-                                },
-                                {
-                                    'value': 0.0,
-                                },
-                            ],
-                        },
-                    },
-                },
-            ],
-        },
-    ]
+        # Global Mean
+        {'type': 'rule',
+         'from': {'data': _GLOBAL_VALS},
+         'encode': {
+             'update': {
+                 'strokeWidth': {'value': _GLOBAL_STROKE},
+                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
+                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
+                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _MEAN},
+                 'strokeOpacity': [
+                     {'test': _SHOW_GLOBAL_MEAN_SIGNAL, 'value': _OPACITY_1},
+                     {'value': _OPACITY_0}]}}},
+        # Global confidence limit, -3x std dev
+        {'type': 'rule',
+         'from': {'data': 'globalVals'},
+         'encode': {
+             'update': {
+                 'strokeWidth': {'value': _GLOBAL_STROKE},
+                 'strokeDash': {'value': _GLOBAL_3X_DASH},
+                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
+                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
+                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL0},
+                 'strokeOpacity': [
+                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': _OPACITY_1},
+                     {'value': _OPACITY_0},
+                 ]}}},
+        # Global confidence limit, -2x std dev
+        {'type': 'rule',
+         'from': {'data': _GLOBAL_VALS},
+         'encode': {
+             'update': {
+                 'strokeWidth': {'value': _GLOBAL_STROKE},
+                 'strokeDash': {'value': _GLOBAL_2X_DASH},
+                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
+                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
+                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL1},
+                 'strokeOpacity': [
+                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': _OPACITY_1},
+                     {'value': _OPACITY_0},
+                 ]}}},
+        # Global confidence limit, +2x std dev
+        {'type': 'rule',
+         'from': {'data': _GLOBAL_VALS},
+         'encode': {
+             'update': {
+                 'strokeWidth': {'value': _GLOBAL_STROKE},
+                 'strokeDash': {'value': _GLOBAL_2X_DASH},
+                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
+                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
+                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL2},
+                 'strokeOpacity': [
+                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': _OPACITY_1},
+                     {'value': _OPACITY_0},
+                 ]}}},
+        # Global confidence limit, +3x std dev
+        {'type': 'rule',
+         'from': {'data': _GLOBAL_VALS},
+         'encode': {
+             'update': {
+                 'strokeWidth': {'value': _GLOBAL_STROKE},
+                 'strokeDash': {'value': _GLOBAL_3X_DASH},
+                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
+                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
+                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL3},
+                 'strokeOpacity': [
+                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': _OPACITY_1},
+                     {'value': _OPACITY_0},
+                 ]}}}]
 
 
+# def _foo(state):
+#     return {
+#             'type': 'group',
+#             'from': {
+#                 'facet': {
+#                     'name': 'series',
+#                     'data': 'aggBy',
+#                     'groupby': 'groupByVal',
+#                 },
+#             },
+#             'marks': [
+#                 {
+#                     'type': 'line',
+#                     'from': {
+#                         'data': 'series',
+#                     },
+#                     'sort': {
+#                         'field': 'datum.%s' % state,
+#                         'order': 'ascending',
+#                     },
+#                     'encode': {
+#                         'update': {
+#                             'x': {
+#                                 'scale': 'x',
+#                                 'field': state,
+#                             },
+#                             'y': {
+#                                 'scale': 'y',
+#                                 'field': 'mean',
+#                             },
+#                             'stroke': {
+#                                 'scale': 'color',
+#                                 'field': 'groupByVal',
+#                             },
+#                             'strokeWidth': {
+#                                 'signal': 'meanLineThickness',
+#                             },
+#                             'opacity': [
+#                                 {
+#                                     'test': group_test,
+#                                     'signal': 'meanLineOpacity',
+#                                 },
+#                                 {
+#                                     'value': 0.0,
+#                                 },
+#                             ],
+#                         },
+#                     },
+#                 },
+#                 # Need to add symbols into plot for mouseover
+#                 # https://github.com/vega/vega-tooltip/issues/120
+#                 {
+#                     'type': 'symbol',
+#                     'from': {
+#                         'data': 'series',
+#                     },
+#                     'encode': {
+#                         'update': {
+#                             'tooltip': {
+#                                 'signal': mean_signal,
+#                             },
+#                             'x': {
+#                                 'scale': 'x',
+#                                 'field': state,
+#                             },
+#                             'y': {
+#                                 'scale': 'y',
+#                                 'field': 'mean',
+#                             },
+#                             'stroke': {
+#                                 'scale': 'color',
+#                                 'field': 'groupByVal',
+#                             },
+#                             'fill': {
+#                                 'scale': 'color',
+#                                 'field': 'groupByVal',
+#                             },
+#                             'size': {
+#                                 'signal': 'meanSymbolSize',
+#                             },
+#                             'opacity': [
+#                                 {
+#                                     'test': group_test,
+#                                     'signal': 'meanSymbolOpacity',
+#                                 },
+#                                 {
+#                                     'value': 0.0,
+#                                 },
+#                             ],
+#                         },
+#                     },
+#                 },
+#                 {
+#                     'type': 'rect',
+#                     'from': {
+#                         'data': 'series',
+#                     },
+#                     'encode': {
+#                         'update': {
+#                             'width': {
+#                                 'value': 2.0,
+#                             },
+#                             'x': {
+#                                 'scale': 'x',
+#                                 'field': state,
+#                                 'band': 0.5,
+#                             },
+#                             'y': {
+#                                 'scale': 'y',
+#                                 'field': 'ci0',
+#                             },
+#                             'y2': {
+#                                 'scale': 'y',
+#                                 'field': 'ci1',
+#                             },
+#                             'fill': {
+#                                 'scale': 'color',
+#                                 'field': 'groupByVal',
+#                             },
+#                             'opacity': [
+#                                 {
+#                                     'test': error_bar_test,
+#                                     'value': 1.0,
+#                                 },
+#                                 {
+#                                     'value': 0.0,
+#                                 },
+#                             ],
+#                         },
+#                     },
+#                 },
+#             ],
+#         },
+#     ]
+#
+#
 def _individual_marks(individual_id, state, metric_signal, group_signal,
                       group_test, spaghetti_signal):
     return {

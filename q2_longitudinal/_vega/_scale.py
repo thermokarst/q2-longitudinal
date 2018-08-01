@@ -7,6 +7,10 @@
 # ----------------------------------------------------------------------------
 
 
+_CONTROL_X_SCALE = 'x'
+_CONTROL_Y_SCALE = 'y'
+
+
 def _layout_scale():
     return {
         'name': 'layoutY',
