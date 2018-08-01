@@ -29,6 +29,9 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
     error_bar_test = 'showErrorBars && (%s)' % group_test
     metric_signal = {'signal': 'metric'}
     group_signal = {'signal': 'grouper'}
+    feature_stats_test = 'feature_stats === "Cumulative Average Change"'
+    feature_stats_signal = {'signal': 'feature_stats'}
+
     # This looks grosser than it is (you can't do variable assignment in a
     # vega expr, so no temp helper vars) - basically find the min and max
     # extents of the metric in question for the y-axis rendering, including
@@ -379,8 +382,56 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
         },
         {
             'name': 'halfWidth',
-            'update': 'width / 7',
+            'update': 'width / 2',
         },
+        # TODO: only add this if feature volatility
+        {
+            'name': 'feature_stats',
+            'value': 'Cumulative Average Change',
+            'bind': {
+                'input': 'select',
+                'element': '#feature-stats',
+                'options': [
+                    'Cumulative Average Change',
+                    'Variance',
+                    'Mean',
+                    'Median',
+                    'Standard Deviation',
+                    'CV (%)',
+                ],
+            },
+        },
+        {
+            'name': 'feature_sort',
+            'value': 'importance',
+            'bind': {
+                'input': 'select',
+                'element': '#sort-features',
+                'options': [
+                    'importance',
+                    'Cumulative Avg Decrease',
+                    'Cumulative Avg Increase',
+                    'Variance',
+                    'Mean',
+                    'Median',
+                    'Standard Deviation',
+                    'CV (%)',
+                ],
+            },
+        },
+        {
+            'name': 'sort_direction',
+            'value': 'descending',
+            'bind': {
+                'input': 'select',
+                'element': '#sort-direction',
+                'options': [
+                    'ascending',
+                    'descending',
+                ],
+            },
+        },
+        # END TODO
         {
             'name': 'grouper',
             'value': default_group,
@@ -1006,12 +1057,22 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
             },
             'scales': [
                 # TODO: sort y axis
+                # TODO: stop dupe
                 {
                     'name': 'y',
                     'type': 'band',
                     'domain': {
                         'data': 'features',
                         'field': 'id',
+                        'sort': {
+                            'field': {
+                                'signal': 'feature_sort',
+                            },
+                            'order': {
+                                'signal': 'sort_direction',
+                            },
+                            'op': 'mean',
+                        },
                     },
                     'range': [
                         0,
@@ -1054,10 +1115,6 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                                 'scale': 'x',
                                 'value': 0,
                             },
-                            'y': {
-                                'scale': 'y',
-                                'field': 'id',
-                            },
                             'width': {
                                 'scale': 'x',
                                 'field': 'importance',
@@ -1070,6 +1127,12 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                                 'value': '#AAAAAA',
                             },
                         },
+                        'update': {
+                            'y': {
+                                'scale': 'y',
+                                'field': 'id',
+                            },
+                        },
                     },
                 },
             ],
@@ -1078,7 +1141,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
         first_diff_subplot = {
             # TODO: make this dynamic?
             'description': '',
-            'name': 'first_diff_chart',
+            'name': '',
             'type': 'group',
             'encode': {
                 'enter': {
@@ -1100,12 +1163,23 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
             },
             'scales': [
                 # TODO: sort y axis
+                # TODO: stop dupe
+                # TODO: figure out how to sort avg cumulative jazz
                 {
                     'name': 'y',
                     'type': 'band',
                     'domain': {
                         'data': 'features',
                         'field': 'id',
+                        'sort': {
+                            'field': {
+                                'signal': 'feature_sort',
+                            },
+                            'order': {
+                                'signal': 'sort_direction',
+                            },
+                            'op': 'mean',
+                        },
                     },
                     'range': [
                         0,
@@ -1116,10 +1190,11 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 },
                 {
                     'name': 'x',
-                    'domain': [
-                        -1,
-                        1
-                    ],
+                    'domain': {
+                        'signal': 'if(feature_stats === "Cumulative Average '
+                                  'Change", [-1, 1], [data("statScale")[0].'
+                                  'min, data("statScale")[0].max])',
+                    },
                     'range': [
                         0,
                         {
@@ -1132,7 +1207,7 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                 {
                     'orient': 'top',
                     'scale': 'x',
-                    'title': 'Cumulative Avg Change',
+                    'title': feature_stats_signal,
                 },
 
             ],
@@ -1144,18 +1219,6 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                     },
                     'encode': {
                         'enter': {
-                            'x': {
-                                'scale': 'x',
-                                'field': 'Cumulative Avg Increase',
-                            },
-                            'y': {
-                                'scale': 'y',
-                                'field': 'id',
-                            },
-                            'x2': {
-                                'scale': 'x',
-                                'field': 'Cumulative Avg Decrease',
-                            },
                             'height': {
                                 'scale': 'y',
                                 'band': 1,
@@ -1164,14 +1227,62 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
                                 'value': '#AAAAAA',
                             },
                         },
+                        'update': {
+                            'x': [
+                                {
+                                    'test': feature_stats_test,
+                                    'scale': 'x',
+                                    'field': 'Cumulative Avg Decrease',
+                                },
+                                {
+                                    'scale': 'x',
+                                    'value': 0,
+                                },
+                            ],
+                            'y': {
+                                'scale': 'y',
+                                'field': 'id',
+                            },
+                            'x2': [
+                                {
+                                    'test': feature_stats_test,
+                                    'scale': 'x',
+                                    'field': 'Cumulative Avg Increase',
+                                },
+                                {
+                                    'scale': 'x',
+                                    'field': feature_stats_signal,
+                                },
+                            ],
+                        },
                     },
                 },
             ],
         }
-        # CUMULATIVE AVG CHANGE
         spec['marks'].append(first_diff_subplot)
         spec['data'].append({
             'name': 'features',
             'values': features_chart_data.to_dict('records'),
+        })
+        spec['data'].append({
+            'name': 'statScale',
+            'source': 'features',
+            'transform': [
+                {
+                    'type': 'aggregate',
+                    'ops': [
+                        'min',
+                        'max',
+                    ],
+                    'fields': [
+                        feature_stats_signal,
+                        feature_stats_signal,
+                    ],
+                    'as': [
+                        'min',
+                        'max',
+                    ],
+                },
+            ],
         })
     return json.dumps(spec)

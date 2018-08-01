@@ -761,5 +761,5 @@ def _summarize_feature_stats(table, state_md_col):
     feature_md['Median'] = table.median()
     feature_md['Standard Deviation'] = table.std()
     feature_md['CV (%)'] = (
-        feature_md['Standard Deviation'] / feature_md['Mean'] * 100)
+        feature_md['Standard Deviation'] / feature_md['Mean'])
     return feature_md
