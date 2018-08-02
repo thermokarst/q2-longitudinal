@@ -7,12 +7,6 @@
 # ----------------------------------------------------------------------------
 
 
-OPACITY_TEST = "!length(data('selected')) || indata('selected', 'value', datum.value)"  # noqa: E501
-FEATURE_STATS_TEST = 'feature_stats === "Cumulative Average Change"'
-GROUP_TEST = "!length(data('selected')) || indata('selected', 'value', datum.groupByVal)"  # noqa: E501
-ERROR_BAR_TEST = 'showErrorBars && (%s)' % GROUP_TEST
-
-
 # STICKING THIS HERE FOR NOW
 #     if is_feat_vol_plot:
 #         importances_subplot = {

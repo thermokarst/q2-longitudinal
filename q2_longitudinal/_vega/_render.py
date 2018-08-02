@@ -13,13 +13,14 @@ import json
 
 import pandas as pd
 
+from ._axis import _control_chart_axes
+from ._legend import _control_chart_legend
 from ._mark import (_control_chart_global_marks, _individual_marks,
-                    _control_chart_marks)
-from ._signal import (_volatility_signals, _spaghetti_signals, METRIC_SIGNAL,
-                      GROUP_SIGNAL)
-from ._scale import _layout_scale, _color_scale
+                    _control_chart_subplot)
+from ._signal import _volatility_signals, _spaghetti_signals
+from ._scale import _layout_scale, _color_scale, _control_chart_subplot_scales
 from ._data import _control_chart_data
-from ._test import OPACITY_TEST, GROUP_TEST
+from ._const import GROUP_TEST, METRIC_SIGNAL, GROUP_SIGNAL
 
 
 # TODO: do I need the feature flag?
@@ -50,14 +51,19 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
         # Vega Editor.
         'width': 800,
         'signals': [],
+        # TODO: can color scale get moved into the control chart?
         'scales': [_layout_scale(), _color_scale()],
         'marks': [],
         'data': _control_chart_data(control_chart_data, METRIC_SIGNAL, state),
     }
 
-    spec['marks'].extend(_control_chart_marks(_control_chart_global_marks(),
-                                              state, yscale, GROUP_SIGNAL,
-                                              METRIC_SIGNAL, OPACITY_TEST))
+    control_chart = _control_chart_subplot(state, yscale)
+    control_chart['marks'] = _control_chart_global_marks()
+    control_chart['scales'] = _control_chart_subplot_scales(state, yscale)
+    control_chart['axes'] = _control_chart_axes(state)
+    control_chart['legends'] = _control_chart_legend()
+    spec['marks'].append(control_chart)
+
     spec['signals'].extend(_volatility_signals(features_chart_data,
                                                default_group, group_columns,
                                                default_metric, metric_columns))

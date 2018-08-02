@@ -6,4 +6,32 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+from ._const import (
+    CONTROL_SYMBOL_LEGEND, CONTROL_LABEL_LEGEND, TRANSPARENT, GROUP_SIGNAL,
+    CONTROL_COLOR_SCALE, OPACITY_TEST, STROKE_2, OPACITY_015, OPACITY_025,
+    OPACITY_100, SIZE_100)
 
+
+def _control_chart_legend():
+    return [
+        {'stroke': CONTROL_COLOR_SCALE,
+         'title': GROUP_SIGNAL,
+         'encode': {
+             'symbols': {
+                 'name': CONTROL_SYMBOL_LEGEND,
+                 'interactive': True,
+                 'update': {
+                     'fill': {'value': TRANSPARENT},
+                     'strokeWidth': {'value': STROKE_2},
+                     'opacity': [
+                         {'test': OPACITY_TEST, 'value': OPACITY_100},
+                         {'value': OPACITY_015},
+                     ],
+                     'size': {'value': SIZE_100}}},
+             'labels': {
+                 'name': CONTROL_LABEL_LEGEND,
+                 'interactive': True,
+                 'update': {
+                     'opacity': [
+                         {'test': OPACITY_TEST, 'value': OPACITY_100},
+                         {'value': OPACITY_025}]}}}}]

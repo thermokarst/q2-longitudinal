@@ -7,8 +7,10 @@
 # ----------------------------------------------------------------------------
 
 
-_CONTROL_X_SCALE = 'x'
-_CONTROL_Y_SCALE = 'y'
+from ._const import (INDIVIDUAL, CONTROL_CHART_HEIGHT_SIGNAL,
+                     COLOR_SCHEME_SIGNAL, GLOBAL_DOMAIN_SIGNAL, GROUP_SIGNAL,
+                     CONTROL_X_SCALE, LINEAR, WIDTH, CONTROL_Y_SCALE,
+                     CONTROL_COLOR_SCALE, ORDINAL)
 
 
 def _layout_scale():
@@ -36,3 +38,29 @@ def _color_scale():
         },
         'nice': True,
     }
+
+
+def _control_chart_subplot_scales(state, yscale):
+    return [
+        {'name': CONTROL_X_SCALE,
+         'type': LINEAR,
+         'range': WIDTH,
+         'nice': True,
+         'domain': {
+             'data': INDIVIDUAL,
+             'field': state,
+             'sort': True,
+         }},
+        {'name': CONTROL_Y_SCALE,
+         # Signal registration on this param is currently
+         # blocked by https://github.com/vega/vega/issues/525,
+         # which is why this setting is still a QIIME 2 param to
+         # this viz.
+         'type': yscale,
+         'range': [{'signal': CONTROL_CHART_HEIGHT_SIGNAL}, 0],
+         'nice': True,
+         'domain': {'signal': GLOBAL_DOMAIN_SIGNAL, 'sort': True}},
+        {'name': CONTROL_COLOR_SCALE,
+         'type': ORDINAL,
+         'range': {'scheme': {'signal': COLOR_SCHEME_SIGNAL}},
+         'domain': {'data': INDIVIDUAL, 'field': GROUP_SIGNAL}}]

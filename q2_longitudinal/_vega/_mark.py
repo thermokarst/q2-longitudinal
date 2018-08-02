@@ -6,29 +6,12 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from ._data import _GLOBAL_VALS, _MIN_X, _MAX_X, _MEAN, _CL0, _CL1, _CL2, _CL3
-# from ._test import GROUP_TEST, ERROR_BAR_TEST
-from ._scale import _CONTROL_X_SCALE, _CONTROL_Y_SCALE
-from ._signal import (_SHOW_GLOBAL_MEAN_SIGNAL,
-                      _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL)
+from ._const import (
+    GLOBAL_VALS, MIN_X, MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
+    CONTROL_Y_SCALE, SHOW_GLOBAL_MEAN_SIGNAL, STROKE_2, OPACITY_000,
+    OPACITY_100, DASH_A, DASH_B, SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL, WIDTH,
+    CONTROL_CHART_HEIGHT_SIGNAL, RULE, GROUP)
 
-
-_GLOBAL_STROKE = 2
-_GLOBAL_3X_DASH = [8, 8]
-_GLOBAL_2X_DASH = [6, 2]
-_OPACITY_0 = 0.0
-_OPACITY_1 = 1.0
-
-
-# This looks grosser than it is (you can't do variable assignment in a
-# vega expr, so no temp helper vars) - basically find the min and max
-# extents of the metric in question for the y-axis rendering, including
-# the 3x stdev (depending on the spread this could be beyond the metric's
-# own limits.
-domain_expr = ("[min(data('globalVals')[0].cl0,"
-               "data('globalVals')[0].minY),"
-               "max(data('globalVals')[0].cl3,"
-               "data('globalVals')[0].maxY)]")
 
 # # TODO: new template names
 # mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
@@ -37,79 +20,96 @@ domain_expr = ("[min(data('globalVals')[0].cl0,"
 #                % state)
 
 
+def _control_chart_subplot(state, yscale):
+    return \
+        {'description': 'Control Chart',
+         'name': 'spaghetti',
+         'type': GROUP,
+         'encode': {
+             'enter': {
+                 'y': {'value': 0},
+                 'width': {'signal': WIDTH},
+                 'height': {'signal': CONTROL_CHART_HEIGHT_SIGNAL},
+                }},
+         'marks': [],
+         'scales': [],
+         'axes': [],
+         'legends': []}
+
+
 def _control_chart_global_marks():
     return [
         # Global Mean
-        {'type': 'rule',
-         'from': {'data': _GLOBAL_VALS},
+        {'type': RULE,
+         'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': _GLOBAL_STROKE},
-                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
-                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
-                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _MEAN},
+                 'strokeWidth': {'value': STROKE_2},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
                  'strokeOpacity': [
-                     {'test': _SHOW_GLOBAL_MEAN_SIGNAL, 'value': _OPACITY_1},
-                     {'value': _OPACITY_0}]}}},
+                     {'test': SHOW_GLOBAL_MEAN_SIGNAL, 'value': OPACITY_100},
+                     {'value': OPACITY_000}]}}},
         # Global confidence limit, -3x std dev
-        {'type': 'rule',
+        {'type': RULE,
          'from': {'data': 'globalVals'},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': _GLOBAL_STROKE},
-                 'strokeDash': {'value': _GLOBAL_3X_DASH},
-                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
-                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
-                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL0},
+                 'strokeWidth': {'value': STROKE_2},
+                 'strokeDash': {'value': DASH_A},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL0},
                  'strokeOpacity': [
-                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
-                      'value': _OPACITY_1},
-                     {'value': _OPACITY_0},
+                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': OPACITY_100},
+                     {'value': OPACITY_000},
                  ]}}},
         # Global confidence limit, -2x std dev
-        {'type': 'rule',
-         'from': {'data': _GLOBAL_VALS},
+        {'type': RULE,
+         'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': _GLOBAL_STROKE},
-                 'strokeDash': {'value': _GLOBAL_2X_DASH},
-                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
-                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
-                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL1},
+                 'strokeWidth': {'value': STROKE_2},
+                 'strokeDash': {'value': DASH_B},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL1},
                  'strokeOpacity': [
-                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
-                      'value': _OPACITY_1},
-                     {'value': _OPACITY_0},
+                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': OPACITY_100},
+                     {'value': OPACITY_000},
                  ]}}},
         # Global confidence limit, +2x std dev
-        {'type': 'rule',
-         'from': {'data': _GLOBAL_VALS},
+        {'type': RULE,
+         'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': _GLOBAL_STROKE},
-                 'strokeDash': {'value': _GLOBAL_2X_DASH},
-                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
-                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
-                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL2},
+                 'strokeWidth': {'value': STROKE_2},
+                 'strokeDash': {'value': DASH_A},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL2},
                  'strokeOpacity': [
-                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
-                      'value': _OPACITY_1},
-                     {'value': _OPACITY_0},
+                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': OPACITY_100},
+                     {'value': OPACITY_000},
                  ]}}},
         # Global confidence limit, +3x std dev
-        {'type': 'rule',
-         'from': {'data': _GLOBAL_VALS},
+        {'type': RULE,
+         'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': _GLOBAL_STROKE},
-                 'strokeDash': {'value': _GLOBAL_3X_DASH},
-                 'x': {'scale': _CONTROL_X_SCALE, 'field': _MIN_X},
-                 'x2': {'scale': _CONTROL_X_SCALE, 'field': _MAX_X},
-                 'y': {'scale': _CONTROL_Y_SCALE, 'field': _CL3},
+                 'strokeWidth': {'value': STROKE_2},
+                 'strokeDash': {'value': DASH_B},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL3},
                  'strokeOpacity': [
-                     {'test': _SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
-                      'value': _OPACITY_1},
-                     {'value': _OPACITY_0},
+                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                      'value': OPACITY_100},
+                     {'value': OPACITY_000},
                  ]}}}]
 
 
@@ -344,134 +344,3 @@ def _individual_marks(individual_id, state, metric_signal, group_signal,
             },
         ],
     }
-
-
-def _control_chart_marks(spaghetti_marks, state, yscale, group_signal,
-                         metric_signal, opacity_test):
-    return [
-        {
-            'description': 'Control Chart',
-            'name': 'spaghetti',
-            'type': 'group',
-            'encode': {
-                'enter': {
-                    'y': {
-                        'value': 0,
-                    },
-                    'width': {
-                        'signal': 'width',
-                    },
-                    'height': {
-                        'signal': 'controlChartHeight',
-                    },
-                },
-            },
-            'marks': spaghetti_marks,
-            'scales': [
-                {
-                    'name': 'x',
-                    'type': 'linear',
-                    'range': 'width',
-                    'nice': True,
-                    'domain': {
-                        'data': 'individual',
-                        'field': state,
-                        'sort': True,
-                    },
-                },
-                {
-                    'name': 'y',
-                    # Signal registration on this param is currently
-                    # blocked by https://github.com/vega/vega/issues/525,
-                    # which is why this setting is still a QIIME 2 param to
-                    # this viz.
-                    'type': yscale,
-                    'range': [
-                        {
-                            'signal': 'controlChartHeight',
-                        },
-                        0,
-                    ],
-                    'nice': True,
-                    'domain': {
-                        'signal': domain_expr,
-                        'sort': True,
-                    },
-                },
-                {
-                    'name': 'color',
-                    'type': 'ordinal',
-                    'range': {
-                        'scheme': {
-                            'signal': 'colorScheme',
-                        },
-                    },
-                    'domain': {
-                        'data': 'individual',
-                        'field': group_signal,
-                    },
-                },
-            ],
-            'axes': [
-                {
-                    'orient': 'bottom',
-                    'scale': 'x',
-                    'title': state,
-                },
-                {
-                    'orient': 'left',
-                    'scale': 'y',
-                    # TODO: for feature volatility, include the fact
-                    # that this is the relative abundance
-                    'title': metric_signal,
-                },
-            ],
-            'legends': [
-                {
-                    'stroke': 'color',
-                    'title': group_signal,
-                    'encode': {
-                        'symbols': {
-                            'name': 'legendSymbol',
-                            'interactive': True,
-                            'update': {
-                                'fill': {
-                                    'value': 'transparent',
-                                },
-                                'strokeWidth': {
-                                    'value': 2,
-                                },
-                                'opacity': [
-                                    {
-                                        'test': opacity_test,
-                                        'value': 1.0,
-                                    },
-                                    {
-                                        'value': 0.15,
-                                    },
-                                ],
-                                'size': {
-                                    'value': 100,
-                                },
-                            },
-                        },
-                        'labels': {
-                            'name': 'legendLabel',
-                            'interactive': True,
-                            'update': {
-                                'opacity': [
-                                    {
-                                        'test': opacity_test,
-                                        'value': 1,
-                                    },
-                                    {
-                                        'value': 0.25,
-                                    },
-                                ],
-                            },
-                        },
-                    },
-                },
-            ],
-        },
-    ]
