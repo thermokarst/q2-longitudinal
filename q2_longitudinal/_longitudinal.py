@@ -25,7 +25,7 @@ from ._utilities import (_get_group_pairs, _extract_distance_distribution,
                          _nmit, _validate_is_numeric_column,
                          _tabulate_matrix_ids, _first_differences,
                          _summarize_feature_stats)
-from ._vega import _render_volatility_spec
+from ._vega_specs import render_volatility_spec
 
 
 TEMPLATES = pkg_resources.resource_filename('q2_longitudinal', 'assets')
@@ -286,11 +286,11 @@ def _volatility(metadata, table, importances, output_dir, state_column,
     else:
         feature_data = pd.DataFrame()
 
-    vega_spec = _render_volatility_spec(is_feat_vol_plot, control_chart_data,
-                                        feature_data, individual_id_column,
-                                        state_column, default_group_column,
-                                        group_columns, default_metric,
-                                        metric_columns, yscale)
+    vega_spec = render_volatility_spec(is_feat_vol_plot, control_chart_data,
+                                       feature_data, individual_id_column,
+                                       state_column, default_group_column,
+                                       group_columns, default_metric,
+                                       metric_columns, yscale)
 
     # Order matters here - need to render the template *after* copying the
     # directory tree, otherwise we will overwrite the index.html

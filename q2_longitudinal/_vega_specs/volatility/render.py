@@ -13,27 +13,27 @@ import json
 
 import pandas as pd
 
-from ._axis import _control_chart_axes
-from ._legend import _control_chart_legend
-from ._mark import (
+from .axis import _control_chart_axes
+from .legend import _control_chart_legend
+from .mark import (
     _control_chart_global_marks, _control_chart_subplot,
     _control_chart_grouped_marks, _control_chart_individual_marks)
-from ._signal import _volatility_signals, _spaghetti_signals
-from ._scale import _layout_scale, _color_scale, _control_chart_subplot_scales
-from ._data import _control_chart_data
-from ._const import METRIC_SIGNAL
+from .signal import _volatility_signals, _spaghetti_signals
+from .scale import _layout_scale, _color_scale, _control_chart_subplot_scales
+from .data import _control_chart_data
+from .const import METRIC_SIGNAL
 
 
 # TODO: do I need the feature flag?
 # TODO: break out more placeholder values (like signal dicts)
 # TODO: split this spec composition up a bit more
-def _render_volatility_spec(is_feat_vol_plot: bool,
-                            control_chart_data: pd.DataFrame,
-                            features_chart_data: pd.DataFrame,
-                            individual_id: str, state: str,
-                            default_group: str, group_columns: list,
-                            default_metric: str, metric_columns: list,
-                            yscale: str) -> str:
+def render_volatility_spec(is_feat_vol_plot: bool,
+                           control_chart_data: pd.DataFrame,
+                           features_chart_data: pd.DataFrame,
+                           individual_id: str, state: str,
+                           default_group: str, group_columns: list,
+                           default_metric: str, metric_columns: list,
+                           yscale: str) -> str:
     spec = {
         # This `$schema` is only fetched as part of the interactive vega
         # editor, which opens up outside of the visualization - this doesn't

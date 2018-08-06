@@ -6,7 +6,7 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from ._const import (
+from .const import (
     CONTROL_SYMBOL_LEGEND, CONTROL_LABEL_LEGEND, TRANSPARENT, GROUP_SIGNAL,
     CONTROL_COLOR_SCALE, OPACITY_TEST, STROKE_2, OPACITY_015, OPACITY_025,
     OPACITY_100, SIZE_100)

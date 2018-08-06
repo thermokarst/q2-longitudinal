@@ -7,10 +7,10 @@
 # ----------------------------------------------------------------------------
 
 
-from ._const import (INDIVIDUAL, CONTROL_CHART_HEIGHT_SIGNAL,
-                     COLOR_SCHEME_SIGNAL, GLOBAL_DOMAIN_SIGNAL, GROUP_BY_VALUE,
-                     CONTROL_X_SCALE, LINEAR, WIDTH, CONTROL_Y_SCALE,
-                     CONTROL_COLOR_SCALE, ORDINAL)
+from .const import (INDIVIDUAL, CONTROL_CHART_HEIGHT_SIGNAL,
+                    COLOR_SCHEME_SIGNAL, GLOBAL_DOMAIN_SIGNAL, GROUP_BY_VALUE,
+                    CONTROL_X_SCALE, LINEAR, WIDTH, CONTROL_Y_SCALE,
+                    CONTROL_COLOR_SCALE, ORDINAL)
 
 
 def _layout_scale():

@@ -6,7 +6,7 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from ._const import (
+from .const import (
     GLOBAL_VALS, MIN_X, MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
     CONTROL_Y_SCALE, SHOW_GLOBAL_MEAN_SIGNAL, STROKE_2, OPACITY_000,
     OPACITY_100, DASH_A, DASH_B, SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL, WIDTH,
