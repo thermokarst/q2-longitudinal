@@ -21,7 +21,6 @@ from .mark import (
 from .signal import _volatility_signals, _spaghetti_signals
 from .scale import _layout_scale, _color_scale, _control_chart_subplot_scales
 from .data import _control_chart_data
-from .const import METRIC_SIGNAL
 
 
 # TODO: do I need the feature flag?
@@ -48,7 +47,7 @@ def render_volatility_spec(is_feat_vol_plot: bool,
         # TODO: can color scale get moved into the control chart?
         'scales': [_layout_scale(), _color_scale()],
         'marks': [],
-        'data': _control_chart_data(control_chart_data, METRIC_SIGNAL, state),
+        'data': _control_chart_data(control_chart_data, state),
     }
 
     control_chart = _control_chart_subplot(yscale)

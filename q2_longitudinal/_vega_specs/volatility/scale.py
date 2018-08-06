@@ -10,34 +10,27 @@
 from .const import (INDIVIDUAL, CONTROL_CHART_HEIGHT_SIGNAL,
                     COLOR_SCHEME_SIGNAL, GLOBAL_DOMAIN_SIGNAL, GROUP_BY_VALUE,
                     CONTROL_X_SCALE, LINEAR, WIDTH, CONTROL_Y_SCALE,
-                    CONTROL_COLOR_SCALE, ORDINAL)
+                    CONTROL_COLOR_SCALE, ORDINAL, LAYOUT_Y, BAND, ROW_1, ROW_2,
+                    HEIGHT)
 
 
 def _layout_scale():
-    return {
-        'name': 'layoutY',
-        'type': 'band',
-        'domain': ['row1', 'row2'],
-        'range': 'height',
-        'nice': True,
-    }
+    return \
+        {'name': LAYOUT_Y,
+         'type': BAND,
+         'domain': [ROW_1, ROW_2],
+         'range': HEIGHT,
+         'nice': True}
 
 
+# TODO: rename me
 def _color_scale():
-    return {
-        'name': 'color',
-        'type': 'ordinal',
-        'range': {
-            'scheme': {
-                'signal': 'colorScheme',
-            },
-        },
-        'domain': {
-            'data': 'individual',
-            'field': 'groupByVal',
-        },
-        'nice': True,
-    }
+    return \
+        {'name': CONTROL_COLOR_SCALE,
+         'type': ORDINAL,
+         'range': {'scheme': {'signal': COLOR_SCHEME_SIGNAL}},
+         'domain': {'data': INDIVIDUAL, 'field': GROUP_BY_VALUE},
+         'nice': True}
 
 
 def _control_chart_subplot_scales(state, yscale):
