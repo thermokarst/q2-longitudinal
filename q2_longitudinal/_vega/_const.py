@@ -18,11 +18,17 @@ SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL = 'showGlobalControlLimits'
 CONTROL_CHART_HEIGHT_SIGNAL = 'controlChartHeight'
 COLOR_SCHEME_SIGNAL = 'colorScheme'
 
+CONTROL_MEAN_LINE_THICKNESS_SIGNAL = 'meanLineThickness'
+CONTROL_MEAN_LINE_OPACITY_SIGNAL = 'meanLineOpacity'
+CONTROL_MEAN_SYMBOL_SIZE_SIGNAL = 'meanSymbolSize'
+CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL = 'meanSymbolOpacity'
+
 # TODO: should this be templated?
 GLOBAL_DOMAIN_SIGNAL = ("[min(data('globalVals')[0].cl0,data('globalVals')[0].minY), "  # noqa: E501
                         " max(data('globalVals')[0].cl3,data('globalVals')[0].maxY)]")  # noqa: E501
 
 STROKE_2 = 2
+RECT_2 = 2.0
 DASH_A = [8, 8]
 DASH_B = [6, 2]
 OPACITY_000 = 0.0
@@ -30,9 +36,12 @@ OPACITY_015 = 0.15
 OPACITY_025 = 0.25
 OPACITY_100 = 1.0
 SIZE_100 = 100
+BAND_050 = 0.5
 
 RULE = 'rule'
+RECT = 'rect'
 GROUP = 'group'
+SYMBOL = 'symbol'
 
 GLOBAL_VALS = 'globalVals'
 MIN_X = 'minX'
@@ -42,7 +51,10 @@ CL0 = 'cl0'
 CL1 = 'cl1'
 CL2 = 'cl2'
 CL3 = 'cl3'
+CI0 = 'ci0'
+CI1 = 'ci1'
 INDIVIDUAL = 'individual'
+SERIES = 'series'
 
 CONTROL_X_SCALE = 'x'
 CONTROL_Y_SCALE = 'y'
@@ -67,3 +79,9 @@ TRANSPARENT = 'transparent'
 ###############################################################################
 CONTROL_SYMBOL_LEGEND = 'legendSymbol'
 CONTROL_LABEL_LEGEND = 'labelSymbol'
+
+AGG_BY_DATA = 'aggBy'
+GROUP_BY_VALUE = 'groupByVal'
+
+LINE = 'line'
+ASCENDING_ORDER = 'ascending'

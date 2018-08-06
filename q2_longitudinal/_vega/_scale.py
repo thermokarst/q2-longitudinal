@@ -8,7 +8,7 @@
 
 
 from ._const import (INDIVIDUAL, CONTROL_CHART_HEIGHT_SIGNAL,
-                     COLOR_SCHEME_SIGNAL, GLOBAL_DOMAIN_SIGNAL, GROUP_SIGNAL,
+                     COLOR_SCHEME_SIGNAL, GLOBAL_DOMAIN_SIGNAL, GROUP_BY_VALUE,
                      CONTROL_X_SCALE, LINEAR, WIDTH, CONTROL_Y_SCALE,
                      CONTROL_COLOR_SCALE, ORDINAL)
 
@@ -63,4 +63,4 @@ def _control_chart_subplot_scales(state, yscale):
         {'name': CONTROL_COLOR_SCALE,
          'type': ORDINAL,
          'range': {'scheme': {'signal': COLOR_SCHEME_SIGNAL}},
-         'domain': {'data': INDIVIDUAL, 'field': GROUP_SIGNAL}}]
+         'domain': {'data': INDIVIDUAL, 'field': GROUP_BY_VALUE}}]

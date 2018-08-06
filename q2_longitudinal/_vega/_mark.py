@@ -10,17 +10,15 @@ from ._const import (
     GLOBAL_VALS, MIN_X, MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
     CONTROL_Y_SCALE, SHOW_GLOBAL_MEAN_SIGNAL, STROKE_2, OPACITY_000,
     OPACITY_100, DASH_A, DASH_B, SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL, WIDTH,
-    CONTROL_CHART_HEIGHT_SIGNAL, RULE, GROUP)
+    CONTROL_CHART_HEIGHT_SIGNAL, RULE, GROUP, SERIES, AGG_BY_DATA,
+    GROUP_BY_VALUE, LINE, ASCENDING_ORDER, CONTROL_COLOR_SCALE,
+    CONTROL_MEAN_LINE_THICKNESS_SIGNAL, SYMBOL,
+    CONTROL_MEAN_SYMBOL_SIZE_SIGNAL, GROUP_TEST,
+    CONTROL_MEAN_LINE_OPACITY_SIGNAL, CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL,
+    RECT_2, RECT, BAND_050, CI0, CI1, ERROR_BAR_TEST)
 
 
-# # TODO: new template names
-# mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
-#                ' "state": datum["%s"], "count": datum.count,'
-#                ' "mean": datum.mean, "ci0": datum.ci0, "ci1": datum.ci1}'
-#                % state)
-
-
-def _control_chart_subplot(state, yscale):
+def _control_chart_subplot(yscale):
     return \
         {'description': 'Control Chart',
          'name': 'spaghetti',
@@ -113,142 +111,74 @@ def _control_chart_global_marks():
                  ]}}}]
 
 
-# def _foo(state):
-#     return {
-#             'type': 'group',
-#             'from': {
-#                 'facet': {
-#                     'name': 'series',
-#                     'data': 'aggBy',
-#                     'groupby': 'groupByVal',
-#                 },
-#             },
-#             'marks': [
-#                 {
-#                     'type': 'line',
-#                     'from': {
-#                         'data': 'series',
-#                     },
-#                     'sort': {
-#                         'field': 'datum.%s' % state,
-#                         'order': 'ascending',
-#                     },
-#                     'encode': {
-#                         'update': {
-#                             'x': {
-#                                 'scale': 'x',
-#                                 'field': state,
-#                             },
-#                             'y': {
-#                                 'scale': 'y',
-#                                 'field': 'mean',
-#                             },
-#                             'stroke': {
-#                                 'scale': 'color',
-#                                 'field': 'groupByVal',
-#                             },
-#                             'strokeWidth': {
-#                                 'signal': 'meanLineThickness',
-#                             },
-#                             'opacity': [
-#                                 {
-#                                     'test': group_test,
-#                                     'signal': 'meanLineOpacity',
-#                                 },
-#                                 {
-#                                     'value': 0.0,
-#                                 },
-#                             ],
-#                         },
-#                     },
-#                 },
-#                 # Need to add symbols into plot for mouseover
-#                 # https://github.com/vega/vega-tooltip/issues/120
-#                 {
-#                     'type': 'symbol',
-#                     'from': {
-#                         'data': 'series',
-#                     },
-#                     'encode': {
-#                         'update': {
-#                             'tooltip': {
-#                                 'signal': mean_signal,
-#                             },
-#                             'x': {
-#                                 'scale': 'x',
-#                                 'field': state,
-#                             },
-#                             'y': {
-#                                 'scale': 'y',
-#                                 'field': 'mean',
-#                             },
-#                             'stroke': {
-#                                 'scale': 'color',
-#                                 'field': 'groupByVal',
-#                             },
-#                             'fill': {
-#                                 'scale': 'color',
-#                                 'field': 'groupByVal',
-#                             },
-#                             'size': {
-#                                 'signal': 'meanSymbolSize',
-#                             },
-#                             'opacity': [
-#                                 {
-#                                     'test': group_test,
-#                                     'signal': 'meanSymbolOpacity',
-#                                 },
-#                                 {
-#                                     'value': 0.0,
-#                                 },
-#                             ],
-#                         },
-#                     },
-#                 },
-#                 {
-#                     'type': 'rect',
-#                     'from': {
-#                         'data': 'series',
-#                     },
-#                     'encode': {
-#                         'update': {
-#                             'width': {
-#                                 'value': 2.0,
-#                             },
-#                             'x': {
-#                                 'scale': 'x',
-#                                 'field': state,
-#                                 'band': 0.5,
-#                             },
-#                             'y': {
-#                                 'scale': 'y',
-#                                 'field': 'ci0',
-#                             },
-#                             'y2': {
-#                                 'scale': 'y',
-#                                 'field': 'ci1',
-#                             },
-#                             'fill': {
-#                                 'scale': 'color',
-#                                 'field': 'groupByVal',
-#                             },
-#                             'opacity': [
-#                                 {
-#                                     'test': error_bar_test,
-#                                     'value': 1.0,
-#                                 },
-#                                 {
-#                                     'value': 0.0,
-#                                 },
-#                             ],
-#                         },
-#                     },
-#                 },
-#             ],
-#         },
-#     ]
-#
-#
+def _control_chart_grouped_marks(state):
+    datum_state = "datum['%s']" % state
+    # TODO: Clean this up
+    mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
+                   ' "state": datum["%s"], "count": datum.count,'
+                   ' "mean": datum.mean, "ci0": datum.ci0, "ci1": datum.ci1}'
+                   % state)
+    return [
+        {'type': GROUP,
+         'from': {
+             # Regroup by "group" column
+             'facet': {
+                 'name': SERIES,
+                 'data': AGG_BY_DATA,
+                 'groupby': GROUP_BY_VALUE}},
+         'marks': [
+             # Per-group mean lines
+             {'type': LINE,
+              'from': {'data': SERIES},
+              'sort': {'field': datum_state, 'order': ASCENDING_ORDER},
+              'encode': {
+                  'update': {
+                      'x': {'scale': CONTROL_X_SCALE, 'field': state},
+                      'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
+                      'stroke': {'scale': CONTROL_COLOR_SCALE,
+                                 'field': GROUP_BY_VALUE},
+                      'strokeWidth': {'signal':
+                                      CONTROL_MEAN_LINE_THICKNESS_SIGNAL},
+                      'opacity': [
+                          {'test': GROUP_TEST,
+                           'signal': CONTROL_MEAN_LINE_OPACITY_SIGNAL},
+                          {'value': OPACITY_000},
+                      ]}}},
+             # per-group symbols
+             {'type': SYMBOL,
+              'from': {'data': SERIES},
+              'encode': {
+                  'update': {
+                      'tooltip': {'signal': mean_signal},
+                      'x': {'scale': CONTROL_X_SCALE, 'field': state},
+                      'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
+                      'stroke': {'scale': CONTROL_COLOR_SCALE,
+                                 'field': GROUP_BY_VALUE},
+                      'fill': {'scale': CONTROL_COLOR_SCALE,
+                               'field': GROUP_BY_VALUE},
+                      'size': {'signal': CONTROL_MEAN_SYMBOL_SIZE_SIGNAL},
+                      'opacity': [
+                          {'test': GROUP_TEST,
+                           'signal': CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL},
+                          {'value': OPACITY_000}]}}},
+             # Per-group error bars
+             {'type': RECT,
+              'from': {'data': SERIES},
+              'encode': {
+                  'update': {
+                      'width': {'value': RECT_2},
+                      'x': {'scale': CONTROL_X_SCALE, 'field': state,
+                            'band': BAND_050},
+                      'y': {'scale': CONTROL_Y_SCALE, 'field': CI0},
+                      'y2': {'scale': CONTROL_Y_SCALE, 'field': CI1},
+                      'fill': {'scale': CONTROL_COLOR_SCALE,
+                               'field': GROUP_BY_VALUE},
+                      'opacity': [
+                          {'test': ERROR_BAR_TEST, 'value': OPACITY_100},
+                          {'value': OPACITY_000}]}}}]}]
+
+
+# TODO: revisit this
 def _individual_marks(individual_id, state, metric_signal, group_signal,
                       group_test, spaghetti_signal):
     return {
