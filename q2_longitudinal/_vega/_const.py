@@ -11,6 +11,9 @@
 METRIC_SIGNAL = {'signal': 'metric'}
 GROUP_SIGNAL = {'signal': 'grouper'}
 FEATURE_STATS_SIGNAL = {'signal': 'feature_stats'}
+
+METRIC_SIGNAL2 = 'metric'
+GROUP_SIGNAL2 = 'grouper'
 FEATURE_TOOLTIP_SIGNAL = 'datum'
 
 SHOW_GLOBAL_MEAN_SIGNAL = 'showGlobalMean'
@@ -22,6 +25,10 @@ CONTROL_MEAN_LINE_THICKNESS_SIGNAL = 'meanLineThickness'
 CONTROL_MEAN_LINE_OPACITY_SIGNAL = 'meanLineOpacity'
 CONTROL_MEAN_SYMBOL_SIZE_SIGNAL = 'meanSymbolSize'
 CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL = 'meanSymbolOpacity'
+CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL = 'spaghettiLineThickness'
+CONTROL_SPAGHET_LINE_OPACITY_SIGNAL = 'spaghettiLineOpacity'
+CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL = 'spaghettiSymbolSize'
+CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL = 'spaghettiSymbolOpacity'
 
 # TODO: should this be templated?
 GLOBAL_DOMAIN_SIGNAL = ("[min(data('globalVals')[0].cl0,data('globalVals')[0].minY), "  # noqa: E501
@@ -55,6 +62,7 @@ CI0 = 'ci0'
 CI1 = 'ci1'
 INDIVIDUAL = 'individual'
 SERIES = 'series'
+SPAGHETTIS = 'spaghettis'
 
 CONTROL_X_SCALE = 'x'
 CONTROL_Y_SCALE = 'y'

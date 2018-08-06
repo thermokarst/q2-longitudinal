@@ -216,13 +216,8 @@ def _volatility(metadata, table, importances, output_dir, state_column,
 
     is_feat_vol_plot = (importances is not None)
     if is_feat_vol_plot:
-        # We don't want to include any MD columns in the metric select in the
-        # feature volatility variant of the viz, except for the state vo
-        state_md_col = metadata.get_column(state_column).to_dataframe()
-        metadata = metadata.filter_columns(column_type='categorical')
-        metadata = metadata.merge(qiime2.Metadata(state_md_col))
-
         # Compile first differences and other stats on feature data
+        state_md_col = metadata.get_column(state_column).to_dataframe()
         feature_md = _summarize_feature_stats(table, state_md_col)
         # TODO: use metadata API
         feature_md.to_csv(
@@ -282,13 +277,14 @@ def _volatility(metadata, table, importances, output_dir, state_column,
     if is_feat_vol_plot:
         metric_columns.remove(state_column)
         default_metric = metric_columns[0]
-
-    # TODO: ID match table and importances
-    # TODO: do i need to set the id column label? or pass it through?
-    # TODO: drop zero imp?
-    # TODO: make importances label title case
-    feature_data = importances.join(feature_md, how='left')
-    feature_data = feature_data.reset_index(drop=False)
+        # TODO: ID match table and importances
+        # TODO: do i need to set the id column label? or pass it through?
+        # TODO: drop zero imp?
+        # TODO: make importances label title case
+        feature_data = importances.join(feature_md, how='left')
+        feature_data = feature_data.reset_index(drop=False)
+    else:
+        feature_data = pd.DataFrame()
 
     vega_spec = _render_volatility_spec(is_feat_vol_plot, control_chart_data,
                                         feature_data, individual_id_column,

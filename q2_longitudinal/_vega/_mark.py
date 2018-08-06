@@ -15,7 +15,10 @@ from ._const import (
     CONTROL_MEAN_LINE_THICKNESS_SIGNAL, SYMBOL,
     CONTROL_MEAN_SYMBOL_SIZE_SIGNAL, GROUP_TEST,
     CONTROL_MEAN_LINE_OPACITY_SIGNAL, CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL,
-    RECT_2, RECT, BAND_050, CI0, CI1, ERROR_BAR_TEST)
+    RECT_2, RECT, BAND_050, CI0, CI1, ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL,
+    CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL, METRIC_SIGNAL2, GROUP_SIGNAL2,
+    CONTROL_SPAGHET_LINE_OPACITY_SIGNAL, CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL,
+    CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL)
 
 
 def _control_chart_subplot(yscale):
@@ -178,99 +181,52 @@ def _control_chart_grouped_marks(state):
                           {'value': OPACITY_000}]}}}]}]
 
 
-# TODO: revisit this
-def _individual_marks(individual_id, state, metric_signal, group_signal,
-                      group_test, spaghetti_signal):
-    return {
-        'type': 'group',
-        'from': {
-            'facet': {
-                'name': 'spaghettis',
-                'data': 'individual',
-                'groupby': individual_id,
-            },
-        },
-        'marks': [
-            {
-                'type': 'line',
-                'from': {
-                    'data': 'spaghettis',
-                },
-                'sort': {
-                    'field': 'datum.%s' % state,
-                    'order': 'ascending',
-                },
-                'encode': {
-                    'update': {
-                        'strokeWidth': {
-                            'signal': 'spaghettiLineThickness',
-                        },
-                        'x': {
-                            'scale': 'x',
-                            'field': state,
-                        },
-                        'y': {
-                            'scale': 'y',
-                            'field': metric_signal,
-                        },
-                        'stroke': {
-                            'scale': 'color',
-                            'field': group_signal,
-                        },
-                        'opacity': [
-                            {
-                                'test': group_test,
-                                'signal': 'spaghettiLineOpacity',
-                            },
-                            {
-                                'value': 0.0,
-                            },
-                        ],
-                    },
-                },
-            },
-            # Need to add symbols into plot for mouseover
-            # https://github.com/vega/vega-tooltip/issues/120
-            {
-                'type': 'symbol',
-                'from': {
-                    'data': 'spaghettis',
-                },
-                'encode': {
-                    'update': {
-                        'tooltip': {
-                            'signal': spaghetti_signal,
-                        },
-                        'size': {
-                            'signal': 'spaghettiSymbolSize',
-                        },
-                        'x': {
-                            'scale': 'x',
-                            'field': state,
-                        },
-                        'y': {
-                            'scale': 'y',
-                            'field': metric_signal,
-                        },
-                        'stroke': {
-                            'scale': 'color',
-                            'field': group_signal,
-                        },
-                        'fill': {
-                            'scale': 'color',
-                            'field': group_signal,
-                        },
-                        'opacity': [
-                            {
-                                'test': group_test,
-                                'signal': 'spaghettiSymbolOpacity',
-                            },
-                            {
-                                'value': 0.0,
-                            },
-                        ],
-                    },
-                },
-            },
-        ],
-    }
+def _control_chart_individual_marks(individual_id, state):
+    datum_state = 'datum["%s"]' % state
+    # TODO: clean this up
+    spaghetti_signal = ('{"title": "spaghetti", "individual_id": '
+                        'datum["%s"], "group": datum.groupByVal, "state": '
+                        'datum["%s"], "metric": datum.metricVal}' %
+                        (individual_id, state))
+    return \
+        {'type': GROUP,
+         'from': {
+             # Regroup by "individual_id" column
+             'facet': {
+                 'name': SPAGHETTIS,
+                 'data': INDIVIDUAL,
+                 'groupby': individual_id}},
+         'marks': [
+             {'type': LINE, 'from': {'data': SPAGHETTIS},
+              'sort': {'field': datum_state, 'order': ASCENDING_ORDER},
+              'encode': {
+                  'update': {
+                      'strokeWidth': {'signal':
+                                      CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL},
+                      'x': {'scale': CONTROL_X_SCALE, 'field': state},
+                      'y': {'scale': CONTROL_Y_SCALE,
+                            'field': {'signal': METRIC_SIGNAL2}},
+                      'stroke': {'scale': CONTROL_COLOR_SCALE,
+                                 'field': {'signal': GROUP_SIGNAL2}},
+                      'opacity': [
+                          {'test': GROUP_TEST,
+                           'signal': CONTROL_SPAGHET_LINE_OPACITY_SIGNAL},
+                          {'value': OPACITY_000}]}}},
+             # Need to add symbols into plot for mouseover
+             # https://github.com/vega/vega-tooltip/issues/120
+             {'type': SYMBOL,
+              'from': {'data': SPAGHETTIS},
+              'encode': {
+                  'update': {
+                      'tooltip': {'signal': spaghetti_signal},
+                      'size': {'signal': CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL},
+                      'x': {'scale': CONTROL_X_SCALE, 'field': state},
+                      'y': {'scale': CONTROL_Y_SCALE, 'field': METRIC_SIGNAL2},
+                      'stroke': {'scale': CONTROL_COLOR_SCALE,
+                                 'field': {'signal': GROUP_SIGNAL2}},
+                      'fill': {'scale': CONTROL_COLOR_SCALE,
+                               'field': {'signal': GROUP_SIGNAL2}},
+                      'opacity': [
+                          {'test': GROUP_TEST,
+                           'signal': CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL},
+                          {'value': OPACITY_000}]}}}]}

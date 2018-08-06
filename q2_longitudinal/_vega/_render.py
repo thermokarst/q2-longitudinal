@@ -17,8 +17,8 @@ from ._axis import _control_chart_axes
 from ._legend import _control_chart_legend
 from ._mark import (
     _control_chart_global_marks, _control_chart_subplot,
-    _control_chart_grouped_marks)
-from ._signal import _volatility_signals
+    _control_chart_grouped_marks, _control_chart_individual_marks)
+from ._signal import _volatility_signals, _spaghetti_signals
 from ._scale import _layout_scale, _color_scale, _control_chart_subplot_scales
 from ._data import _control_chart_data
 from ._const import METRIC_SIGNAL
@@ -57,22 +57,15 @@ def _render_volatility_spec(is_feat_vol_plot: bool,
     control_chart['scales'] = _control_chart_subplot_scales(state, yscale)
     control_chart['axes'] = _control_chart_axes(state)
     control_chart['legends'] = _control_chart_legend()
-    spec['marks'].append(control_chart)
 
     spec['signals'].extend(_volatility_signals(features_chart_data,
                                                default_group, group_columns,
                                                default_metric, metric_columns))
 
-    # TODO: Revisit this
-    # if individual_id:
-    #     spaghetti_signal = ('{"title": "spaghetti", "individual_id": '
-    #                         'datum["%s"], "group": datum.groupByVal, "state": '
-    #                         'datum["%s"], "metric": datum.metricVal}' %
-    #                         (individual_id, state))
-    #     spec['signals'].append(_individual_marks(individual_id, state,
-    #                                              METRIC_SIGNAL, GROUP_SIGNAL,
-    #                                              GROUP_TEST, spaghetti_signal))
+    if individual_id:
+        control_chart['marks'].append(
+            _control_chart_individual_marks(individual_id, state))
+        spec['signals'].extend(_spaghetti_signals())
 
-    #     spec['signals'].extend(_spaghetti_signals())
-
+    spec['marks'].append(control_chart)
     return json.dumps(spec)
