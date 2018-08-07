@@ -7,10 +7,9 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    INDIVIDUAL, FORMULA, GROUP_BY_VALUE, DATUM_METRIC_EXPR, DATUM_GROUPER_EXPR,
-    METRIC_VALUE, GLOBAL_VALS, AGGREGATE, MEAN, MIN, MAX, STDEV,
-    SIG_METRIC, MIN_X, MAX_X, MIN_Y, MAX_Y, CL0, CL1, CL2, CL3, EXT,
-    AGG_BY_DATA, CI0, CI1, COUNT, SELECTED)
+    INDIVIDUAL, FORMULA, GROUP_BY_VALUE, METRIC_VALUE, GLOBAL_VALS, AGGREGATE,
+    MEAN, MIN, MAX, STDEV, SIG_METRIC, SIG_GROUP, MIN_X, MAX_X, MIN_Y, MAX_Y,
+    CL0, CL1, CL2, CL3, EXT, AGG_BY_DATA, CI0, CI1, COUNT, SELECTED)
 
 
 def _control_chart_data(control_chart_data, state):
@@ -19,9 +18,9 @@ def _control_chart_data(control_chart_data, state):
          'values': control_chart_data.to_dict('record'),
          'transform': [
              {'type': FORMULA, 'as': GROUP_BY_VALUE,
-              'expr': DATUM_GROUPER_EXPR},
+              'expr': 'datum[%s]' % SIG_GROUP},
              {'type': FORMULA, 'as': METRIC_VALUE,
-              'expr': DATUM_METRIC_EXPR}]},
+              'expr': 'datum[%s]' % SIG_METRIC}]},
         {'name': GLOBAL_VALS,
          'source': INDIVIDUAL,
          'transform': [

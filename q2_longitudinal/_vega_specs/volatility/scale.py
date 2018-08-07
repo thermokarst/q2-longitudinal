@@ -7,8 +7,8 @@
 # ----------------------------------------------------------------------------
 
 
-from .const import (INDIVIDUAL, CONTROL_CHART_HEIGHT_SIGNAL,
-                    COLOR_SCHEME_SIGNAL, GLOBAL_DOMAIN_SIGNAL, GROUP_BY_VALUE,
+from .const import (INDIVIDUAL, SIG_CTRL_CHART_HEIGHT,
+                    SIG_COLOR_SCHEME, GLOBAL_DOMAIN_SIGNAL, GROUP_BY_VALUE,
                     CONTROL_X_SCALE, LINEAR, WIDTH, CONTROL_Y_SCALE,
                     CONTROL_COLOR_SCALE, ORDINAL, LAYOUT_Y, BAND, ROW_1, ROW_2,
                     HEIGHT)
@@ -28,7 +28,7 @@ def _color_scale():
     return \
         {'name': CONTROL_COLOR_SCALE,
          'type': ORDINAL,
-         'range': {'scheme': {'signal': COLOR_SCHEME_SIGNAL}},
+         'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
          'domain': {'data': INDIVIDUAL, 'field': GROUP_BY_VALUE},
          'nice': True}
 
@@ -50,10 +50,10 @@ def _control_chart_subplot_scales(state, yscale):
          # which is why this setting is still a QIIME 2 param to
          # this viz.
          'type': yscale,
-         'range': [{'signal': CONTROL_CHART_HEIGHT_SIGNAL}, 0],
+         'range': [{'signal': SIG_CTRL_CHART_HEIGHT}, 0],
          'nice': True,
          'domain': {'signal': GLOBAL_DOMAIN_SIGNAL, 'sort': True}},
         {'name': CONTROL_COLOR_SCALE,
          'type': ORDINAL,
-         'range': {'scheme': {'signal': COLOR_SCHEME_SIGNAL}},
+         'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
          'domain': {'data': INDIVIDUAL, 'field': GROUP_BY_VALUE}}]

@@ -6,30 +6,35 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+from .const import (
+    SIG_METRIC, SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS,
+    SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME
+    )
+
 
 def _volatility_signals(features_chart_data, default_group, group_columns,
                         default_metric, metric_columns):
     return [
         # LAYOUT/DIMENSIONS
-        {'name': 'controlChartHeight', 'value': 400},
+        {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
         {'name': 'importancesChartHeight',
          # TODO: make this a vega expression
          'value': 10 * len(features_chart_data.index)},
         {'name': 'height',
-         'update': 'controlChartHeight + importancesChartHeight'},
+         'update': '%s + importancesChartHeight' % SIG_CTRL_CHART_HEIGHT},
         {'name': 'halfWidth', 'update': 'width / 2'},
         {'name': 'width', 'value': '', 'bind': {'input': 'text'},
          'on': [{'events': {'source': 'window', 'type': 'resize'},
                  'update': 'containerSize()[0]'}]},
 
-         # UI WIDGETS
+        # UI WIDGETS
         {'name': 'showErrorBars', 'value': False,
          'bind': {'input': 'checkbox', 'element': '#toggle-error-bars'}},
-        {'name': 'grouper',
+        {'name': SIG_GROUP,
          'value': default_group,
          'bind': {'input': 'select', 'element': '#group-column',
                   'options': group_columns}},
-        {'name': 'metric', 'value': default_metric,
+        {'name': SIG_METRIC, 'value': default_metric,
          'bind': {'input': 'select', 'element': '#metric-column',
                   'options': metric_columns},
          # TODO: Is this a problem to leave this here?
@@ -39,9 +44,9 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
               'update': 'datum.id', 'force': True},
              {'events': '@descriptive_stats:click',
               'update': 'datum.id', 'force': True}]},
-        {'name': 'showGlobalMean', 'value': False,
+        {'name': SIG_SHOW_GLOBAL_MEAN, 'value': False,
          'bind': {'input': 'checkbox', 'element': '#toggle-global-mean'}},
-        {'name': 'showGlobalControlLimits', 'value': False,
+        {'name': SIG_SHOW_GLOBAL_CTRL_LIMS, 'value': False,
          'bind': {'input': 'checkbox',
                   'element': '#toggle-global-control-limits'}},
         {'name': 'meanLineThickness', 'value': 3,
@@ -56,7 +61,7 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
         {'name': 'meanSymbolOpacity', 'value': 0.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 1.0, 'step': 0.01,
                   'element': '#mean-symbol-opacity'}},
-        {'name': 'colorScheme', 'value': 'category10',
+        {'name': SIG_COLOR_SCHEME, 'value': 'category10',
          'bind': {'input': 'select', 'element': '#color-scheme',
                   'options': ['accent', 'category10', 'category20',
                               'category20b', 'category20c', 'dark2', 'paired',

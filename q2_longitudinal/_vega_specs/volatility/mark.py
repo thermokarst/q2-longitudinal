@@ -9,8 +9,8 @@
 from .const import (
     GLOBAL_VALS, MIN_X, MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
     CONTROL_Y_SCALE, SIG_SHOW_GLOBAL_MEAN, STROKE_2, OPACITY_000,
-    OPACITY_100, DASH_A, DASH_B, SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL, WIDTH,
-    CONTROL_CHART_HEIGHT_SIGNAL, RULE, GROUP, SERIES, AGG_BY_DATA,
+    OPACITY_100, DASH_A, DASH_B, SIG_SHOW_GLOBAL_CTRL_LIMS, WIDTH,
+    SIG_CTRL_CHART_HEIGHT, RULE, GROUP, SERIES, AGG_BY_DATA,
     GROUP_BY_VALUE, LINE, ASCENDING_ORDER, CONTROL_COLOR_SCALE,
     CONTROL_MEAN_LINE_THICKNESS_SIGNAL, SYMBOL,
     CONTROL_MEAN_SYMBOL_SIZE_SIGNAL, GROUP_TEST,
@@ -30,7 +30,7 @@ def _control_chart_subplot(yscale):
              'enter': {
                  'y': {'value': 0},
                  'width': {'signal': WIDTH},
-                 'height': {'signal': CONTROL_CHART_HEIGHT_SIGNAL},
+                 'height': {'signal': SIG_CTRL_CHART_HEIGHT},
                 }},
          'marks': [],
          'scales': [],
@@ -63,7 +63,7 @@ def _control_chart_global_marks():
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL0},
                  'strokeOpacity': [
-                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                     {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': OPACITY_100},
                      {'value': OPACITY_000},
                  ]}}},
@@ -78,7 +78,7 @@ def _control_chart_global_marks():
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL1},
                  'strokeOpacity': [
-                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                     {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': OPACITY_100},
                      {'value': OPACITY_000},
                  ]}}},
@@ -93,7 +93,7 @@ def _control_chart_global_marks():
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL2},
                  'strokeOpacity': [
-                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                     {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': OPACITY_100},
                      {'value': OPACITY_000},
                  ]}}},
@@ -108,7 +108,7 @@ def _control_chart_global_marks():
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL3},
                  'strokeOpacity': [
-                     {'test': SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL,
+                     {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': OPACITY_100},
                      {'value': OPACITY_000},
                  ]}}}]

@@ -24,10 +24,9 @@
 SIG_METRIC = 'metric'
 SIG_GROUP = 'grouper'
 SIG_SHOW_GLOBAL_MEAN = 'showGlobalMean'
-
-SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL = 'showGlobalControlLimits'
-CONTROL_CHART_HEIGHT_SIGNAL = 'controlChartHeight'
-COLOR_SCHEME_SIGNAL = 'colorScheme'
+SIG_SHOW_GLOBAL_CTRL_LIMS = 'showGlobalControlLimits'
+SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
+SIG_COLOR_SCHEME = 'colorScheme'
 
 CONTROL_MEAN_LINE_THICKNESS_SIGNAL = 'meanLineThickness'
 CONTROL_MEAN_LINE_OPACITY_SIGNAL = 'meanLineOpacity'
@@ -114,8 +113,6 @@ GROUP_BY_VALUE = 'groupByVal'
 LINE = 'line'
 ASCENDING_ORDER = 'ascending'
 
-DATUM_GROUPER_EXPR = 'datum[grouper]'
-DATUM_METRIC_EXPR = 'datum[metric]'
 METRIC_VALUE = 'metricVal'
 AGGREGATE = 'aggregate'
 
