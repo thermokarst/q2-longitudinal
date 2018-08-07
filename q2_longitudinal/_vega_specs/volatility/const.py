@@ -7,12 +7,8 @@
 # ----------------------------------------------------------------------------
 
 # TODO: ag for these
-# TODO: just ship signal names around, not the dict
-GROUP_SIGNAL = {'signal': 'grouper'}
-FEATURE_STATS_SIGNAL = {'signal': 'feature_stats'}
-
 METRIC_SIGNAL = 'metric'
-GROUP_SIGNAL2 = 'grouper'
+GROUP_SIGNAL = 'grouper'
 FEATURE_TOOLTIP_SIGNAL = 'datum'
 
 SHOW_GLOBAL_MEAN_SIGNAL = 'showGlobalMean'

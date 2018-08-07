@@ -16,7 +16,7 @@ from .const import (
     CONTROL_MEAN_SYMBOL_SIZE_SIGNAL, GROUP_TEST,
     CONTROL_MEAN_LINE_OPACITY_SIGNAL, CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL,
     RECT_2, RECT, BAND_050, CI0, CI1, ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL,
-    CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL, METRIC_SIGNAL, GROUP_SIGNAL2,
+    CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL, METRIC_SIGNAL, GROUP_SIGNAL,
     CONTROL_SPAGHET_LINE_OPACITY_SIGNAL, CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL,
     CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL)
 
@@ -207,7 +207,7 @@ def _control_chart_individual_marks(individual_id, state):
                       'y': {'scale': CONTROL_Y_SCALE,
                             'field': {'signal': METRIC_SIGNAL}},
                       'stroke': {'scale': CONTROL_COLOR_SCALE,
-                                 'field': {'signal': GROUP_SIGNAL2}},
+                                 'field': {'signal': GROUP_SIGNAL}},
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': CONTROL_SPAGHET_LINE_OPACITY_SIGNAL},
@@ -224,9 +224,9 @@ def _control_chart_individual_marks(individual_id, state):
                       'y': {'scale': CONTROL_Y_SCALE,
                             'field': {'signal': METRIC_SIGNAL}},
                       'stroke': {'scale': CONTROL_COLOR_SCALE,
-                                 'field': {'signal': GROUP_SIGNAL2}},
+                                 'field': {'signal': GROUP_SIGNAL}},
                       'fill': {'scale': CONTROL_COLOR_SCALE,
-                               'field': {'signal': GROUP_SIGNAL2}},
+                               'field': {'signal': GROUP_SIGNAL}},
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL},
