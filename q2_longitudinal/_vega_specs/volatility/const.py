@@ -6,6 +6,17 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+# Some thoughts on "rules"
+# 1. These constants should be used for identifiers only (don't worry about
+#    values or things like mark types).
+# 2. Names should be prefixed with a 3 character abbreviation:
+#    SIG - signal
+#    SCL - scale
+#    DAT - data
+#    FLD - field
+#    TST - test
+#    EXP - expression
+
 # TODO: ag for these
 
 # SIGNALS
