@@ -8,7 +8,8 @@
 
 # Some thoughts on "rules"
 # 1. These constants should be used for identifiers only (don't worry about
-#    values or things like mark types).
+#    values or things like mark types). The exception is when we are
+#    coordinating styles across multiple components.
 # 2. Names should be prefixed with a 3 character abbreviation:
 #    SIG - signal
 #    SCL - scale
@@ -16,6 +17,7 @@
 #    FLD - field
 #    TST - test
 #    EXP - expression
+#    STY - style
 
 # TODO: ag for these
 
@@ -36,27 +38,14 @@ SIG_CTRL_SPG_LINE_OPACITY = 'spaghettiLineOpacity'
 SIG_CTRL_SPG_SYMBOL_SIZE = 'spaghettiSymbolSize'
 SIG_CTRL_SPG_SYMBOL_OPACITY = 'spaghettiSymbolOpacity'
 
-# TODO: should this be templated?
-GLOBAL_DOMAIN_SIGNAL = ("[min(data('globalVals')[0].cl0,data('globalVals')[0].minY), "  # noqa: E501
-                        " max(data('globalVals')[0].cl3,data('globalVals')[0].maxY)]")  # noqa: E501
+# STYLES
+###############################################################################
+STY_STROKE_2 = 2
+STY_DASH_A = [8, 8]
+STY_DASH_B = [6, 2]
 
-STROKE_2 = 2
-RECT_2 = 2.0
-DASH_A = [8, 8]
-DASH_B = [6, 2]
-OPACITY_000 = 0.0
-OPACITY_015 = 0.15
-OPACITY_025 = 0.25
-OPACITY_100 = 1.0
-SIZE_100 = 100
-BAND_050 = 0.5
-
-RULE = 'rule'
-RECT = 'rect'
-GROUP = 'group'
-SYMBOL = 'symbol'
-FORMULA = 'formula'
-
+# NEEDS TO BE EVALUATED
+###############################################################################
 GLOBAL_VALS = 'globalVals'
 MIN_X = 'minX'
 MAX_X = 'maxX'

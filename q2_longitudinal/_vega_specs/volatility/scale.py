@@ -7,11 +7,10 @@
 # ----------------------------------------------------------------------------
 
 
-from .const import (INDIVIDUAL, SIG_CTRL_CHART_HEIGHT,
-                    SIG_COLOR_SCHEME, GLOBAL_DOMAIN_SIGNAL, GROUP_BY_VALUE,
-                    CONTROL_X_SCALE, LINEAR, WIDTH, CONTROL_Y_SCALE,
-                    CONTROL_COLOR_SCALE, ORDINAL, LAYOUT_Y, BAND, ROW_1, ROW_2,
-                    HEIGHT)
+from .const import (INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
+                    GROUP_BY_VALUE, CONTROL_X_SCALE, LINEAR, WIDTH,
+                    CONTROL_Y_SCALE, CONTROL_COLOR_SCALE, ORDINAL, LAYOUT_Y,
+                    BAND, ROW_1, ROW_2, HEIGHT)
 
 
 def _layout_scale():
@@ -52,7 +51,11 @@ def _control_chart_subplot_scales(state, yscale):
          'type': yscale,
          'range': [{'signal': SIG_CTRL_CHART_HEIGHT}, 0],
          'nice': True,
-         'domain': {'signal': GLOBAL_DOMAIN_SIGNAL, 'sort': True}},
+         'domain': {'signal': "[min(data('globalVals')[0].cl0,"
+                              "     data('globalVals')[0].minY),"
+                              " max(data('globalVals')[0].cl3,"
+                              "     data('globalVals')[0].maxY)]",
+                    'sort': True}},
         {'name': CONTROL_COLOR_SCALE,
          'type': ORDINAL,
          'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},

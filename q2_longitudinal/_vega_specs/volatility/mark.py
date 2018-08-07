@@ -8,14 +8,14 @@
 
 from .const import (
     GLOBAL_VALS, MIN_X, MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
-    CONTROL_Y_SCALE, SIG_SHOW_GLOBAL_MEAN, STROKE_2, OPACITY_000,
-    OPACITY_100, DASH_A, DASH_B, SIG_SHOW_GLOBAL_CTRL_LIMS, WIDTH,
-    SIG_CTRL_CHART_HEIGHT, RULE, GROUP, SERIES, AGG_BY_DATA,
+    CONTROL_Y_SCALE, SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2,
+    STY_DASH_A, STY_DASH_B, SIG_SHOW_GLOBAL_CTRL_LIMS, WIDTH,
+    SIG_CTRL_CHART_HEIGHT, SERIES, AGG_BY_DATA,
     GROUP_BY_VALUE, LINE, ASCENDING_ORDER, CONTROL_COLOR_SCALE,
-    SIG_CTRL_MEAN_LINE_THICKNESS, SYMBOL,
+    SIG_CTRL_MEAN_LINE_THICKNESS,
     SIG_CTRL_MEAN_SYMBOL_SIZE, GROUP_TEST,
     SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_OPACITY,
-    RECT_2, RECT, BAND_050, CI0, CI1, ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL,
+    CI0, CI1, ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL,
     SIG_CTRL_SPG_LINE_THICKNESS, SIG_METRIC, SIG_GROUP,
     SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
     SIG_CTRL_SPG_SYMBOL_OPACITY)
@@ -25,7 +25,7 @@ def _control_chart_subplot(yscale):
     return \
         {'description': 'Control Chart',
          'name': 'spaghetti',
-         'type': GROUP,
+         'type': 'group',
          'encode': {
              'enter': {
                  'y': {'value': 0},
@@ -41,76 +41,76 @@ def _control_chart_subplot(yscale):
 def _control_chart_global_marks():
     return [
         # Global Mean
-        {'type': RULE,
+        {'type': 'rule',
          'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': STROKE_2},
+                 'strokeWidth': {'value': STY_STROKE_2},
                  'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
                  'strokeOpacity': [
-                     {'test': SIG_SHOW_GLOBAL_MEAN, 'value': OPACITY_100},
-                     {'value': OPACITY_000}]}}},
+                     {'test': SIG_SHOW_GLOBAL_MEAN, 'value': 1.0},
+                     {'value': 0.0}]}}},
         # Global confidence limit, -3x std dev
-        {'type': RULE,
+        {'type': 'rule',
          'from': {'data': 'globalVals'},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': STROKE_2},
-                 'strokeDash': {'value': DASH_A},
+                 'strokeWidth': {'value': STY_STROKE_2},
+                 'strokeDash': {'value': STY_DASH_A},
                  'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL0},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
-                      'value': OPACITY_100},
-                     {'value': OPACITY_000},
+                      'value': 1.0},
+                     {'value': 0.0},
                  ]}}},
         # Global confidence limit, -2x std dev
-        {'type': RULE,
+        {'type': 'rule',
          'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': STROKE_2},
-                 'strokeDash': {'value': DASH_B},
+                 'strokeWidth': {'value': STY_STROKE_2},
+                 'strokeDash': {'value': STY_DASH_B},
                  'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL1},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
-                      'value': OPACITY_100},
-                     {'value': OPACITY_000},
+                      'value': 1.0},
+                     {'value': 0.0},
                  ]}}},
         # Global confidence limit, +2x std dev
-        {'type': RULE,
+        {'type': 'rule',
          'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': STROKE_2},
-                 'strokeDash': {'value': DASH_A},
+                 'strokeWidth': {'value': STY_STROKE_2},
+                 'strokeDash': {'value': STY_DASH_A},
                  'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL2},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
-                      'value': OPACITY_100},
-                     {'value': OPACITY_000},
+                      'value': 1.0},
+                     {'value': 0.0},
                  ]}}},
         # Global confidence limit, +3x std dev
-        {'type': RULE,
+        {'type': 'rule',
          'from': {'data': GLOBAL_VALS},
          'encode': {
              'update': {
-                 'strokeWidth': {'value': STROKE_2},
-                 'strokeDash': {'value': DASH_B},
+                 'strokeWidth': {'value': STY_STROKE_2},
+                 'strokeDash': {'value': STY_DASH_B},
                  'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL3},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
-                      'value': OPACITY_100},
-                     {'value': OPACITY_000},
+                      'value': 1.0},
+                     {'value': 0.0},
                  ]}}}]
 
 
@@ -122,7 +122,7 @@ def _control_chart_grouped_marks(state):
                    ' "mean": datum.mean, "ci0": datum.ci0, "ci1": datum.ci1}'
                    % state)
     return [
-        {'type': GROUP,
+        {'type': 'group',
          'from': {
              # Regroup by "group" column
              'facet': {
@@ -145,10 +145,10 @@ def _control_chart_grouped_marks(state):
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': SIG_CTRL_MEAN_LINE_OPACITY},
-                          {'value': OPACITY_000},
+                          {'value': 0.0},
                       ]}}},
              # per-group symbols
-             {'type': SYMBOL,
+             {'type': 'symbol',
               'from': {'data': SERIES},
               'encode': {
                   'update': {
@@ -163,22 +163,22 @@ def _control_chart_grouped_marks(state):
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': SIG_CTRL_MEAN_SYMBOL_OPACITY},
-                          {'value': OPACITY_000}]}}},
+                          {'value': 0.0}]}}},
              # Per-group error bars
-             {'type': RECT,
+             {'type': 'rect',
               'from': {'data': SERIES},
               'encode': {
                   'update': {
-                      'width': {'value': RECT_2},
+                      'width': {'value': 2.0},
                       'x': {'scale': CONTROL_X_SCALE, 'field': state,
-                            'band': BAND_050},
+                            'band': 0.5},
                       'y': {'scale': CONTROL_Y_SCALE, 'field': CI0},
                       'y2': {'scale': CONTROL_Y_SCALE, 'field': CI1},
                       'fill': {'scale': CONTROL_COLOR_SCALE,
                                'field': GROUP_BY_VALUE},
                       'opacity': [
-                          {'test': ERROR_BAR_TEST, 'value': OPACITY_100},
-                          {'value': OPACITY_000}]}}}]}]
+                          {'test': ERROR_BAR_TEST, 'value': 1.0},
+                          {'value': 0.0}]}}}]}]
 
 
 def _control_chart_individual_marks(individual_id, state):
@@ -189,7 +189,7 @@ def _control_chart_individual_marks(individual_id, state):
                         'datum["%s"], "metric": datum.metricVal}' %
                         (individual_id, state))
     return \
-        {'type': GROUP,
+        {'type': 'group',
          'from': {
              # Regroup by "individual_id" column
              'facet': {
@@ -211,10 +211,10 @@ def _control_chart_individual_marks(individual_id, state):
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': SIG_CTRL_SPG_LINE_OPACITY},
-                          {'value': OPACITY_000}]}}},
+                          {'value': 0.0}]}}},
              # Need to add symbols into plot for mouseover
              # https://github.com/vega/vega-tooltip/issues/120
-             {'type': SYMBOL,
+             {'type': 'symbol',
               'from': {'data': SPAGHETTIS},
               'encode': {
                   'update': {
@@ -230,4 +230,4 @@ def _control_chart_individual_marks(individual_id, state):
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': SIG_CTRL_SPG_SYMBOL_OPACITY},
-                          {'value': OPACITY_000}]}}}]}
+                          {'value': 0.0}]}}}]}

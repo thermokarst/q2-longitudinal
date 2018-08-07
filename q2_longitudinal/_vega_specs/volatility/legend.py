@@ -8,8 +8,8 @@
 
 from .const import (
     CONTROL_SYMBOL_LEGEND, CONTROL_LABEL_LEGEND, TRANSPARENT, SIG_GROUP,
-    CONTROL_COLOR_SCALE, OPACITY_TEST, STROKE_2, OPACITY_015, OPACITY_025,
-    OPACITY_100, SIZE_100)
+    CONTROL_COLOR_SCALE, OPACITY_TEST, STY_STROKE_2,
+    )
 
 
 def _control_chart_legend():
@@ -22,16 +22,16 @@ def _control_chart_legend():
                  'interactive': True,
                  'update': {
                      'fill': {'value': TRANSPARENT},
-                     'strokeWidth': {'value': STROKE_2},
+                     'strokeWidth': {'value': STY_STROKE_2},
                      'opacity': [
-                         {'test': OPACITY_TEST, 'value': OPACITY_100},
-                         {'value': OPACITY_015},
+                         {'test': OPACITY_TEST, 'value': 1.0},
+                         {'value': 0.15},
                      ],
-                     'size': {'value': SIZE_100}}},
+                     'size': {'value': 100}}},
              'labels': {
                  'name': CONTROL_LABEL_LEGEND,
                  'interactive': True,
                  'update': {
                      'opacity': [
-                         {'test': OPACITY_TEST, 'value': OPACITY_100},
-                         {'value': OPACITY_025}]}}}}]
+                         {'test': OPACITY_TEST, 'value': 1.0},
+                         {'value': 0.25}]}}}}]

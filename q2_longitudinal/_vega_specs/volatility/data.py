@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    INDIVIDUAL, FORMULA, GROUP_BY_VALUE, METRIC_VALUE, GLOBAL_VALS, AGGREGATE,
+    INDIVIDUAL, GROUP_BY_VALUE, METRIC_VALUE, GLOBAL_VALS, AGGREGATE,
     MEAN, MIN, MAX, STDEV, SIG_METRIC, SIG_GROUP, MIN_X, MAX_X, MIN_Y, MAX_Y,
     CL0, CL1, CL2, CL3, EXT, AGG_BY_DATA, CI0, CI1, COUNT, SELECTED)
 
@@ -17,9 +17,9 @@ def _control_chart_data(control_chart_data, state):
         {'name': INDIVIDUAL,
          'values': control_chart_data.to_dict('record'),
          'transform': [
-             {'type': FORMULA, 'as': GROUP_BY_VALUE,
+             {'type': 'formula', 'as': GROUP_BY_VALUE,
               'expr': 'datum[%s]' % SIG_GROUP},
-             {'type': FORMULA, 'as': METRIC_VALUE,
+             {'type': 'formula', 'as': METRIC_VALUE,
               'expr': 'datum[%s]' % SIG_METRIC}]},
         {'name': GLOBAL_VALS,
          'source': INDIVIDUAL,
@@ -35,15 +35,15 @@ def _control_chart_data(control_chart_data, state):
                   {'signal': SIG_METRIC}],
               'as': [MEAN, MIN_X, MAX_X, STDEV, MIN_Y, MAX_Y]},
              # TODO: clean up these expressions
-             {'type': FORMULA, 'as': CL0,
+             {'type': 'formula', 'as': CL0,
               'expr': 'datum.mean - (3 * datum.stdev)'},
-             {'type': FORMULA, 'as': CL1,
+             {'type': 'formula', 'as': CL1,
               'expr': 'datum.mean - (2 * datum.stdev)'},
-             {'type': FORMULA, 'as': CL2,
+             {'type': 'formula', 'as': CL2,
               'expr': 'datum.mean + (2 * datum.stdev)'},
-             {'type': FORMULA, 'as': CL3,
+             {'type': 'formula', 'as': CL3,
               'expr': 'datum.mean + (3 * datum.stdev)'},
-             {'type': FORMULA, 'as': EXT,
+             {'type': 'formula', 'as': EXT,
               'expr': '[datum.cl0, datum.cl3]'}]},
         {'name': AGG_BY_DATA,
          'source': INDIVIDUAL,
