@@ -8,7 +8,11 @@
 
 from .const import (
     SIG_METRIC, SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS,
-    SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME
+    SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME, SIG_CTRL_MEAN_LINE_THICKNESS,
+    SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_SIZE,
+    SIG_CTRL_MEAN_SYMBOL_OPACITY, SIG_CTRL_SPG_LINE_THICKNESS,
+    SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
+    SIG_CTRL_SPG_SYMBOL_OPACITY
     )
 
 
@@ -49,16 +53,16 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
         {'name': SIG_SHOW_GLOBAL_CTRL_LIMS, 'value': False,
          'bind': {'input': 'checkbox',
                   'element': '#toggle-global-control-limits'}},
-        {'name': 'meanLineThickness', 'value': 3,
+        {'name': SIG_CTRL_MEAN_LINE_THICKNESS, 'value': 3,
          'bind': {'input': 'range', 'min': 0.1, 'max': 10, 'step': 0.1,
                   'element': '#mean-line-thickness'}},
-        {'name': 'meanLineOpacity', 'value': 1.0,
+        {'name': SIG_CTRL_MEAN_LINE_OPACITY, 'value': 1.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 1.0, 'step': 0.01,
                   'element': '#mean-line-opacity'}},
-        {'name': 'meanSymbolSize', 'value': 50.0,
+        {'name': SIG_CTRL_MEAN_SYMBOL_SIZE, 'value': 50.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 500.0, 'step': 1.0,
                   'element': '#mean-symbol-size'}},
-        {'name': 'meanSymbolOpacity', 'value': 0.0,
+        {'name': SIG_CTRL_MEAN_SYMBOL_OPACITY, 'value': 0.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 1.0, 'step': 0.01,
                   'element': '#mean-symbol-opacity'}},
         {'name': SIG_COLOR_SCHEME, 'value': 'category10',
@@ -83,16 +87,16 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
 
 def _spaghetti_signals():
     return [
-        {'name': 'spaghettiLineThickness', 'value': 0.5,
+        {'name': SIG_CTRL_SPG_LINE_THICKNESS, 'value': 0.5,
          'bind': {'input': 'range', 'min': 0.1, 'max': 10, 'step': 0.1,
                   'element': '#spaghetti-line-thickness'}},
-        {'name': 'spaghettiLineOpacity', 'value': 0.5,
+        {'name': SIG_CTRL_SPG_LINE_OPACITY, 'value': 0.5,
          'bind': {'input': 'range', 'min': 0.0, 'max': 1.0, 'step': 0.01,
                   'element': '#spaghetti-line-opacity'}},
-        {'name': 'spaghettiSymbolSize', 'value': 50.0,
+        {'name': SIG_CTRL_SPG_SYMBOL_SIZE, 'value': 50.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 500.0, 'step': 1.0,
                   'element': '#spaghetti-symbol-size'}},
-        {'name': 'spaghettiSymbolOpacity', 'value': 0.0,
+        {'name': SIG_CTRL_SPG_SYMBOL_OPACITY, 'value': 0.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 1.0, 'step': 0.01,
                   'element': '#spaghetti-symbol-opacity'}}]
 

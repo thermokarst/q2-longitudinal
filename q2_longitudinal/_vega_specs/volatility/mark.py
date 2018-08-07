@@ -12,13 +12,13 @@ from .const import (
     OPACITY_100, DASH_A, DASH_B, SIG_SHOW_GLOBAL_CTRL_LIMS, WIDTH,
     SIG_CTRL_CHART_HEIGHT, RULE, GROUP, SERIES, AGG_BY_DATA,
     GROUP_BY_VALUE, LINE, ASCENDING_ORDER, CONTROL_COLOR_SCALE,
-    CONTROL_MEAN_LINE_THICKNESS_SIGNAL, SYMBOL,
-    CONTROL_MEAN_SYMBOL_SIZE_SIGNAL, GROUP_TEST,
-    CONTROL_MEAN_LINE_OPACITY_SIGNAL, CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL,
+    SIG_CTRL_MEAN_LINE_THICKNESS, SYMBOL,
+    SIG_CTRL_MEAN_SYMBOL_SIZE, GROUP_TEST,
+    SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_OPACITY,
     RECT_2, RECT, BAND_050, CI0, CI1, ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL,
-    CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL, SIG_METRIC, SIG_GROUP,
-    CONTROL_SPAGHET_LINE_OPACITY_SIGNAL, CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL,
-    CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL)
+    SIG_CTRL_SPG_LINE_THICKNESS, SIG_METRIC, SIG_GROUP,
+    SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
+    SIG_CTRL_SPG_SYMBOL_OPACITY)
 
 
 def _control_chart_subplot(yscale):
@@ -141,10 +141,10 @@ def _control_chart_grouped_marks(state):
                       'stroke': {'scale': CONTROL_COLOR_SCALE,
                                  'field': GROUP_BY_VALUE},
                       'strokeWidth': {'signal':
-                                      CONTROL_MEAN_LINE_THICKNESS_SIGNAL},
+                                      SIG_CTRL_MEAN_LINE_THICKNESS},
                       'opacity': [
                           {'test': GROUP_TEST,
-                           'signal': CONTROL_MEAN_LINE_OPACITY_SIGNAL},
+                           'signal': SIG_CTRL_MEAN_LINE_OPACITY},
                           {'value': OPACITY_000},
                       ]}}},
              # per-group symbols
@@ -159,10 +159,10 @@ def _control_chart_grouped_marks(state):
                                  'field': GROUP_BY_VALUE},
                       'fill': {'scale': CONTROL_COLOR_SCALE,
                                'field': GROUP_BY_VALUE},
-                      'size': {'signal': CONTROL_MEAN_SYMBOL_SIZE_SIGNAL},
+                      'size': {'signal': SIG_CTRL_MEAN_SYMBOL_SIZE},
                       'opacity': [
                           {'test': GROUP_TEST,
-                           'signal': CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL},
+                           'signal': SIG_CTRL_MEAN_SYMBOL_OPACITY},
                           {'value': OPACITY_000}]}}},
              # Per-group error bars
              {'type': RECT,
@@ -202,7 +202,7 @@ def _control_chart_individual_marks(individual_id, state):
               'encode': {
                   'update': {
                       'strokeWidth': {'signal':
-                                      CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL},
+                                      SIG_CTRL_SPG_LINE_THICKNESS},
                       'x': {'scale': CONTROL_X_SCALE, 'field': state},
                       'y': {'scale': CONTROL_Y_SCALE,
                             'field': {'signal': SIG_METRIC}},
@@ -210,7 +210,7 @@ def _control_chart_individual_marks(individual_id, state):
                                  'field': {'signal': SIG_GROUP}},
                       'opacity': [
                           {'test': GROUP_TEST,
-                           'signal': CONTROL_SPAGHET_LINE_OPACITY_SIGNAL},
+                           'signal': SIG_CTRL_SPG_LINE_OPACITY},
                           {'value': OPACITY_000}]}}},
              # Need to add symbols into plot for mouseover
              # https://github.com/vega/vega-tooltip/issues/120
@@ -219,7 +219,7 @@ def _control_chart_individual_marks(individual_id, state):
               'encode': {
                   'update': {
                       'tooltip': {'signal': spaghetti_signal},
-                      'size': {'signal': CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL},
+                      'size': {'signal': SIG_CTRL_SPG_SYMBOL_SIZE},
                       'x': {'scale': CONTROL_X_SCALE, 'field': state},
                       'y': {'scale': CONTROL_Y_SCALE,
                             'field': {'signal': SIG_METRIC}},
@@ -229,5 +229,5 @@ def _control_chart_individual_marks(individual_id, state):
                                'field': {'signal': SIG_GROUP}},
                       'opacity': [
                           {'test': GROUP_TEST,
-                           'signal': CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL},
+                           'signal': SIG_CTRL_SPG_SYMBOL_OPACITY},
                           {'value': OPACITY_000}]}}}]}
