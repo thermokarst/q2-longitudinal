@@ -8,11 +8,10 @@
 
 # TODO: ag for these
 # TODO: just ship signal names around, not the dict
-METRIC_SIGNAL = {'signal': 'metric'}
 GROUP_SIGNAL = {'signal': 'grouper'}
 FEATURE_STATS_SIGNAL = {'signal': 'feature_stats'}
 
-METRIC_SIGNAL2 = 'metric'
+METRIC_SIGNAL = 'metric'
 GROUP_SIGNAL2 = 'grouper'
 FEATURE_TOOLTIP_SIGNAL = 'datum'
 

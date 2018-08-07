@@ -9,7 +9,7 @@
 from .const import (
     INDIVIDUAL, FORMULA, GROUP_BY_VALUE, DATUM_METRIC_EXPR, DATUM_GROUPER_EXPR,
     METRIC_VALUE, GLOBAL_VALS, AGGREGATE, MEAN, MIN, MAX, STDEV,
-    METRIC_SIGNAL2, MIN_X, MAX_X, MIN_Y, MAX_Y, CL0, CL1, CL2, CL3, EXT,
+    METRIC_SIGNAL, MIN_X, MAX_X, MIN_Y, MAX_Y, CL0, CL1, CL2, CL3, EXT,
     AGG_BY_DATA, CI0, CI1, COUNT, SELECTED)
 
 
@@ -28,12 +28,12 @@ def _control_chart_data(control_chart_data, state):
              {'type': AGGREGATE,
               'ops': [MEAN, MIN, MAX, STDEV, MIN, MAX],
               'fields': [
-                  {'signal': METRIC_SIGNAL2},
+                  {'signal': METRIC_SIGNAL},
                   state,
                   state,
-                  {'signal': METRIC_SIGNAL2},
-                  {'signal': METRIC_SIGNAL2},
-                  {'signal': METRIC_SIGNAL2}],
+                  {'signal': METRIC_SIGNAL},
+                  {'signal': METRIC_SIGNAL},
+                  {'signal': METRIC_SIGNAL}],
               'as': [MEAN, MIN_X, MAX_X, STDEV, MIN_Y, MAX_Y]},
              # TODO: clean up these expressions
              {'type': FORMULA, 'as': CL0,
@@ -56,10 +56,10 @@ def _control_chart_data(control_chart_data, state):
               # your own confidence interval in vega.
               'ops': [MEAN, CI0, CI1, COUNT],
               'fields': [
-                  {'signal': METRIC_SIGNAL2},
-                  {'signal': METRIC_SIGNAL2},
-                  {'signal': METRIC_SIGNAL2},
-                  {'signal': METRIC_SIGNAL2}],
+                  {'signal': METRIC_SIGNAL},
+                  {'signal': METRIC_SIGNAL},
+                  {'signal': METRIC_SIGNAL},
+                  {'signal': METRIC_SIGNAL}],
               'as': [MEAN, CI0, CI1, COUNT]}]},
         # These are just UI state vars to keep track of what has been clicked
         # in the legend.
