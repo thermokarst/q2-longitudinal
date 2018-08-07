@@ -7,11 +7,13 @@
 # ----------------------------------------------------------------------------
 
 # TODO: ag for these
-METRIC_SIGNAL = 'metric'
-GROUP_SIGNAL = 'grouper'
-FEATURE_TOOLTIP_SIGNAL = 'datum'
 
-SHOW_GLOBAL_MEAN_SIGNAL = 'showGlobalMean'
+# SIGNALS
+###############################################################################
+SIG_METRIC = 'metric'
+SIG_GROUP = 'grouper'
+SIG_SHOW_GLOBAL_MEAN = 'showGlobalMean'
+
 SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL = 'showGlobalControlLimits'
 CONTROL_CHART_HEIGHT_SIGNAL = 'controlChartHeight'
 COLOR_SCHEME_SIGNAL = 'colorScheme'

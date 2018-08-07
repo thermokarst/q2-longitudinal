@@ -8,7 +8,7 @@
 
 from .const import (
     GLOBAL_VALS, MIN_X, MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
-    CONTROL_Y_SCALE, SHOW_GLOBAL_MEAN_SIGNAL, STROKE_2, OPACITY_000,
+    CONTROL_Y_SCALE, SIG_SHOW_GLOBAL_MEAN, STROKE_2, OPACITY_000,
     OPACITY_100, DASH_A, DASH_B, SHOW_GLOBAL_CONTROL_LIMITS_SIGNAL, WIDTH,
     CONTROL_CHART_HEIGHT_SIGNAL, RULE, GROUP, SERIES, AGG_BY_DATA,
     GROUP_BY_VALUE, LINE, ASCENDING_ORDER, CONTROL_COLOR_SCALE,
@@ -16,7 +16,7 @@ from .const import (
     CONTROL_MEAN_SYMBOL_SIZE_SIGNAL, GROUP_TEST,
     CONTROL_MEAN_LINE_OPACITY_SIGNAL, CONTROL_MEAN_SYMBOL_OPACITY_SIGNAL,
     RECT_2, RECT, BAND_050, CI0, CI1, ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL,
-    CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL, METRIC_SIGNAL, GROUP_SIGNAL,
+    CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL, SIG_METRIC, SIG_GROUP,
     CONTROL_SPAGHET_LINE_OPACITY_SIGNAL, CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL,
     CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL)
 
@@ -50,7 +50,7 @@ def _control_chart_global_marks():
                  'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
                  'strokeOpacity': [
-                     {'test': SHOW_GLOBAL_MEAN_SIGNAL, 'value': OPACITY_100},
+                     {'test': SIG_SHOW_GLOBAL_MEAN, 'value': OPACITY_100},
                      {'value': OPACITY_000}]}}},
         # Global confidence limit, -3x std dev
         {'type': RULE,
@@ -205,9 +205,9 @@ def _control_chart_individual_marks(individual_id, state):
                                       CONTROL_SPAGHET_LINE_THICKNESS_SIGNAL},
                       'x': {'scale': CONTROL_X_SCALE, 'field': state},
                       'y': {'scale': CONTROL_Y_SCALE,
-                            'field': {'signal': METRIC_SIGNAL}},
+                            'field': {'signal': SIG_METRIC}},
                       'stroke': {'scale': CONTROL_COLOR_SCALE,
-                                 'field': {'signal': GROUP_SIGNAL}},
+                                 'field': {'signal': SIG_GROUP}},
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': CONTROL_SPAGHET_LINE_OPACITY_SIGNAL},
@@ -222,11 +222,11 @@ def _control_chart_individual_marks(individual_id, state):
                       'size': {'signal': CONTROL_SPAGHET_SYMBOL_SIZE_SIGNAL},
                       'x': {'scale': CONTROL_X_SCALE, 'field': state},
                       'y': {'scale': CONTROL_Y_SCALE,
-                            'field': {'signal': METRIC_SIGNAL}},
+                            'field': {'signal': SIG_METRIC}},
                       'stroke': {'scale': CONTROL_COLOR_SCALE,
-                                 'field': {'signal': GROUP_SIGNAL}},
+                                 'field': {'signal': SIG_GROUP}},
                       'fill': {'scale': CONTROL_COLOR_SCALE,
-                               'field': {'signal': GROUP_SIGNAL}},
+                               'field': {'signal': SIG_GROUP}},
                       'opacity': [
                           {'test': GROUP_TEST,
                            'signal': CONTROL_SPAGHET_SYMBOL_OPACITY_SIGNAL},

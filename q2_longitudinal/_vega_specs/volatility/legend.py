@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    CONTROL_SYMBOL_LEGEND, CONTROL_LABEL_LEGEND, TRANSPARENT, GROUP_SIGNAL,
+    CONTROL_SYMBOL_LEGEND, CONTROL_LABEL_LEGEND, TRANSPARENT, SIG_GROUP,
     CONTROL_COLOR_SCALE, OPACITY_TEST, STROKE_2, OPACITY_015, OPACITY_025,
     OPACITY_100, SIZE_100)
 
@@ -15,7 +15,7 @@ from .const import (
 def _control_chart_legend():
     return [
         {'stroke': CONTROL_COLOR_SCALE,
-         'title': GROUP_SIGNAL,
+         'title': SIG_GROUP,
          'encode': {
              'symbols': {
                  'name': CONTROL_SYMBOL_LEGEND,
