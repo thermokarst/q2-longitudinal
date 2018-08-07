@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    GLOBAL_VALS, MIN_X, MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
+    DAT_GLOBAL_VALS, FLD_MIN_X, FLD_MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
     CONTROL_Y_SCALE, SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2,
     STY_DASH_A, STY_DASH_B, SIG_SHOW_GLOBAL_CTRL_LIMS, WIDTH,
     SIG_CTRL_CHART_HEIGHT, SERIES, AGG_BY_DATA,
@@ -42,25 +42,25 @@ def _control_chart_global_marks():
     return [
         # Global Mean
         {'type': 'rule',
-         'from': {'data': GLOBAL_VALS},
+         'from': {'data': DAT_GLOBAL_VALS},
          'encode': {
              'update': {
                  'strokeWidth': {'value': STY_STROKE_2},
-                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
-                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_MEAN, 'value': 1.0},
                      {'value': 0.0}]}}},
         # Global confidence limit, -3x std dev
         {'type': 'rule',
-         'from': {'data': 'globalVals'},
+         'from': {'data': DAT_GLOBAL_VALS},
          'encode': {
              'update': {
                  'strokeWidth': {'value': STY_STROKE_2},
                  'strokeDash': {'value': STY_DASH_A},
-                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
-                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL0},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
@@ -69,13 +69,13 @@ def _control_chart_global_marks():
                  ]}}},
         # Global confidence limit, -2x std dev
         {'type': 'rule',
-         'from': {'data': GLOBAL_VALS},
+         'from': {'data': DAT_GLOBAL_VALS},
          'encode': {
              'update': {
                  'strokeWidth': {'value': STY_STROKE_2},
                  'strokeDash': {'value': STY_DASH_B},
-                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
-                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL1},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
@@ -84,13 +84,13 @@ def _control_chart_global_marks():
                  ]}}},
         # Global confidence limit, +2x std dev
         {'type': 'rule',
-         'from': {'data': GLOBAL_VALS},
+         'from': {'data': DAT_GLOBAL_VALS},
          'encode': {
              'update': {
                  'strokeWidth': {'value': STY_STROKE_2},
                  'strokeDash': {'value': STY_DASH_A},
-                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
-                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL2},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
@@ -99,13 +99,13 @@ def _control_chart_global_marks():
                  ]}}},
         # Global confidence limit, +3x std dev
         {'type': 'rule',
-         'from': {'data': GLOBAL_VALS},
+         'from': {'data': DAT_GLOBAL_VALS},
          'encode': {
              'update': {
                  'strokeWidth': {'value': STY_STROKE_2},
                  'strokeDash': {'value': STY_DASH_B},
-                 'x': {'scale': CONTROL_X_SCALE, 'field': MIN_X},
-                 'x2': {'scale': CONTROL_X_SCALE, 'field': MAX_X},
+                 'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
+                 'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
                  'y': {'scale': CONTROL_Y_SCALE, 'field': CL3},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,

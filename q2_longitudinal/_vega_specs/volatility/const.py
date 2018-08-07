@@ -20,6 +20,7 @@
 #    STY - style
 
 # TODO: ag for these
+# TODO: revise the json names
 
 # SIGNALS
 ###############################################################################
@@ -44,13 +45,19 @@ STY_STROKE_2 = 2
 STY_DASH_A = [8, 8]
 STY_DASH_B = [6, 2]
 
+# DATA
+###############################################################################
+DAT_GLOBAL_VALS = 'globalVals'
+
+# FIELDS
+###############################################################################
+FLD_MIN_X = 'minX'
+FLD_MAX_X = 'maxX'
+FLD_MIN_Y = 'minY'
+FLD_MAX_Y = 'maxY'
+
 # NEEDS TO BE EVALUATED
 ###############################################################################
-GLOBAL_VALS = 'globalVals'
-MIN_X = 'minX'
-MAX_X = 'maxX'
-MIN_Y = 'minY'
-MAX_Y = 'maxY'
 MEAN = 'mean'
 MIN = 'min'
 MAX = 'max'

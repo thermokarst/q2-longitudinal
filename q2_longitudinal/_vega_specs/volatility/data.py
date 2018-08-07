@@ -7,8 +7,8 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    INDIVIDUAL, GROUP_BY_VALUE, METRIC_VALUE, GLOBAL_VALS, AGGREGATE,
-    MEAN, MIN, MAX, STDEV, SIG_METRIC, SIG_GROUP, MIN_X, MAX_X, MIN_Y, MAX_Y,
+    INDIVIDUAL, GROUP_BY_VALUE, METRIC_VALUE, DAT_GLOBAL_VALS, AGGREGATE,
+    MEAN, MIN, MAX, STDEV, SIG_METRIC, SIG_GROUP, FLD_MIN_X, FLD_MAX_X, FLD_MIN_Y, FLD_MAX_Y,
     CL0, CL1, CL2, CL3, EXT, AGG_BY_DATA, CI0, CI1, COUNT, SELECTED)
 
 
@@ -21,7 +21,7 @@ def _control_chart_data(control_chart_data, state):
               'expr': 'datum[%s]' % SIG_GROUP},
              {'type': 'formula', 'as': METRIC_VALUE,
               'expr': 'datum[%s]' % SIG_METRIC}]},
-        {'name': GLOBAL_VALS,
+        {'name': DAT_GLOBAL_VALS,
          'source': INDIVIDUAL,
          'transform': [
              {'type': AGGREGATE,
@@ -33,7 +33,7 @@ def _control_chart_data(control_chart_data, state):
                   {'signal': SIG_METRIC},
                   {'signal': SIG_METRIC},
                   {'signal': SIG_METRIC}],
-              'as': [MEAN, MIN_X, MAX_X, STDEV, MIN_Y, MAX_Y]},
+              'as': [MEAN, FLD_MIN_X, FLD_MAX_X, STDEV, FLD_MIN_Y, FLD_MAX_Y]},
              # TODO: clean up these expressions
              {'type': 'formula', 'as': CL0,
               'expr': 'datum.mean - (3 * datum.stdev)'},
