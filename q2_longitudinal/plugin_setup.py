@@ -208,9 +208,6 @@ plugin.visualizers.register_function(
 )
 
 
-_VOLATILITY_AXIS_CHOICES = ['linear', 'pow', 'sqrt', 'log']
-
-
 plugin.visualizers.register_function(
     function=volatility,
     inputs={
@@ -221,7 +218,7 @@ plugin.visualizers.register_function(
         'state_column': miscellaneous_parameters['state_column'],
         'default_metric': Str,
         'default_group_column': Str,
-        'yscale': Str % Choices(_VOLATILITY_AXIS_CHOICES)
+        'yscale': Str % Choices(['linear', 'pow', 'sqrt', 'log'])
     },
     input_descriptions={
         'table': 'Feature table to optionally use for paired comparisons.',

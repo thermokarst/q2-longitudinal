@@ -146,7 +146,7 @@ def _control_chart_grouped_marks(state):
                            'signal': SIG_CTRL_MEAN_LINE_OPACITY},
                           {'value': 0.0},
                       ]}}},
-             # per-group symbols
+             # Per-group symbols
              {'type': 'symbol',
               'from': {'data': DAT_SERIES},
               'encode': {

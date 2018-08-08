@@ -6,7 +6,6 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-# Some thoughts on "rules"
 # 1. These constants should be used for identifiers only (don't worry about
 #    values or things like mark types). The exception is when we are
 #    coordinating styles across multiple components.
