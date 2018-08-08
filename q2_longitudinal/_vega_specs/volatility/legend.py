@@ -11,7 +11,7 @@ from .const import (
     STY_STROKE_2)
 
 
-def _control_chart_legend():
+def render_legend_ctrl():
     return [
         {'stroke': SCL_CTRL_COLOR,
          'title': {'signal': SIG_GROUP},

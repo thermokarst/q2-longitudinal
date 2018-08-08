@@ -9,7 +9,7 @@
 from .const import SIG_METRIC, SCL_CTRL_X, SCL_CTRL_Y
 
 
-def _control_chart_axes(state):
+def render_axis_ctrl(state):
     return [
         {'orient': 'bottom', 'scale': SCL_CTRL_X,
          'title': state},

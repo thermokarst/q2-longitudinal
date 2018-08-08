@@ -10,17 +10,17 @@ import json
 
 import pandas as pd
 
-from .axis import _control_chart_axes
-from .legend import _control_chart_legend
+from .axis import render_axis_ctrl
+from .legend import render_legend_ctrl
 from .mark import (
-    _control_chart_global_marks, _control_chart_subplot,
+    render_mark_ctrl_global, render_subplot_ctrl,
     _control_chart_grouped_marks, _control_chart_individual_marks)
 from .signal import _volatility_signals, _spaghetti_signals
 from .scale import _control_chart_subplot_scales
 from .data import _control_chart_data
 
 
-def render_volatility_spec(control_chart_data: pd.DataFrame,
+def render_spec_volatility(control_chart_data: pd.DataFrame,
                            individual_id: str, state: str,
                            default_group: str, group_columns: list,
                            default_metric: str, metric_columns: list,
@@ -42,12 +42,12 @@ def render_volatility_spec(control_chart_data: pd.DataFrame,
         'data': _control_chart_data(control_chart_data, state),
     }
 
-    control_chart = _control_chart_subplot(yscale)
-    control_chart['marks'] = _control_chart_global_marks() + \
+    control_chart = render_subplot_ctrl(yscale)
+    control_chart['marks'] = render_mark_ctrl_global() + \
         _control_chart_grouped_marks(state)
     control_chart['scales'] = _control_chart_subplot_scales(state, yscale)
-    control_chart['axes'] = _control_chart_axes(state)
-    control_chart['legends'] = _control_chart_legend()
+    control_chart['axes'] = render_axis_ctrl(state)
+    control_chart['legends'] = render_legend_ctrl()
 
     spec['signals'].extend(_volatility_signals(default_group, group_columns,
                                                default_metric, metric_columns))

@@ -20,7 +20,7 @@ from .const import (
     STY_DASH_A, STY_DASH_B)
 
 
-def _control_chart_subplot(yscale):
+def render_subplot_ctrl(yscale):
     return \
         {'description': 'Control Chart',
          'name': 'spaghetti',
@@ -37,7 +37,7 @@ def _control_chart_subplot(yscale):
          'legends': []}
 
 
-def _control_chart_global_marks():
+def render_mark_ctrl_global():
     return [
         # Global Mean
         {'type': 'rule',

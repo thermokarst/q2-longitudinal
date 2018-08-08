@@ -24,7 +24,7 @@ from ._utilities import (_get_group_pairs, _extract_distance_distribution,
                          _validate_input_values, _validate_input_columns,
                          _nmit, _validate_is_numeric_column,
                          _tabulate_matrix_ids, _first_differences)
-from ._vega_specs import render_volatility_spec
+from ._vega_specs import render_spec_volatility
 
 
 TEMPLATES = pkg_resources.resource_filename('q2_longitudinal', 'assets')
@@ -206,9 +206,10 @@ def _warn_column_name_exists(column_name):
     warnings.warn(warning, UserWarning)
 
 
-def _volatility(metadata, table, output_dir, state_column,
-                individual_id_column, default_group_column, default_metric,
-                yscale):
+def volatility(output_dir: str, metadata: qiime2.Metadata,
+               state_column: str, individual_id_column: str=None,
+               default_group_column: str=None, default_metric: str=None,
+               table: pd.DataFrame=None, yscale: str='linear') -> None:
     if individual_id_column == state_column:
         raise ValueError('individual_id_column & state_column must be set to '
                          'unique values.')
@@ -265,7 +266,7 @@ def _volatility(metadata, table, output_dir, state_column,
         group_columns += [individual_id_column]
     metric_columns = list(numeric.columns.keys())
 
-    vega_spec = render_volatility_spec(control_chart_data,
+    vega_spec = render_spec_volatility(control_chart_data,
                                        individual_id_column,
                                        state_column, default_group_column,
                                        group_columns, default_metric,
@@ -277,15 +278,6 @@ def _volatility(metadata, table, output_dir, state_column,
     copy_tree(os.path.join(TEMPLATES, 'volatility'), output_dir)
     index = os.path.join(TEMPLATES, 'volatility', 'index.html')
     q2templates.render(index, output_dir, context={'vega_spec': vega_spec})
-
-
-def volatility(output_dir: str, metadata: qiime2.Metadata,
-               state_column: str, individual_id_column: str=None,
-               default_group_column: str=None, default_metric: str=None,
-               table: pd.DataFrame=None, yscale: str='linear') -> None:
-    return _volatility(metadata, table, output_dir, state_column,
-                       individual_id_column, default_group_column,
-                       default_metric, yscale)
 
 
 def nmit(table: pd.DataFrame, metadata: qiime2.Metadata,

@@ -6,7 +6,7 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from .render import render_volatility_spec
+from .render import render_spec_volatility
 
 
-__all__ = ['render_volatility_spec']
+__all__ = ['render_spec_volatility']
