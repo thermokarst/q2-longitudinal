@@ -7,11 +7,10 @@
 # ----------------------------------------------------------------------------
 
 
-from .const import (DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
-                    FLD_GROUP_BY, SCL_CTRL_X, SIG_WIDTH, SCL_CTRL_Y,
-                    SCL_CTRL_COLOR,
-                    DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0,
-                    FLD_CTRL_CL3)
+from .const import (
+    DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL3,
+    FLD_GROUP_BY, SCL_CTRL_X, SIG_WIDTH, SCL_CTRL_Y, SCL_CTRL_COLOR,
+    DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME)
 
 
 def _control_chart_subplot_scales(state, yscale):
