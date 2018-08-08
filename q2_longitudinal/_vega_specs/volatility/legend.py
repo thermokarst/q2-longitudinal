@@ -7,24 +7,24 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    CONTROL_SYMBOL_LEGEND, CONTROL_LABEL_LEGEND, TRANSPARENT, SIG_GROUP,
-    SCL_CTRL_COLOR, OPACITY_TEST, STY_STROKE_2,
+    LEG_CTRL_SYMBOL, CONTROL_LABEL_LEGEND, SIG_GROUP,
+    SCL_CTRL_COLOR, TST_OPACITY, STY_STROKE_2,
     )
 
 
 def _control_chart_legend():
     return [
         {'stroke': SCL_CTRL_COLOR,
-         'title': SIG_GROUP,
+         'title': {'signal': SIG_GROUP},
          'encode': {
              'symbols': {
-                 'name': CONTROL_SYMBOL_LEGEND,
+                 'name': LEG_CTRL_SYMBOL,
                  'interactive': True,
                  'update': {
-                     'fill': {'value': TRANSPARENT},
+                     'fill': {'value': 'transparent'},
                      'strokeWidth': {'value': STY_STROKE_2},
                      'opacity': [
-                         {'test': OPACITY_TEST, 'value': 1.0},
+                         {'test': TST_OPACITY, 'value': 1.0},
                          {'value': 0.15},
                      ],
                      'size': {'value': 100}}},
@@ -33,5 +33,5 @@ def _control_chart_legend():
                  'interactive': True,
                  'update': {
                      'opacity': [
-                         {'test': OPACITY_TEST, 'value': 1.0},
+                         {'test': TST_OPACITY, 'value': 1.0},
                          {'value': 0.25}]}}}}]

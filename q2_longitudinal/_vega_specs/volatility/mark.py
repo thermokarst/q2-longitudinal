@@ -12,12 +12,12 @@ from .const import (
     SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2, STY_DASH_A, STY_DASH_B,
     SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_WIDTH, SIG_CTRL_CHART_HEIGHT, DAT_SERIES,
     AGG_BY_DATA, GROUP_BY_VALUE, LINE, ASCENDING_ORDER, SCL_CTRL_COLOR,
-    SIG_CTRL_MEAN_LINE_THICKNESS, SIG_CTRL_MEAN_SYMBOL_SIZE, GROUP_TEST,
+    SIG_CTRL_MEAN_LINE_THICKNESS, SIG_CTRL_MEAN_SYMBOL_SIZE, TST_GROUP,
     SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_OPACITY, FLD_CTRL_CI0,
-    FLD_CTRL_CI1, ERROR_BAR_TEST, DAT_SPAGHETTIS, DAT_INDIVIDUAL,
+    FLD_CTRL_CI1, DAT_SPAGHETTIS, DAT_INDIVIDUAL,
     SIG_CTRL_SPG_LINE_THICKNESS, SIG_METRIC, SIG_GROUP,
     SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
-    SIG_CTRL_SPG_SYMBOL_OPACITY)
+    SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS)
 
 
 def _control_chart_subplot(yscale):
@@ -117,9 +117,10 @@ def _control_chart_grouped_marks(state):
     datum_state = "datum['%s']" % state
     # TODO: Clean this up
     mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
-                   ' "state": datum["%s"], "count": datum.count,'
+                   ' "state": datum["%s"], "count": datum.%s,'
                    ' "mean": datum.%s, "ci0": datum.%s, "ci1": datum.%s}'
-                   % (state, FLD_CTRL_MEAN, FLD_CTRL_CI0, FLD_CTRL_CI1))
+                   % (state, FLD_CTRL_COUNT, FLD_CTRL_MEAN, FLD_CTRL_CI0,
+                      FLD_CTRL_CI1))
     return [
         {'type': 'group',
          'from': {
@@ -142,7 +143,7 @@ def _control_chart_grouped_marks(state):
                       'strokeWidth': {'signal':
                                       SIG_CTRL_MEAN_LINE_THICKNESS},
                       'opacity': [
-                          {'test': GROUP_TEST,
+                          {'test': TST_GROUP,
                            'signal': SIG_CTRL_MEAN_LINE_OPACITY},
                           {'value': 0.0},
                       ]}}},
@@ -160,7 +161,7 @@ def _control_chart_grouped_marks(state):
                                'field': GROUP_BY_VALUE},
                       'size': {'signal': SIG_CTRL_MEAN_SYMBOL_SIZE},
                       'opacity': [
-                          {'test': GROUP_TEST,
+                          {'test': TST_GROUP,
                            'signal': SIG_CTRL_MEAN_SYMBOL_OPACITY},
                           {'value': 0.0}]}}},
              # Per-group error bars
@@ -176,7 +177,8 @@ def _control_chart_grouped_marks(state):
                       'fill': {'scale': SCL_CTRL_COLOR,
                                'field': GROUP_BY_VALUE},
                       'opacity': [
-                          {'test': ERROR_BAR_TEST, 'value': 1.0},
+                          {'test': '%s && %s' % (SIG_SHOW_ERROR_BARS,
+                                                 TST_GROUP), 'value': 1.0},
                           {'value': 0.0}]}}}]}]
 
 
@@ -208,7 +210,7 @@ def _control_chart_individual_marks(individual_id, state):
                       'stroke': {'scale': SCL_CTRL_COLOR,
                                  'field': {'signal': SIG_GROUP}},
                       'opacity': [
-                          {'test': GROUP_TEST,
+                          {'test': TST_GROUP,
                            'signal': SIG_CTRL_SPG_LINE_OPACITY},
                           {'value': 0.0}]}}},
              # Need to add symbols into plot for mouseover
@@ -227,6 +229,6 @@ def _control_chart_individual_marks(individual_id, state):
                       'fill': {'scale': SCL_CTRL_COLOR,
                                'field': {'signal': SIG_GROUP}},
                       'opacity': [
-                          {'test': GROUP_TEST,
+                          {'test': TST_GROUP,
                            'signal': SIG_CTRL_SPG_SYMBOL_OPACITY},
                           {'value': 0.0}]}}}]}

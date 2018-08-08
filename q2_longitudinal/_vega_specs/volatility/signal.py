@@ -12,7 +12,8 @@ from .const import (
     SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_SIZE,
     SIG_CTRL_MEAN_SYMBOL_OPACITY, SIG_CTRL_SPG_LINE_THICKNESS,
     SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
-    SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_HEIGHT
+    SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_HEIGHT, SIG_SHOW_ERROR_BARS,
+    LEG_CTRL_SYMBOL
     )
 
 
@@ -21,6 +22,7 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
     return [
         # LAYOUT/DIMENSIONS
         {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
+        # TODO: you don't belong in here
         {'name': 'importancesChartHeight',
          # TODO: make this a vega expression
          'value': 10 * len(features_chart_data.index)},
@@ -32,7 +34,7 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
                  'update': 'containerSize()[0]'}]},
 
         # UI WIDGETS
-        {'name': 'showErrorBars', 'value': False,
+        {'name': SIG_SHOW_ERROR_BARS, 'value': False,
          'bind': {'input': 'checkbox', 'element': '#toggle-error-bars'}},
         {'name': SIG_GROUP,
          'value': default_group,
@@ -77,10 +79,12 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
          'on': [{'events': 'mouseup[!event.item]', 'update': 'true',
                  'force': True}]},
         {'name': 'shift', 'value': False,
-         'on': [{'events': '@legendSymbol:click, @legendLabel:click',
+         'on': [{'events': '@%s:click, @legendLabel:click' %
+                           LEG_CTRL_SYMBOL,
                  'update': 'event.shiftKey', 'force': True}]},
         {'name': 'clicked', 'value': None,
-         'on': [{'events': '@legendSymbol:click, @legendLabel:click',
+         'on': [{'events': '@%s:click, @legendLabel:click' %
+                           LEG_CTRL_SYMBOL,
                  'update': '{value: datum.value}', 'force': True}]},
     ]
 

@@ -18,6 +18,7 @@
 #    TST - test
 #    EXP - expression
 #    STY - style
+#    LEG - legend
 
 # TODO: ag for these
 # TODO: revise the json names
@@ -28,6 +29,7 @@ SIG_METRIC = 'metric'
 SIG_GROUP = 'grouper'
 SIG_SHOW_GLOBAL_MEAN = 'showGlobalMean'
 SIG_SHOW_GLOBAL_CTRL_LIMS = 'showGlobalControlLimits'
+SIG_SHOW_ERROR_BARS = 'showErrorBars'
 SIG_COLOR_SCHEME = 'colorScheme'
 SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
 SIG_CTRL_MEAN_LINE_THICKNESS = 'meanLineThickness'
@@ -53,6 +55,7 @@ DAT_GLOBAL_VALS = 'globalVals'
 DAT_INDIVIDUAL = 'individual'
 DAT_SERIES = 'series'
 DAT_SPAGHETTIS = 'spaghettis'
+DAT_SELECTED = 'selected'
 
 # FIELDS
 ###############################################################################
@@ -64,6 +67,7 @@ FLD_MAX_Y = 'maxY'
 FLD_CTRL_MEAN = 'mean'
 FLD_CTRL_MIN = 'min'
 FLD_CTRL_STDEV = 'stdev'
+FLD_CTRL_COUNT = 'count'
 FLD_CTRL_CL0 = 'cl0'
 FLD_CTRL_CL1 = 'cl1'
 FLD_CTRL_CL2 = 'cl2'
@@ -78,26 +82,23 @@ SCL_CTRL_X = 'x'
 SCL_CTRL_Y = 'y'
 SCL_CTRL_COLOR = 'color'
 
+# TESTS
+###############################################################################
+TST_OPACITY = "!length(data('{0}')) || indata('{0}', 'value', datum.value)".format(DAT_SELECTED)  # noqa: E501
+TST_GROUP = "!length(data('{0}')) || indata('{0}', 'value', datum.groupByVal)".format(DAT_SELECTED)  # noqa: E501
+
+###############################################################################
+###############################################################################
 # NEEDS TO BE EVALUATED
 ###############################################################################
-SELECTED = 'selected'
-COUNT = 'count'
-
-OPACITY_TEST = "!length(data('selected')) || indata('selected', 'value', datum.value)"  # noqa: E501
-FEATURE_STATS_TEST = 'feature_stats === "Cumulative Average Change"'
-GROUP_TEST = "!length(data('selected')) || indata('selected', 'value', datum.groupByVal)"  # noqa: E501
-ERROR_BAR_TEST = 'showErrorBars && (%s)' % GROUP_TEST
-
-BOTTOM_ORIENT_AXIS = 'bottom'
-LEFT_ORIENT_AXIS = 'left'
+###############################################################################
 
 # COLORS
 ###############################################################################
-TRANSPARENT = 'transparent'
 
 # LEGEND
 ###############################################################################
-CONTROL_SYMBOL_LEGEND = 'legendSymbol'
+LEG_CTRL_SYMBOL = 'legendSymbol'
 CONTROL_LABEL_LEGEND = 'labelSymbol'
 
 AGG_BY_DATA = 'aggBy'

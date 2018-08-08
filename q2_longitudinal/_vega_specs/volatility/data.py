@@ -10,8 +10,8 @@ from .const import (
     DAT_INDIVIDUAL, GROUP_BY_VALUE, METRIC_VALUE, DAT_GLOBAL_VALS, AGGREGATE,
     FLD_CTRL_MEAN, FLD_CTRL_STDEV, SIG_METRIC, SIG_GROUP, FLD_MIN_X, FLD_MAX_X,
     FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL1, FLD_CTRL_CL2,
-    FLD_CTRL_CL3, FLD_CTRL_EXT, AGG_BY_DATA, FLD_CTRL_CI0, FLD_CTRL_CI1, COUNT,
-    SELECTED)
+    FLD_CTRL_CL3, FLD_CTRL_EXT, AGG_BY_DATA, FLD_CTRL_CI0, FLD_CTRL_CI1,
+    FLD_CTRL_COUNT, DAT_SELECTED)
 
 
 def _control_chart_data(control_chart_data, state):
@@ -66,10 +66,11 @@ def _control_chart_data(control_chart_data, state):
                   {'signal': SIG_METRIC},
                   {'signal': SIG_METRIC},
                   {'signal': SIG_METRIC}],
-              'as': [FLD_CTRL_MEAN, FLD_CTRL_CI0, FLD_CTRL_CI1, COUNT]}]},
+              'as': [FLD_CTRL_MEAN, FLD_CTRL_CI0, FLD_CTRL_CI1,
+                     FLD_CTRL_COUNT]}]},
         # These are just UI state vars to keep track of what has been clicked
         # in the legend.
-        {'name': SELECTED,
+        {'name': DAT_SELECTED,
          'on': [
              {'trigger': 'clear', 'remove': True},
              {'trigger': '!shift', 'remove': True},
