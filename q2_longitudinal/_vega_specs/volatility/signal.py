@@ -12,7 +12,7 @@ from .const import (
     SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_SIZE,
     SIG_CTRL_MEAN_SYMBOL_OPACITY, SIG_CTRL_SPG_LINE_THICKNESS,
     SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
-    SIG_CTRL_SPG_SYMBOL_OPACITY
+    SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_HEIGHT
     )
 
 
@@ -24,10 +24,10 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
         {'name': 'importancesChartHeight',
          # TODO: make this a vega expression
          'value': 10 * len(features_chart_data.index)},
-        {'name': 'height',
+        {'name': SIG_HEIGHT,
          'update': '%s + importancesChartHeight' % SIG_CTRL_CHART_HEIGHT},
         {'name': 'halfWidth', 'update': 'width / 2'},
-        {'name': 'width', 'value': '', 'bind': {'input': 'text'},
+        {'name': SIG_WIDTH, 'value': '', 'bind': {'input': 'text'},
          'on': [{'events': {'source': 'window', 'type': 'resize'},
                  'update': 'containerSize()[0]'}]},
 

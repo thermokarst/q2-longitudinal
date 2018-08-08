@@ -7,44 +7,44 @@
 # ----------------------------------------------------------------------------
 
 
-from .const import (INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
-                    GROUP_BY_VALUE, CONTROL_X_SCALE, LINEAR, WIDTH,
-                    CONTROL_Y_SCALE, CONTROL_COLOR_SCALE, ORDINAL, LAYOUT_Y,
-                    BAND, ROW_1, ROW_2, HEIGHT, DAT_GLOBAL_VALS, FLD_MIN_Y,
-                    FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL3)
+from .const import (DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
+                    GROUP_BY_VALUE, SCL_CTRL_X, SIG_WIDTH, SCL_CTRL_Y,
+                    SCL_CTRL_COLOR, LAYOUT_Y, ROW_1, ROW_2, SIG_HEIGHT,
+                    DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0,
+                    FLD_CTRL_CL3)
 
 
 def _layout_scale():
     return \
         {'name': LAYOUT_Y,
-         'type': BAND,
+         'type': 'band',
          'domain': [ROW_1, ROW_2],
-         'range': HEIGHT,
+         'range': SIG_HEIGHT,
          'nice': True}
 
 
 # TODO: rename me
 def _color_scale():
     return \
-        {'name': CONTROL_COLOR_SCALE,
-         'type': ORDINAL,
+        {'name': SCL_CTRL_COLOR,
+         'type': 'ordinal',
          'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
-         'domain': {'data': INDIVIDUAL, 'field': GROUP_BY_VALUE},
+         'domain': {'data': DAT_INDIVIDUAL, 'field': GROUP_BY_VALUE},
          'nice': True}
 
 
 def _control_chart_subplot_scales(state, yscale):
     return [
-        {'name': CONTROL_X_SCALE,
-         'type': LINEAR,
-         'range': WIDTH,
+        {'name': SCL_CTRL_X,
+         'type': 'linear',
+         'range': SIG_WIDTH,
          'nice': True,
          'domain': {
-             'data': INDIVIDUAL,
+             'data': DAT_INDIVIDUAL,
              'field': state,
              'sort': True,
          }},
-        {'name': CONTROL_Y_SCALE,
+        {'name': SCL_CTRL_Y,
          # Signal registration on this param is currently
          # blocked by https://github.com/vega/vega/issues/525,
          # which is why this setting is still a QIIME 2 param to
@@ -59,7 +59,7 @@ def _control_chart_subplot_scales(state, yscale):
                                   DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y,
                                   FLD_CTRL_CL0, FLD_CTRL_CL3),
                     'sort': True}},
-        {'name': CONTROL_COLOR_SCALE,
-         'type': ORDINAL,
+        {'name': SCL_CTRL_COLOR,
+         'type': 'ordinal',
          'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
-         'domain': {'data': INDIVIDUAL, 'field': GROUP_BY_VALUE}}]
+         'domain': {'data': DAT_INDIVIDUAL, 'field': GROUP_BY_VALUE}}]

@@ -38,6 +38,8 @@ SIG_CTRL_SPG_LINE_THICKNESS = 'spaghettiLineThickness'
 SIG_CTRL_SPG_LINE_OPACITY = 'spaghettiLineOpacity'
 SIG_CTRL_SPG_SYMBOL_SIZE = 'spaghettiSymbolSize'
 SIG_CTRL_SPG_SYMBOL_OPACITY = 'spaghettiSymbolOpacity'
+SIG_WIDTH = 'width'  # this is a special signal in vega
+SIG_HEIGHT = 'height'  # this is a special signal in vega
 
 # STYLES
 ###############################################################################
@@ -48,6 +50,9 @@ STY_DASH_B = [6, 2]
 # DATA
 ###############################################################################
 DAT_GLOBAL_VALS = 'globalVals'
+DAT_INDIVIDUAL = 'individual'
+DAT_SERIES = 'series'
+DAT_SPAGHETTIS = 'spaghettis'
 
 # FIELDS
 ###############################################################################
@@ -63,25 +68,18 @@ FLD_CTRL_CL0 = 'cl0'
 FLD_CTRL_CL1 = 'cl1'
 FLD_CTRL_CL2 = 'cl2'
 FLD_CTRL_CL3 = 'cl3'
+FLD_CTRL_CI0 = 'ci0'
+FLD_CTRL_CI1 = 'ci1'
+FLD_CTRL_EXT = 'ext'
+
+# SCALES
+###############################################################################
+SCL_CTRL_X = 'x'
+SCL_CTRL_Y = 'y'
+SCL_CTRL_COLOR = 'color'
 
 # NEEDS TO BE EVALUATED
 ###############################################################################
-CI0 = 'ci0'
-CI1 = 'ci1'
-EXT = 'ext'
-INDIVIDUAL = 'individual'
-SERIES = 'series'
-SPAGHETTIS = 'spaghettis'
-
-CONTROL_X_SCALE = 'x'
-CONTROL_Y_SCALE = 'y'
-CONTROL_COLOR_SCALE = 'color'
-LINEAR = 'linear'
-WIDTH = 'width'
-HEIGHT = 'height'
-ORDINAL = 'ordinal'
-BAND = 'band'
-
 SELECTED = 'selected'
 COUNT = 'count'
 

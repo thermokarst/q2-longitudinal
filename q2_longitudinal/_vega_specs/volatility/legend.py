@@ -8,13 +8,13 @@
 
 from .const import (
     CONTROL_SYMBOL_LEGEND, CONTROL_LABEL_LEGEND, TRANSPARENT, SIG_GROUP,
-    CONTROL_COLOR_SCALE, OPACITY_TEST, STY_STROKE_2,
+    SCL_CTRL_COLOR, OPACITY_TEST, STY_STROKE_2,
     )
 
 
 def _control_chart_legend():
     return [
-        {'stroke': CONTROL_COLOR_SCALE,
+        {'stroke': SCL_CTRL_COLOR,
          'title': SIG_GROUP,
          'encode': {
              'symbols': {
