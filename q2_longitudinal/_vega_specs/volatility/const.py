@@ -19,9 +19,7 @@
 #    EXP - expression
 #    STY - style
 #    LEG - legend
-
-# TODO: ag for these
-# TODO: revise the json names
+#    VAR - any other variable that doesn't fit into the above categories
 
 # SIGNALS
 ###############################################################################
@@ -56,10 +54,10 @@ DAT_INDIVIDUAL = 'individual'
 DAT_SERIES = 'series'
 DAT_SPAGHETTIS = 'spaghettis'
 DAT_SELECTED = 'selected'
+DAT_AGG_BY = 'aggBy'
 
 # FIELDS
 ###############################################################################
-# TODO: These minx/maxx should be updated to mention they are CTRL plot
 FLD_MIN_X = 'minX'
 FLD_MAX_X = 'maxX'
 FLD_MIN_Y = 'minY'
@@ -75,6 +73,8 @@ FLD_CTRL_CL3 = 'cl3'
 FLD_CTRL_CI0 = 'ci0'
 FLD_CTRL_CI1 = 'ci1'
 FLD_CTRL_EXT = 'ext'
+FLD_GROUP_BY = 'groupByVal'
+FLD_METRIC = 'metricVal'
 
 # SCALES
 ###############################################################################
@@ -85,28 +85,9 @@ SCL_CTRL_COLOR = 'color'
 # TESTS
 ###############################################################################
 TST_OPACITY = "!length(data('{0}')) || indata('{0}', 'value', datum.value)".format(DAT_SELECTED)  # noqa: E501
-TST_GROUP = "!length(data('{0}')) || indata('{0}', 'value', datum.groupByVal)".format(DAT_SELECTED)  # noqa: E501
+TST_GROUP = "!length(data('{0}')) || indata('{0}', 'value', datum.{1})".format(DAT_SELECTED, FLD_GROUP_BY)  # noqa: E501
 
 # LEGEND
 ###############################################################################
 LEG_CTRL_SYMBOL = 'legendSymbol'
-
-###############################################################################
-###############################################################################
-# NEEDS TO BE EVALUATED
-###############################################################################
-###############################################################################
-CONTROL_LABEL_LEGEND = 'labelSymbol'
-
-AGG_BY_DATA = 'aggBy'
-GROUP_BY_VALUE = 'groupByVal'
-
-LINE = 'line'
-ASCENDING_ORDER = 'ascending'
-
-METRIC_VALUE = 'metricVal'
-AGGREGATE = 'aggregate'
-
-ROW_1 = 'row1'
-ROW_2 = 'row2'
-LAYOUT_Y = 'layoutY'
+LEG_CTRL_LABEL = 'labelSymbol'

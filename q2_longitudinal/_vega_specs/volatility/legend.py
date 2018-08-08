@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    LEG_CTRL_SYMBOL, CONTROL_LABEL_LEGEND, SIG_GROUP,
+    LEG_CTRL_SYMBOL, LEG_CTRL_LABEL, SIG_GROUP,
     SCL_CTRL_COLOR, TST_OPACITY, STY_STROKE_2,
     )
 
@@ -29,7 +29,7 @@ def _control_chart_legend():
                      ],
                      'size': {'value': 100}}},
              'labels': {
-                 'name': CONTROL_LABEL_LEGEND,
+                 'name': LEG_CTRL_LABEL,
                  'interactive': True,
                  'update': {
                      'opacity': [

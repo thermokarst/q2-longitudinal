@@ -7,10 +7,10 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    DAT_INDIVIDUAL, GROUP_BY_VALUE, METRIC_VALUE, DAT_GLOBAL_VALS, AGGREGATE,
+    DAT_INDIVIDUAL, FLD_GROUP_BY, FLD_METRIC, DAT_GLOBAL_VALS,
     FLD_CTRL_MEAN, FLD_CTRL_STDEV, SIG_METRIC, SIG_GROUP, FLD_MIN_X, FLD_MAX_X,
     FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL1, FLD_CTRL_CL2,
-    FLD_CTRL_CL3, FLD_CTRL_EXT, AGG_BY_DATA, FLD_CTRL_CI0, FLD_CTRL_CI1,
+    FLD_CTRL_CL3, FLD_CTRL_EXT, DAT_AGG_BY, FLD_CTRL_CI0, FLD_CTRL_CI1,
     FLD_CTRL_COUNT, DAT_SELECTED)
 
 
@@ -19,14 +19,14 @@ def _control_chart_data(control_chart_data, state):
         {'name': DAT_INDIVIDUAL,
          'values': control_chart_data.to_dict('record'),
          'transform': [
-             {'type': 'formula', 'as': GROUP_BY_VALUE,
+             {'type': 'formula', 'as': FLD_GROUP_BY,
               'expr': 'datum[%s]' % SIG_GROUP},
-             {'type': 'formula', 'as': METRIC_VALUE,
+             {'type': 'formula', 'as': FLD_METRIC,
               'expr': 'datum[%s]' % SIG_METRIC}]},
         {'name': DAT_GLOBAL_VALS,
          'source': DAT_INDIVIDUAL,
          'transform': [
-             {'type': AGGREGATE,
+             {'type': 'aggregate',
               'ops': ['mean', 'min', 'max', 'stdev', 'min', 'max'],
               'fields': [
                   {'signal': SIG_METRIC},
@@ -52,11 +52,11 @@ def _control_chart_data(control_chart_data, state):
                                                      FLD_CTRL_STDEV)},
              {'type': 'formula', 'as': FLD_CTRL_EXT,
               'expr': '[datum.%s, datum.%s]' % (FLD_CTRL_CL0, FLD_CTRL_CL3)}]},
-        {'name': AGG_BY_DATA,
+        {'name': DAT_AGG_BY,
          'source': DAT_INDIVIDUAL,
          'transform': [
-             {'type': AGGREGATE,
-              'groupby': [GROUP_BY_VALUE, state],
+             {'type': 'aggregate',
+              'groupby': [FLD_GROUP_BY, state],
               # TODO: parameterize these intervals
               # I don't see an easy way at the moment to define
               # your own confidence interval in vega.

@@ -19,7 +19,7 @@ from .mark import (
     _control_chart_global_marks, _control_chart_subplot,
     _control_chart_grouped_marks, _control_chart_individual_marks)
 from .signal import _volatility_signals, _spaghetti_signals
-from .scale import _layout_scale, _color_scale, _control_chart_subplot_scales
+from .scale import _color_scale, _control_chart_subplot_scales
 from .data import _control_chart_data
 
 
@@ -45,7 +45,7 @@ def render_volatility_spec(is_feat_vol_plot: bool,
         'width': 800,
         'signals': [],
         # TODO: can color scale get moved into the control chart?
-        'scales': [_layout_scale(), _color_scale()],
+        'scales': [_color_scale()],
         'marks': [],
         'data': _control_chart_data(control_chart_data, state),
     }

@@ -8,19 +8,10 @@
 
 
 from .const import (DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
-                    GROUP_BY_VALUE, SCL_CTRL_X, SIG_WIDTH, SCL_CTRL_Y,
-                    SCL_CTRL_COLOR, LAYOUT_Y, ROW_1, ROW_2, SIG_HEIGHT,
+                    FLD_GROUP_BY, SCL_CTRL_X, SIG_WIDTH, SCL_CTRL_Y,
+                    SCL_CTRL_COLOR,
                     DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0,
                     FLD_CTRL_CL3)
-
-
-def _layout_scale():
-    return \
-        {'name': LAYOUT_Y,
-         'type': 'band',
-         'domain': [ROW_1, ROW_2],
-         'range': SIG_HEIGHT,
-         'nice': True}
 
 
 # TODO: rename me
@@ -29,7 +20,7 @@ def _color_scale():
         {'name': SCL_CTRL_COLOR,
          'type': 'ordinal',
          'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
-         'domain': {'data': DAT_INDIVIDUAL, 'field': GROUP_BY_VALUE},
+         'domain': {'data': DAT_INDIVIDUAL, 'field': FLD_GROUP_BY},
          'nice': True}
 
 
@@ -62,4 +53,4 @@ def _control_chart_subplot_scales(state, yscale):
         {'name': SCL_CTRL_COLOR,
          'type': 'ordinal',
          'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
-         'domain': {'data': DAT_INDIVIDUAL, 'field': GROUP_BY_VALUE}}]
+         'domain': {'data': DAT_INDIVIDUAL, 'field': FLD_GROUP_BY}}]

@@ -11,13 +11,14 @@ from .const import (
     FLD_CTRL_CL1, FLD_CTRL_CL2, FLD_CTRL_CL3, SCL_CTRL_X, SCL_CTRL_Y,
     SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2, STY_DASH_A, STY_DASH_B,
     SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_WIDTH, SIG_CTRL_CHART_HEIGHT, DAT_SERIES,
-    AGG_BY_DATA, GROUP_BY_VALUE, LINE, ASCENDING_ORDER, SCL_CTRL_COLOR,
+    DAT_AGG_BY, FLD_GROUP_BY, SCL_CTRL_COLOR,
     SIG_CTRL_MEAN_LINE_THICKNESS, SIG_CTRL_MEAN_SYMBOL_SIZE, TST_GROUP,
     SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_OPACITY, FLD_CTRL_CI0,
     FLD_CTRL_CI1, DAT_SPAGHETTIS, DAT_INDIVIDUAL,
     SIG_CTRL_SPG_LINE_THICKNESS, SIG_METRIC, SIG_GROUP,
     SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
-    SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS)
+    SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS,
+    FLD_METRIC)
 
 
 def _control_chart_subplot(yscale):
@@ -116,30 +117,30 @@ def _control_chart_global_marks():
 def _control_chart_grouped_marks(state):
     datum_state = "datum['%s']" % state
     # TODO: Clean this up
-    mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
+    mean_signal = ('{"title": "group mean", "group": datum.%s,'
                    ' "state": datum["%s"], "count": datum.%s,'
                    ' "mean": datum.%s, "ci0": datum.%s, "ci1": datum.%s}'
-                   % (state, FLD_CTRL_COUNT, FLD_CTRL_MEAN, FLD_CTRL_CI0,
-                      FLD_CTRL_CI1))
+                   % (FLD_GROUP_BY, state, FLD_CTRL_COUNT, FLD_CTRL_MEAN,
+                      FLD_CTRL_CI0, FLD_CTRL_CI1))
     return [
         {'type': 'group',
          'from': {
              # Regroup by "group" column
              'facet': {
                  'name': DAT_SERIES,
-                 'data': AGG_BY_DATA,
-                 'groupby': GROUP_BY_VALUE}},
+                 'data': DAT_AGG_BY,
+                 'groupby': FLD_GROUP_BY}},
          'marks': [
              # Per-group mean lines
-             {'type': LINE,
+             {'type': 'line',
               'from': {'data': DAT_SERIES},
-              'sort': {'field': datum_state, 'order': ASCENDING_ORDER},
+              'sort': {'field': datum_state, 'order': 'ascending'},
               'encode': {
                   'update': {
                       'x': {'scale': SCL_CTRL_X, 'field': state},
                       'y': {'scale': SCL_CTRL_Y, 'field': FLD_CTRL_MEAN},
                       'stroke': {'scale': SCL_CTRL_COLOR,
-                                 'field': GROUP_BY_VALUE},
+                                 'field': FLD_GROUP_BY},
                       'strokeWidth': {'signal':
                                       SIG_CTRL_MEAN_LINE_THICKNESS},
                       'opacity': [
@@ -156,9 +157,9 @@ def _control_chart_grouped_marks(state):
                       'x': {'scale': SCL_CTRL_X, 'field': state},
                       'y': {'scale': SCL_CTRL_Y, 'field': FLD_CTRL_MEAN},
                       'stroke': {'scale': SCL_CTRL_COLOR,
-                                 'field': GROUP_BY_VALUE},
+                                 'field': FLD_GROUP_BY},
                       'fill': {'scale': SCL_CTRL_COLOR,
-                               'field': GROUP_BY_VALUE},
+                               'field': FLD_GROUP_BY},
                       'size': {'signal': SIG_CTRL_MEAN_SYMBOL_SIZE},
                       'opacity': [
                           {'test': TST_GROUP,
@@ -175,7 +176,7 @@ def _control_chart_grouped_marks(state):
                       'y': {'scale': SCL_CTRL_Y, 'field': FLD_CTRL_CI0},
                       'y2': {'scale': SCL_CTRL_Y, 'field': FLD_CTRL_CI1},
                       'fill': {'scale': SCL_CTRL_COLOR,
-                               'field': GROUP_BY_VALUE},
+                               'field': FLD_GROUP_BY},
                       'opacity': [
                           {'test': '%s && %s' % (SIG_SHOW_ERROR_BARS,
                                                  TST_GROUP), 'value': 1.0},
@@ -186,9 +187,9 @@ def _control_chart_individual_marks(individual_id, state):
     datum_state = 'datum["%s"]' % state
     # TODO: clean this up
     spaghetti_signal = ('{"title": "spaghetti", "individual_id": '
-                        'datum["%s"], "group": datum.groupByVal, "state": '
-                        'datum["%s"], "metric": datum.metricVal}' %
-                        (individual_id, state))
+                        'datum["%s"], "group": datum.%s, "state": '
+                        'datum["%s"], "metric": datum.%s}' %
+                        (individual_id, FLD_GROUP_BY, state, FLD_METRIC))
     return \
         {'type': 'group',
          'from': {
@@ -198,8 +199,8 @@ def _control_chart_individual_marks(individual_id, state):
                  'data': DAT_INDIVIDUAL,
                  'groupby': individual_id}},
          'marks': [
-             {'type': LINE, 'from': {'data': DAT_SPAGHETTIS},
-              'sort': {'field': datum_state, 'order': ASCENDING_ORDER},
+             {'type': 'line', 'from': {'data': DAT_SPAGHETTIS},
+              'sort': {'field': datum_state, 'order': 'ascending'},
               'encode': {
                   'update': {
                       'strokeWidth': {'signal':
