@@ -11,7 +11,7 @@ from .const import (INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
                     GROUP_BY_VALUE, CONTROL_X_SCALE, LINEAR, WIDTH,
                     CONTROL_Y_SCALE, CONTROL_COLOR_SCALE, ORDINAL, LAYOUT_Y,
                     BAND, ROW_1, ROW_2, HEIGHT, DAT_GLOBAL_VALS, FLD_MIN_Y,
-                    FLD_MAX_Y)
+                    FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL3)
 
 
 def _layout_scale():
@@ -52,11 +52,12 @@ def _control_chart_subplot_scales(state, yscale):
          'type': yscale,
          'range': [{'signal': SIG_CTRL_CHART_HEIGHT}, 0],
          'nice': True,
-         'domain': {'signal': "[min(data('{0}')[0].cl0,"
+         'domain': {'signal': "[min(data('{0}')[0].{3},"
                               "     data('{0}')[0].{1}),"
-                              " max(data('{0}')[0].cl3,"
+                              " max(data('{0}')[0].{4},"
                               "     data('{0}')[0].{2})]".format(
-                                  DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y),
+                                  DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y,
+                                  FLD_CTRL_CL0, FLD_CTRL_CL3),
                     'sort': True}},
         {'name': CONTROL_COLOR_SCALE,
          'type': ORDINAL,

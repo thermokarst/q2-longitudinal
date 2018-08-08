@@ -7,17 +7,15 @@
 # ----------------------------------------------------------------------------
 
 from .const import (
-    DAT_GLOBAL_VALS, FLD_MIN_X, FLD_MAX_X, MEAN, CL0, CL1, CL2, CL3, CONTROL_X_SCALE,
-    CONTROL_Y_SCALE, SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2,
-    STY_DASH_A, STY_DASH_B, SIG_SHOW_GLOBAL_CTRL_LIMS, WIDTH,
-    SIG_CTRL_CHART_HEIGHT, SERIES, AGG_BY_DATA,
-    GROUP_BY_VALUE, LINE, ASCENDING_ORDER, CONTROL_COLOR_SCALE,
-    SIG_CTRL_MEAN_LINE_THICKNESS,
-    SIG_CTRL_MEAN_SYMBOL_SIZE, GROUP_TEST,
-    SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_OPACITY,
-    CI0, CI1, ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL,
-    SIG_CTRL_SPG_LINE_THICKNESS, SIG_METRIC, SIG_GROUP,
-    SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
+    DAT_GLOBAL_VALS, FLD_MIN_X, FLD_MAX_X, FLD_CTRL_MEAN, FLD_CTRL_CL0,
+    FLD_CTRL_CL1, FLD_CTRL_CL2, FLD_CTRL_CL3, CONTROL_X_SCALE, CONTROL_Y_SCALE,
+    SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2, STY_DASH_A, STY_DASH_B,
+    SIG_SHOW_GLOBAL_CTRL_LIMS, WIDTH, SIG_CTRL_CHART_HEIGHT, SERIES,
+    AGG_BY_DATA, GROUP_BY_VALUE, LINE, ASCENDING_ORDER, CONTROL_COLOR_SCALE,
+    SIG_CTRL_MEAN_LINE_THICKNESS, SIG_CTRL_MEAN_SYMBOL_SIZE, GROUP_TEST,
+    SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_OPACITY, CI0, CI1,
+    ERROR_BAR_TEST, SPAGHETTIS, INDIVIDUAL, SIG_CTRL_SPG_LINE_THICKNESS,
+    SIG_METRIC, SIG_GROUP, SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
     SIG_CTRL_SPG_SYMBOL_OPACITY)
 
 
@@ -48,7 +46,7 @@ def _control_chart_global_marks():
                  'strokeWidth': {'value': STY_STROKE_2},
                  'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
-                 'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': FLD_CTRL_MEAN},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_MEAN, 'value': 1.0},
                      {'value': 0.0}]}}},
@@ -61,7 +59,7 @@ def _control_chart_global_marks():
                  'strokeDash': {'value': STY_DASH_A},
                  'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
-                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL0},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': FLD_CTRL_CL0},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': 1.0},
@@ -76,7 +74,7 @@ def _control_chart_global_marks():
                  'strokeDash': {'value': STY_DASH_B},
                  'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
-                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL1},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': FLD_CTRL_CL1},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': 1.0},
@@ -91,7 +89,7 @@ def _control_chart_global_marks():
                  'strokeDash': {'value': STY_DASH_A},
                  'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
-                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL2},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': FLD_CTRL_CL2},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': 1.0},
@@ -106,7 +104,7 @@ def _control_chart_global_marks():
                  'strokeDash': {'value': STY_DASH_B},
                  'x': {'scale': CONTROL_X_SCALE, 'field': FLD_MIN_X},
                  'x2': {'scale': CONTROL_X_SCALE, 'field': FLD_MAX_X},
-                 'y': {'scale': CONTROL_Y_SCALE, 'field': CL3},
+                 'y': {'scale': CONTROL_Y_SCALE, 'field': FLD_CTRL_CL3},
                  'strokeOpacity': [
                      {'test': SIG_SHOW_GLOBAL_CTRL_LIMS,
                       'value': 1.0},
@@ -119,8 +117,8 @@ def _control_chart_grouped_marks(state):
     # TODO: Clean this up
     mean_signal = ('{"title": "group mean", "group": datum.groupByVal,'
                    ' "state": datum["%s"], "count": datum.count,'
-                   ' "mean": datum.mean, "ci0": datum.ci0, "ci1": datum.ci1}'
-                   % state)
+                   ' "mean": datum.%s, "ci0": datum.ci0, "ci1": datum.ci1}'
+                   % (state, FLD_CTRL_MEAN))
     return [
         {'type': 'group',
          'from': {
@@ -137,7 +135,7 @@ def _control_chart_grouped_marks(state):
               'encode': {
                   'update': {
                       'x': {'scale': CONTROL_X_SCALE, 'field': state},
-                      'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
+                      'y': {'scale': CONTROL_Y_SCALE, 'field': FLD_CTRL_MEAN},
                       'stroke': {'scale': CONTROL_COLOR_SCALE,
                                  'field': GROUP_BY_VALUE},
                       'strokeWidth': {'signal':
@@ -154,7 +152,7 @@ def _control_chart_grouped_marks(state):
                   'update': {
                       'tooltip': {'signal': mean_signal},
                       'x': {'scale': CONTROL_X_SCALE, 'field': state},
-                      'y': {'scale': CONTROL_Y_SCALE, 'field': MEAN},
+                      'y': {'scale': CONTROL_Y_SCALE, 'field': FLD_CTRL_MEAN},
                       'stroke': {'scale': CONTROL_COLOR_SCALE,
                                  'field': GROUP_BY_VALUE},
                       'fill': {'scale': CONTROL_COLOR_SCALE,

@@ -51,21 +51,21 @@ DAT_GLOBAL_VALS = 'globalVals'
 
 # FIELDS
 ###############################################################################
+# TODO: These minx/maxx should be updated to mention they are CTRL plot
 FLD_MIN_X = 'minX'
 FLD_MAX_X = 'maxX'
 FLD_MIN_Y = 'minY'
 FLD_MAX_Y = 'maxY'
+FLD_CTRL_MEAN = 'mean'
+FLD_CTRL_MIN = 'min'
+FLD_CTRL_STDEV = 'stdev'
+FLD_CTRL_CL0 = 'cl0'
+FLD_CTRL_CL1 = 'cl1'
+FLD_CTRL_CL2 = 'cl2'
+FLD_CTRL_CL3 = 'cl3'
 
 # NEEDS TO BE EVALUATED
 ###############################################################################
-MEAN = 'mean'
-MIN = 'min'
-MAX = 'max'
-STDEV = 'stdev'
-CL0 = 'cl0'
-CL1 = 'cl1'
-CL2 = 'cl2'
-CL3 = 'cl3'
 CI0 = 'ci0'
 CI1 = 'ci1'
 EXT = 'ext'
