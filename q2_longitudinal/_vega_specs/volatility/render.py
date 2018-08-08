@@ -6,9 +6,6 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-
-# TODO: prefix constants with underscore
-
 import json
 
 import pandas as pd
@@ -19,16 +16,11 @@ from .mark import (
     _control_chart_global_marks, _control_chart_subplot,
     _control_chart_grouped_marks, _control_chart_individual_marks)
 from .signal import _volatility_signals, _spaghetti_signals
-from .scale import _color_scale, _control_chart_subplot_scales
+from .scale import _control_chart_subplot_scales
 from .data import _control_chart_data
 
 
-# TODO: do I need the feature flag?
-# TODO: break out more placeholder values (like signal dicts)
-# TODO: split this spec composition up a bit more
-def render_volatility_spec(is_feat_vol_plot: bool,
-                           control_chart_data: pd.DataFrame,
-                           features_chart_data: pd.DataFrame,
+def render_volatility_spec(control_chart_data: pd.DataFrame,
                            individual_id: str, state: str,
                            default_group: str, group_columns: list,
                            default_metric: str, metric_columns: list,
@@ -44,9 +36,9 @@ def render_volatility_spec(is_feat_vol_plot: bool,
         # Vega Editor.
         'width': 800,
         'signals': [],
-        # TODO: can color scale get moved into the control chart?
-        'scales': [_color_scale()],
+        'scales': [],
         'marks': [],
+        # TODO: move this into control chart subplot
         'data': _control_chart_data(control_chart_data, state),
     }
 
@@ -57,8 +49,7 @@ def render_volatility_spec(is_feat_vol_plot: bool,
     control_chart['axes'] = _control_chart_axes(state)
     control_chart['legends'] = _control_chart_legend()
 
-    spec['signals'].extend(_volatility_signals(features_chart_data,
-                                               default_group, group_columns,
+    spec['signals'].extend(_volatility_signals(default_group, group_columns,
                                                default_metric, metric_columns))
 
     if individual_id:

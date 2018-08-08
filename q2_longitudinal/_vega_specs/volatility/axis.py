@@ -14,9 +14,4 @@ def _control_chart_axes(state):
         {'orient': 'bottom', 'scale': SCL_CTRL_X,
          'title': state},
         {'orient': 'left', 'scale': SCL_CTRL_Y,
-         # TODO: for feature volatility, include the fact
-         # that this is the relative abundance
          'title': {'signal': SIG_METRIC}}]
-
-
-# TODO: placeholder for feature vol axes

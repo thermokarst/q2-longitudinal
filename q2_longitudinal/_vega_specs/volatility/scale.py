@@ -14,16 +14,6 @@ from .const import (DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
                     FLD_CTRL_CL3)
 
 
-# TODO: rename me
-def _color_scale():
-    return \
-        {'name': SCL_CTRL_COLOR,
-         'type': 'ordinal',
-         'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
-         'domain': {'data': DAT_INDIVIDUAL, 'field': FLD_GROUP_BY},
-         'nice': True}
-
-
 def _control_chart_subplot_scales(state, yscale):
     return [
         {'name': SCL_CTRL_X,

@@ -11,7 +11,6 @@
 
 {% block content %}
 
-{# TODO: add a header for selected metric when running feat vol #}
 <div class="row">
   <div class="col-lg-8">
     <h3>Volatility Control Chart</h3>
@@ -76,12 +75,6 @@
       <div class="col-lg-6" id="spaghetti-symbol-opacity"></div>
     </div>
 
-    <div class="row">
-      <div class="col-lg-4" id="feature-stats"></div>
-      <div class="col-lg-4" id="sort-features"></div>
-      <div class="col-lg-4" id="sort-direction"></div>
-    </div>
-
   </div>
 </div>
 {% endblock %}
@@ -99,7 +92,6 @@
     // based on the browser dimensions.
     var opts = {
       width: $('#plot').width(),
-      height: $(window).height(),
     };
 
     vegaEmbed('#plot', spec, opts).then(function(result) {
@@ -149,9 +141,6 @@
     cleanupEl('#spaghetti-symbol-size', 'Spaghetti scatter size');
     cleanupEl('#mean-symbol-opacity', 'Mean scatter opacity');
     cleanupEl('#spaghetti-symbol-opacity', 'Spaghetti scatter opacity');
-    cleanupEl('#feature-stats', 'Descriptive Feature Statistics', 'select');
-    cleanupEl('#sort-features', 'Sort Features By', 'select');
-    cleanupEl('#sort-direction', 'Sort Direction', 'select');
   });
 </script>
 {% endblock %}

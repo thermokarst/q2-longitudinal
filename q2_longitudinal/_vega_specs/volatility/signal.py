@@ -12,23 +12,15 @@ from .const import (
     SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_SIZE,
     SIG_CTRL_MEAN_SYMBOL_OPACITY, SIG_CTRL_SPG_LINE_THICKNESS,
     SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
-    SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_HEIGHT, SIG_SHOW_ERROR_BARS,
-    LEG_CTRL_SYMBOL
-    )
+    SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_SHOW_ERROR_BARS,
+    LEG_CTRL_SYMBOL)
 
 
-def _volatility_signals(features_chart_data, default_group, group_columns,
-                        default_metric, metric_columns):
+def _volatility_signals(default_group, group_columns, default_metric,
+                        metric_columns):
     return [
         # LAYOUT/DIMENSIONS
         {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
-        # TODO: you don't belong in here
-        {'name': 'importancesChartHeight',
-         # TODO: make this a vega expression
-         'value': 10 * len(features_chart_data.index)},
-        {'name': SIG_HEIGHT,
-         'update': '%s + importancesChartHeight' % SIG_CTRL_CHART_HEIGHT},
-        {'name': 'halfWidth', 'update': 'width / 2'},
         {'name': SIG_WIDTH, 'value': '', 'bind': {'input': 'text'},
          'on': [{'events': {'source': 'window', 'type': 'resize'},
                  'update': 'containerSize()[0]'}]},
@@ -42,14 +34,7 @@ def _volatility_signals(features_chart_data, default_group, group_columns,
                   'options': group_columns}},
         {'name': SIG_METRIC, 'value': default_metric,
          'bind': {'input': 'select', 'element': '#metric-column',
-                  'options': metric_columns},
-         # TODO: Is this a problem to leave this here?
-         'on': [
-             # I couldn't get event merging to work correctly here.
-             {'events': '@feature_importances:click',
-              'update': 'datum.id', 'force': True},
-             {'events': '@descriptive_stats:click',
-              'update': 'datum.id', 'force': True}]},
+                  'options': metric_columns}},
         {'name': SIG_SHOW_GLOBAL_MEAN, 'value': False,
          'bind': {'input': 'checkbox', 'element': '#toggle-global-mean'}},
         {'name': SIG_SHOW_GLOBAL_CTRL_LIMS, 'value': False,
@@ -103,53 +88,3 @@ def _spaghetti_signals():
         {'name': SIG_CTRL_SPG_SYMBOL_OPACITY, 'value': 0.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 1.0, 'step': 0.01,
                   'element': '#spaghetti-symbol-opacity'}}]
-
-
-#         # TODO: only add this if feature volatility
-#         {
-#             'name': 'feature_stats',
-#             'value': 'Cumulative Average Change',
-#             'bind': {
-#                 'input': 'select',
-#                 'element': '#feature-stats',
-#                 'options': [
-#                     'Cumulative Average Change',
-#                     'Variance',
-#                     'Mean',
-#                     'Median',
-#                     'Standard Deviation',
-#                     'CV (%)',
-#                 ],
-#             },
-#         },
-#         {
-#             'name': 'feature_sort',
-#             'value': 'importance',
-#             'bind': {
-#                 'input': 'select',
-#                 'element': '#sort-features',
-#                 'options': [
-#                     'importance',
-#                     'Cumulative Avg Decrease',
-#                     'Cumulative Avg Increase',
-#                     'Variance',
-#                     'Mean',
-#                     'Median',
-#                     'Standard Deviation',
-#                     'CV (%)',
-#                 ],
-#             },
-#         },
-#         {
-#             'name': 'sort_direction',
-#             'value': 'descending',
-#             'bind': {
-#                 'input': 'select',
-#                 'element': '#sort-direction',
-#                 'options': [
-#                     'ascending',
-#                     'descending',
-#                 ],
-#             },
-#         },
-#         # END TODO

@@ -23,8 +23,7 @@ from ._utilities import (_get_group_pairs, _extract_distance_distribution,
                          _regplot_subplots_from_dataframe, _load_metadata,
                          _validate_input_values, _validate_input_columns,
                          _nmit, _validate_is_numeric_column,
-                         _tabulate_matrix_ids, _first_differences,
-                         _summarize_feature_stats)
+                         _tabulate_matrix_ids, _first_differences)
 from ._vega_specs import render_volatility_spec
 
 
@@ -207,21 +206,12 @@ def _warn_column_name_exists(column_name):
     warnings.warn(warning, UserWarning)
 
 
-def _volatility(metadata, table, importances, output_dir, state_column,
+def _volatility(metadata, table, output_dir, state_column,
                 individual_id_column, default_group_column, default_metric,
                 yscale):
     if individual_id_column == state_column:
         raise ValueError('individual_id_column & state_column must be set to '
                          'unique values.')
-
-    is_feat_vol_plot = (importances is not None)
-    if is_feat_vol_plot:
-        # Compile first differences and other stats on feature data
-        state_md_col = metadata.get_column(state_column).to_dataframe()
-        feature_md = _summarize_feature_stats(table, state_md_col)
-        # TODO: use metadata API
-        feature_md.to_csv(
-            os.path.join(output_dir, 'feature_metadata.tsv'), sep='\t')
 
     # Convert table to metadata and merge, if present.
     if table is not None:
@@ -268,26 +258,15 @@ def _volatility(metadata, table, importances, output_dir, state_column,
                          'values.')
 
     control_chart_data = metadata.to_dataframe()
+
     # If we made it this far that means we can let Vega do it's thing!
     group_columns = list(categorical.columns.keys())
     if individual_id_column and individual_id_column not in group_columns:
         group_columns += [individual_id_column]
     metric_columns = list(numeric.columns.keys())
-    # TODO: fix this, it still sends along the data
-    if is_feat_vol_plot:
-        metric_columns.remove(state_column)
-        default_metric = metric_columns[0]
-        # TODO: ID match table and importances
-        # TODO: do i need to set the id column label? or pass it through?
-        # TODO: drop zero imp?
-        # TODO: make importances label title case
-        feature_data = importances.join(feature_md, how='left')
-        feature_data = feature_data.reset_index(drop=False)
-    else:
-        feature_data = pd.DataFrame()
 
-    vega_spec = render_volatility_spec(is_feat_vol_plot, control_chart_data,
-                                       feature_data, individual_id_column,
+    vega_spec = render_volatility_spec(control_chart_data,
+                                       individual_id_column,
                                        state_column, default_group_column,
                                        group_columns, default_metric,
                                        metric_columns, yscale)
@@ -304,21 +283,7 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
                state_column: str, individual_id_column: str=None,
                default_group_column: str=None, default_metric: str=None,
                table: pd.DataFrame=None, yscale: str='linear') -> None:
-    return _volatility(metadata, table, None, output_dir, state_column,
-                       individual_id_column, default_group_column,
-                       default_metric, yscale)
-
-
-def visualize_feature_volatility(output_dir: str,
-                                 table: pd.DataFrame,
-                                 importances: pd.DataFrame,
-                                 metadata: qiime2.Metadata,
-                                 state_column: str,
-                                 individual_id_column: str=None,
-                                 default_group_column: str=None,
-                                 default_metric: str=None,
-                                 yscale: str='linear') -> None:
-    return _volatility(metadata, table, importances, output_dir, state_column,
+    return _volatility(metadata, table, output_dir, state_column,
                        individual_id_column, default_group_column,
                        default_metric, yscale)
 

@@ -37,7 +37,6 @@ def _control_chart_data(control_chart_data, state):
                   {'signal': SIG_METRIC}],
               'as': [FLD_CTRL_MEAN, FLD_MIN_X, FLD_MAX_X, FLD_CTRL_STDEV,
                      FLD_MIN_Y, FLD_MAX_Y]},
-             # TODO: clean up these expressions
              {'type': 'formula', 'as': FLD_CTRL_CL0,
               'expr': 'datum.%s - (3 * datum.%s)' % (FLD_CTRL_MEAN,
                                                      FLD_CTRL_STDEV)},

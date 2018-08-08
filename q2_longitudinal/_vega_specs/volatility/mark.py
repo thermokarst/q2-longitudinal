@@ -116,7 +116,6 @@ def _control_chart_global_marks():
 
 def _control_chart_grouped_marks(state):
     datum_state = "datum['%s']" % state
-    # TODO: Clean this up
     mean_signal = ('{"title": "group mean", "group": datum.%s,'
                    ' "state": datum["%s"], "count": datum.%s,'
                    ' "mean": datum.%s, "ci0": datum.%s, "ci1": datum.%s}'
@@ -185,11 +184,10 @@ def _control_chart_grouped_marks(state):
 
 def _control_chart_individual_marks(individual_id, state):
     datum_state = 'datum["%s"]' % state
-    # TODO: clean this up
-    spaghetti_signal = ('{"title": "spaghetti", "individual_id": '
-                        'datum["%s"], "group": datum.%s, "state": '
-                        'datum["%s"], "metric": datum.%s}' %
-                        (individual_id, FLD_GROUP_BY, state, FLD_METRIC))
+    tooltip_expr = ('{"title": "spaghetti", "individual_id": '
+                    ' datum["%s"], "group": datum.%s, "state": '
+                    ' datum["%s"], "metric": datum.%s}' %
+                    (individual_id, FLD_GROUP_BY, state, FLD_METRIC))
     return \
         {'type': 'group',
          'from': {
@@ -220,7 +218,7 @@ def _control_chart_individual_marks(individual_id, state):
               'from': {'data': DAT_SPAGHETTIS},
               'encode': {
                   'update': {
-                      'tooltip': {'signal': spaghetti_signal},
+                      'tooltip': {'signal': tooltip_expr},
                       'size': {'signal': SIG_CTRL_SPG_SYMBOL_SIZE},
                       'x': {'scale': SCL_CTRL_X, 'field': state},
                       'y': {'scale': SCL_CTRL_Y,
