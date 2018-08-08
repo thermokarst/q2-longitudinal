@@ -20,6 +20,7 @@ from .scale import _control_chart_subplot_scales
 from .data import _control_chart_data
 
 
+# TODO: make a "render_subplot" helper func in this file
 def render_spec_volatility(control_chart_data: pd.DataFrame,
                            individual_id: str, state: str,
                            default_group: str, group_columns: list,

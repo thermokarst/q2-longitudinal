@@ -242,6 +242,7 @@ plugin.visualizers.register_function(
         'column "group_column".')
 )
 
+
 plugin.methods.register_function(
     function=nmit,
     inputs={'table': FeatureTable[RelativeFrequency]},
