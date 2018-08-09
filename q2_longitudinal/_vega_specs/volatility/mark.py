@@ -8,16 +8,15 @@
 
 from .const import (
     DAT_AGG_BY, FLD_GROUP_BY, SCL_CTRL_COLOR, DAT_GLOBAL_VALS, FLD_MIN_X,
-    FLD_MAX_X, FLD_CTRL_MEAN, FLD_CTRL_CL0, FLD_CTRL_CI1, DAT_SPAGHETTIS,
     DAT_INDIVIDUAL, FLD_CTRL_CL1, FLD_CTRL_CL2, FLD_CTRL_CL3, SCL_CTRL_X,
-    SCL_CTRL_Y, FLD_METRIC, SIG_CTRL_MEAN_LINE_OPACITY,
+    FLD_MAX_X, FLD_CTRL_MEAN, FLD_CTRL_CL0, FLD_CTRL_CI1, DAT_SPAGHETTIS,
+    SCL_CTRL_Y, FLD_METRIC, SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_CHART_HEIGHT,
+    DAT_SERIES, SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2,
     SIG_CTRL_MEAN_SYMBOL_OPACITY, FLD_CTRL_CI0, SIG_CTRL_MEAN_LINE_THICKNESS,
     SIG_CTRL_MEAN_SYMBOL_SIZE, TST_GROUP, SIG_CTRL_SPG_LINE_OPACITY,
-    SIG_CTRL_SPG_SYMBOL_SIZE, SIG_CTRL_SPG_LINE_THICKNESS, SIG_METRIC,
-    SIG_GROUP, SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT,
-    SIG_SHOW_ERROR_BARS, SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_WIDTH,
-    SIG_CTRL_CHART_HEIGHT, DAT_SERIES, SIG_SHOW_GLOBAL_MEAN, STY_STROKE_2,
-    STY_DASH_A, STY_DASH_B)
+    SIG_CTRL_SPG_SYMBOL_SIZE, SIG_CTRL_SPG_LINE_THICKNESS, SIG_GROUP,
+    SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS,
+    SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_CTRL_CHART_WIDTH, STY_DASH_A, STY_DASH_B)
 
 
 def render_marks_ctrl(yscale):
@@ -27,8 +26,9 @@ def render_marks_ctrl(yscale):
          'type': 'group',
          'encode': {
              'enter': {
+                 'x': {'value': 0},
                  'y': {'value': 0},
-                 'width': {'signal': SIG_WIDTH},
+                 'width': {'signal': SIG_CTRL_CHART_WIDTH},
                  'height': {'signal': SIG_CTRL_CHART_HEIGHT},
                 }},
          'marks': [],
@@ -177,7 +177,7 @@ def render_marks_ctrl_grouped(state):
                                'field': FLD_GROUP_BY},
                       'opacity': [
                           {'test': '%s && (%s)' % (SIG_SHOW_ERROR_BARS,
-                                                 TST_GROUP), 'value': 1.0},
+                                                   TST_GROUP), 'value': 1.0},
                           {'value': 0.0}]}}}]}]
 
 
@@ -204,7 +204,7 @@ def render_marks_ctrl_individual(individual_id, state):
                                       SIG_CTRL_SPG_LINE_THICKNESS},
                       'x': {'scale': SCL_CTRL_X, 'field': state},
                       'y': {'scale': SCL_CTRL_Y,
-                            'field': {'signal': SIG_METRIC}},
+                            'field': FLD_METRIC},
                       'stroke': {'scale': SCL_CTRL_COLOR,
                                  'field': {'signal': SIG_GROUP}},
                       'opacity': [
@@ -221,7 +221,7 @@ def render_marks_ctrl_individual(individual_id, state):
                       'size': {'signal': SIG_CTRL_SPG_SYMBOL_SIZE},
                       'x': {'scale': SCL_CTRL_X, 'field': state},
                       'y': {'scale': SCL_CTRL_Y,
-                            'field': {'signal': SIG_METRIC}},
+                            'field': FLD_METRIC},
                       'stroke': {'scale': SCL_CTRL_COLOR,
                                  'field': {'signal': SIG_GROUP}},
                       'fill': {'scale': SCL_CTRL_COLOR,

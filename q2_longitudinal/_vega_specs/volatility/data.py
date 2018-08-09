@@ -28,13 +28,8 @@ def render_data_ctrl(control_chart_data, state):
          'transform': [
              {'type': 'aggregate',
               'ops': ['mean', 'min', 'max', 'stdev', 'min', 'max'],
-              'fields': [
-                  {'signal': SIG_METRIC},
-                  state,
-                  state,
-                  {'signal': SIG_METRIC},
-                  {'signal': SIG_METRIC},
-                  {'signal': SIG_METRIC}],
+              'fields': [FLD_METRIC, state, state, FLD_METRIC, FLD_METRIC,
+                         FLD_METRIC],
               'as': [FLD_CTRL_MEAN, FLD_MIN_X, FLD_MAX_X, FLD_CTRL_STDEV,
                      FLD_MIN_Y, FLD_MAX_Y]},
              {'type': 'formula', 'as': FLD_CTRL_CL0,
@@ -60,11 +55,7 @@ def render_data_ctrl(control_chart_data, state):
               # I don't see an easy way at the moment to define
               # your own confidence interval in vega.
               'ops': ['mean', 'ci0', 'ci1', 'count'],
-              'fields': [
-                  {'signal': SIG_METRIC},
-                  {'signal': SIG_METRIC},
-                  {'signal': SIG_METRIC},
-                  {'signal': SIG_METRIC}],
+              'fields': [FLD_METRIC, FLD_METRIC, FLD_METRIC, FLD_METRIC],
               'as': [FLD_CTRL_MEAN, FLD_CTRL_CI0, FLD_CTRL_CI1,
                      FLD_CTRL_COUNT]}]},
         # These are just UI state vars to keep track of what has been clicked

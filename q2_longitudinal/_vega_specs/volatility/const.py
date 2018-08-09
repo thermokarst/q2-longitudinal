@@ -28,7 +28,6 @@ SIG_SHOW_GLOBAL_MEAN = 'showGlobalMean'
 SIG_SHOW_GLOBAL_CTRL_LIMS = 'showGlobalControlLimits'
 SIG_SHOW_ERROR_BARS = 'showErrorBars'
 SIG_COLOR_SCHEME = 'colorScheme'
-SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
 SIG_CTRL_MEAN_LINE_THICKNESS = 'meanLineThickness'
 SIG_CTRL_MEAN_LINE_OPACITY = 'meanLineOpacity'
 SIG_CTRL_MEAN_SYMBOL_SIZE = 'meanSymbolSize'
@@ -39,6 +38,8 @@ SIG_CTRL_SPG_SYMBOL_SIZE = 'spaghettiSymbolSize'
 SIG_CTRL_SPG_SYMBOL_OPACITY = 'spaghettiSymbolOpacity'
 SIG_WIDTH = 'width'  # this is a special signal in vega
 SIG_HEIGHT = 'height'  # this is a special signal in vega
+SIG_CTRL_CHART_WIDTH = 'controlChartWidth'
+SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
 
 # STYLES
 ###############################################################################

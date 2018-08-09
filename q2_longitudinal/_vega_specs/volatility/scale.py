@@ -8,16 +8,16 @@
 
 
 from .const import (
-    DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL3,
-    FLD_GROUP_BY, SCL_CTRL_X, SIG_WIDTH, SCL_CTRL_Y, SCL_CTRL_COLOR,
-    DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME)
+    SIG_CTRL_CHART_WIDTH, DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0,
+    FLD_CTRL_CL3, DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
+    FLD_GROUP_BY, SCL_CTRL_X, SCL_CTRL_Y, SCL_CTRL_COLOR)
 
 
 def render_scales_ctrl(state, yscale):
     return [
         {'name': SCL_CTRL_X,
          'type': 'linear',
-         'range': SIG_WIDTH,
+         'range': {'signal': SIG_CTRL_CHART_WIDTH},
          'nice': True,
          'domain': {
              'data': DAT_INDIVIDUAL,
@@ -32,6 +32,9 @@ def render_scales_ctrl(state, yscale):
          'type': yscale,
          'range': [{'signal': SIG_CTRL_CHART_HEIGHT}, 0],
          'nice': True,
+         # TODO: this signal is valid for when we have individual vals in the
+         # plot (spaghettis), otherwise we should only use the group means for
+         # determining the domain.
          'domain': {'signal': "[min(data('{0}')[0].{3},"
                               "     data('{0}')[0].{1}),"
                               " max(data('{0}')[0].{4},"

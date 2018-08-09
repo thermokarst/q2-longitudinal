@@ -10,6 +10,7 @@ import json
 
 import pandas as pd
 
+from .const import SIG_METRIC
 from .axis import render_axes_ctrl
 from .legend import render_legends_ctrl
 from .mark import (
@@ -20,14 +21,13 @@ from .scale import render_scales_ctrl
 from .data import render_data_ctrl
 
 
-def render_subplot_ctrl(yscale, state, control_chart_data):
+def render_subplot_ctrl(yscale, state):
     control_chart = render_marks_ctrl(yscale)
     control_chart['marks'] = render_marks_ctrl_global() + \
         render_marks_ctrl_grouped(state)
     control_chart['scales'] = render_scales_ctrl(state, yscale)
     control_chart['axes'] = render_axes_ctrl(state)
     control_chart['legends'] = render_legends_ctrl()
-    control_chart['data'] = render_data_ctrl(control_chart_data, state)
 
     return control_chart
 
@@ -47,15 +47,19 @@ def render_spec_volatility(control_chart_data: pd.DataFrame,
         # This dimension is here for when the viz is opened in the online
         # Vega Editor.
         'width': 800,
+        'title': {'text': {'signal': SIG_METRIC}},
+        'background': '#FFFFFF',
         # Not registering signals on a subplot level since they aren't super
         # helpful (e.g. can't `bind` in a subplot signal).
         'signals': render_signals_ctrl(default_group, group_columns,
                                        default_metric, metric_columns),
         'scales': [],
         'marks': [],
-        'data': [],
+        # Add data at root of plot, it is easier to use the built in view
+        # accessor to debug values
+        'data': render_data_ctrl(control_chart_data, state),
     }
-    control_chart = render_subplot_ctrl(yscale, state, control_chart_data)
+    control_chart = render_subplot_ctrl(yscale, state)
     if individual_id:
         control_chart['marks'].append(
             render_marks_ctrl_individual(individual_id, state))

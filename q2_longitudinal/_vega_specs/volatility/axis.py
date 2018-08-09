@@ -14,4 +14,4 @@ def render_axes_ctrl(state):
         {'orient': 'bottom', 'scale': SCL_CTRL_X,
          'title': state},
         {'orient': 'left', 'scale': SCL_CTRL_Y,
-         'title': {'signal': SIG_METRIC}}]
+         'title': 'Metric Column'}]

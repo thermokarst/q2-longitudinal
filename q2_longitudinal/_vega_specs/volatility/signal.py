@@ -8,21 +8,23 @@
 
 from .const import (
     LEG_CTRL_LABEL, LEG_CTRL_SYMBOL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
-    SIG_CTRL_MEAN_LINE_THICKNESS, SIG_CTRL_MEAN_LINE_OPACITY,
-    SIG_CTRL_MEAN_SYMBOL_SIZE, SIG_CTRL_MEAN_SYMBOL_OPACITY,
-    SIG_CTRL_SPG_LINE_THICKNESS, SIG_CTRL_SPG_LINE_OPACITY,
-    SIG_CTRL_SPG_SYMBOL_SIZE, SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH,
-    SIG_SHOW_ERROR_BARS, SIG_METRIC, SIG_GROUP, SIG_SHOW_GLOBAL_MEAN,
-    SIG_SHOW_GLOBAL_CTRL_LIMS)
+    SIG_CTRL_CHART_WIDTH, SIG_CTRL_MEAN_LINE_THICKNESS,
+    SIG_CTRL_MEAN_LINE_OPACITY, SIG_CTRL_MEAN_SYMBOL_SIZE,
+    SIG_CTRL_MEAN_SYMBOL_OPACITY, SIG_CTRL_SPG_LINE_THICKNESS,
+    SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
+    SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_SHOW_ERROR_BARS, SIG_METRIC,
+    SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS)
+
 
 def render_signals_ctrl(default_group, group_columns, default_metric,
                         metric_columns):
     return [
         # LAYOUT/DIMENSIONS
-        {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
         {'name': SIG_WIDTH, 'value': '', 'bind': {'input': 'text'},
          'on': [{'events': {'source': 'window', 'type': 'resize'},
                  'update': 'containerSize()[0]'}]},
+        {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
+        {'name': SIG_CTRL_CHART_WIDTH, 'update': '[0, %s]' % SIG_WIDTH},
 
         # UI WIDGETS
         {'name': SIG_SHOW_ERROR_BARS, 'value': False,
