@@ -259,7 +259,6 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
                          'values.')
 
     control_chart_data = metadata.to_dataframe()
-
     # If we made it this far that means we can let Vega do it's thing!
     group_columns = list(categorical.columns.keys())
     if individual_id_column and individual_id_column not in group_columns:

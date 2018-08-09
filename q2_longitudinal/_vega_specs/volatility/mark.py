@@ -23,7 +23,7 @@ from .const import (
 def render_marks_ctrl(yscale):
     return \
         {'description': 'Control Chart',
-         'name': 'spaghetti',
+         'name': 'controlChart',
          'type': 'group',
          'encode': {
              'enter': {
@@ -176,7 +176,7 @@ def render_marks_ctrl_grouped(state):
                       'fill': {'scale': SCL_CTRL_COLOR,
                                'field': FLD_GROUP_BY},
                       'opacity': [
-                          {'test': '%s && %s' % (SIG_SHOW_ERROR_BARS,
+                          {'test': '%s && (%s)' % (SIG_SHOW_ERROR_BARS,
                                                  TST_GROUP), 'value': 1.0},
                           {'value': 0.0}]}}}]}]
 

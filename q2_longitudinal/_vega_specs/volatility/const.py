@@ -89,4 +89,4 @@ TST_GROUP = "!length(data('{0}')) || indata('{0}', 'value', datum.{1})".format(D
 # LEGEND
 ###############################################################################
 LEG_CTRL_SYMBOL = 'legendSymbol'
-LEG_CTRL_LABEL = 'labelSymbol'
+LEG_CTRL_LABEL = 'legendLabel'
