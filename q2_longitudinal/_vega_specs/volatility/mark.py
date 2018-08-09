@@ -20,7 +20,7 @@ from .const import (
     STY_DASH_A, STY_DASH_B)
 
 
-def render_subplot_ctrl(yscale):
+def render_marks_ctrl(yscale):
     return \
         {'description': 'Control Chart',
          'name': 'spaghetti',
@@ -37,7 +37,7 @@ def render_subplot_ctrl(yscale):
          'legends': []}
 
 
-def render_mark_ctrl_global():
+def render_marks_ctrl_global():
     return [
         # Global Mean
         {'type': 'rule',
@@ -113,7 +113,7 @@ def render_mark_ctrl_global():
                  ]}}}]
 
 
-def _control_chart_grouped_marks(state):
+def render_marks_ctrl_grouped(state):
     datum_state = "datum['%s']" % state
     mean_signal = ('{"title": "group mean", "group": datum.%s,'
                    ' "state": datum["%s"], "count": datum.%s,'
@@ -181,7 +181,7 @@ def _control_chart_grouped_marks(state):
                           {'value': 0.0}]}}}]}]
 
 
-def _control_chart_individual_marks(individual_id, state):
+def render_marks_ctrl_individual(individual_id, state):
     datum_state = 'datum["%s"]' % state
     tooltip_expr = ('{"title": "spaghetti", "individual_id": '
                     ' datum["%s"], "group": datum.%s, "state": '

@@ -13,7 +13,7 @@ from .const import (
     DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME)
 
 
-def _control_chart_subplot_scales(state, yscale):
+def render_scales_ctrl(state, yscale):
     return [
         {'name': SCL_CTRL_X,
          'type': 'linear',

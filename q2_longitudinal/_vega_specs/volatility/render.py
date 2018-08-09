@@ -10,17 +10,28 @@ import json
 
 import pandas as pd
 
-from .axis import render_axis_ctrl
-from .legend import render_legend_ctrl
+from .axis import render_axes_ctrl
+from .legend import render_legends_ctrl
 from .mark import (
-    render_mark_ctrl_global, render_subplot_ctrl,
-    _control_chart_grouped_marks, _control_chart_individual_marks)
-from .signal import _volatility_signals, _spaghetti_signals
-from .scale import _control_chart_subplot_scales
-from .data import _control_chart_data
+    render_marks_ctrl, render_marks_ctrl_global,
+    render_marks_ctrl_grouped, render_marks_ctrl_individual)
+from .signal import render_signals_ctrl, render_signals_ctrl_individual
+from .scale import render_scales_ctrl
+from .data import render_data_ctrl
 
 
-# TODO: make a "render_subplot" helper func in this file
+def render_subplot_ctrl(yscale, state, control_chart_data):
+    control_chart = render_marks_ctrl(yscale)
+    control_chart['marks'] = render_marks_ctrl_global() + \
+        render_marks_ctrl_grouped(state)
+    control_chart['scales'] = render_scales_ctrl(state, yscale)
+    control_chart['axes'] = render_axes_ctrl(state)
+    control_chart['legends'] = render_legends_ctrl()
+    control_chart['data'] = render_data_ctrl(control_chart_data, state)
+
+    return control_chart
+
+
 def render_spec_volatility(control_chart_data: pd.DataFrame,
                            individual_id: str, state: str,
                            default_group: str, group_columns: list,
@@ -36,27 +47,18 @@ def render_spec_volatility(control_chart_data: pd.DataFrame,
         # This dimension is here for when the viz is opened in the online
         # Vega Editor.
         'width': 800,
-        'signals': [],
+        # Not registering signals on a subplot level since they aren't super
+        # helpful (e.g. can't `bind` in a subplot signal).
+        'signals': render_signals_ctrl(default_group, group_columns,
+                                       default_metric, metric_columns),
         'scales': [],
         'marks': [],
-        # TODO: move this into control chart subplot
-        'data': _control_chart_data(control_chart_data, state),
+        'data': [],
     }
-
-    control_chart = render_subplot_ctrl(yscale)
-    control_chart['marks'] = render_mark_ctrl_global() + \
-        _control_chart_grouped_marks(state)
-    control_chart['scales'] = _control_chart_subplot_scales(state, yscale)
-    control_chart['axes'] = render_axis_ctrl(state)
-    control_chart['legends'] = render_legend_ctrl()
-
-    spec['signals'].extend(_volatility_signals(default_group, group_columns,
-                                               default_metric, metric_columns))
-
+    control_chart = render_subplot_ctrl(yscale, state, control_chart_data)
     if individual_id:
         control_chart['marks'].append(
-            _control_chart_individual_marks(individual_id, state))
-        spec['signals'].extend(_spaghetti_signals())
-
+            render_marks_ctrl_individual(individual_id, state))
+        spec['signals'].extend(render_signals_ctrl_individual())
     spec['marks'].append(control_chart)
-    return json.dumps(spec)
+    return json.dumps(spec, indent=2, sort_keys=True)

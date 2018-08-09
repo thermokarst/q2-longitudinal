@@ -16,7 +16,7 @@ from .const import (
     SIG_SHOW_GLOBAL_CTRL_LIMS)
 
 
-def _volatility_signals(default_group, group_columns, default_metric,
+def render_signals_ctrl(default_group, group_columns, default_metric,
                         metric_columns):
     return [
         # LAYOUT/DIMENSIONS
@@ -74,7 +74,7 @@ def _volatility_signals(default_group, group_columns, default_metric,
     ]
 
 
-def _spaghetti_signals():
+def render_signals_ctrl_individual():
     return [
         {'name': SIG_CTRL_SPG_LINE_THICKNESS, 'value': 0.5,
          'bind': {'input': 'range', 'min': 0.1, 'max': 10, 'step': 0.1,

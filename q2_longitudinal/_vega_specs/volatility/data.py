@@ -14,7 +14,7 @@ from .const import (
     FLD_CTRL_CL2)
 
 
-def _control_chart_data(control_chart_data, state):
+def render_data_ctrl(control_chart_data, state):
     return [
         {'name': DAT_INDIVIDUAL,
          'values': control_chart_data.to_dict('record'),
