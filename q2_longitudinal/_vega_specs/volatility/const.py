@@ -40,6 +40,10 @@ SIG_WIDTH = 'width'  # this is a special signal in vega
 SIG_HEIGHT = 'height'  # this is a special signal in vega
 SIG_CTRL_CHART_WIDTH = 'controlChartWidth'
 SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
+SIG_STATS_CHART_WIDTH = 'statsChartWidth'
+SIG_STATS_CHART_HEIGHT = 'statsChartHeight'
+SIG_STATS_LEFT = 'statsLeft'
+SIG_STATS_RIGHT = 'statsRight'
 
 # STYLES
 ###############################################################################
@@ -55,6 +59,8 @@ DAT_SERIES = 'series'
 DAT_SPAGHETTIS = 'spaghettis'
 DAT_SELECTED = 'selected'
 DAT_AGG_BY = 'aggBy'
+DAT_STATS = 'metricStats'
+DAT_STATS_SCALE = 'statsScale'
 
 # FIELDS
 ###############################################################################
@@ -75,12 +81,16 @@ FLD_CTRL_CI1 = 'ci1'
 FLD_CTRL_EXT = 'ext'
 FLD_GROUP_BY = 'groupByVal'
 FLD_METRIC = 'metricVal'
+FLD_STATS_MIN = 'min'
+FLD_STATS_MAX = 'max'
 
 # SCALES
 ###############################################################################
 SCL_CTRL_X = 'x'
 SCL_CTRL_Y = 'y'
 SCL_CTRL_COLOR = 'color'
+SCL_STATS_X = 'x'
+SCL_STATS_Y = 'y'
 
 # TESTS
 ###############################################################################

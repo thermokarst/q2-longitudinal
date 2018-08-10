@@ -16,10 +16,13 @@ from .const import (
     SIG_CTRL_MEAN_SYMBOL_SIZE, TST_GROUP, SIG_CTRL_SPG_LINE_OPACITY,
     SIG_CTRL_SPG_SYMBOL_SIZE, SIG_CTRL_SPG_LINE_THICKNESS, SIG_GROUP,
     SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS,
-    SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_CTRL_CHART_WIDTH, STY_DASH_A, STY_DASH_B)
+    SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_CTRL_CHART_WIDTH, STY_DASH_A, STY_DASH_B,
+
+    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT
+    )
 
 
-def render_marks_ctrl(yscale):
+def render_marks_ctrl():
     return \
         {'description': 'Control Chart',
          'name': 'controlChart',
@@ -31,6 +34,23 @@ def render_marks_ctrl(yscale):
                  'width': {'signal': SIG_CTRL_CHART_WIDTH},
                  'height': {'signal': SIG_CTRL_CHART_HEIGHT},
                 }},
+         'marks': [],
+         'scales': [],
+         'axes': [],
+         'legends': []}
+
+
+def render_marks_stats(side, x):
+    return \
+        {'description': 'Descriptive Stats (%s)' % side,
+         'name': 'statsChart%s' % side,
+         'type': 'group',
+         'encode': {
+             'enter': {
+                 'x': {'value': x},
+                 'y': {'signal': SIG_CTRL_CHART_HEIGHT, 'offset': 75},
+                 'width': {'signal': SIG_STATS_CHART_WIDTH},
+                 'height': {'signal': SIG_STATS_CHART_HEIGHT}}},
          'marks': [],
          'scales': [],
          'axes': [],

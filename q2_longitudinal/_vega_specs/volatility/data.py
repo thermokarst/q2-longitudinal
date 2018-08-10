@@ -11,7 +11,11 @@ from .const import (
     FLD_CTRL_EXT, DAT_AGG_BY, FLD_CTRL_CI0, FLD_CTRL_CI1, FLD_CTRL_COUNT,
     DAT_SELECTED, FLD_CTRL_MEAN, FLD_CTRL_STDEV, SIG_METRIC, SIG_GROUP,
     FLD_MIN_X, FLD_MAX_X, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL1,
-    FLD_CTRL_CL2)
+    FLD_CTRL_CL2,
+
+    DAT_STATS, DAT_STATS_SCALE, SIG_STATS_LEFT, FLD_STATS_MIN,
+    FLD_STATS_MAX, SIG_STATS_RIGHT
+    )
 
 
 def render_data_ctrl(control_chart_data, state):
@@ -23,6 +27,7 @@ def render_data_ctrl(control_chart_data, state):
               'expr': 'datum[%s]' % SIG_GROUP},
              {'type': 'formula', 'as': FLD_METRIC,
               'expr': 'datum[%s]' % SIG_METRIC}]},
+
         {'name': DAT_GLOBAL_VALS,
          'source': DAT_INDIVIDUAL,
          'transform': [
@@ -46,6 +51,7 @@ def render_data_ctrl(control_chart_data, state):
                                                      FLD_CTRL_STDEV)},
              {'type': 'formula', 'as': FLD_CTRL_EXT,
               'expr': '[datum.%s, datum.%s]' % (FLD_CTRL_CL0, FLD_CTRL_CL3)}]},
+
         {'name': DAT_AGG_BY,
          'source': DAT_INDIVIDUAL,
          'transform': [
@@ -58,6 +64,7 @@ def render_data_ctrl(control_chart_data, state):
               'fields': [FLD_METRIC, FLD_METRIC, FLD_METRIC, FLD_METRIC],
               'as': [FLD_CTRL_MEAN, FLD_CTRL_CI0, FLD_CTRL_CI1,
                      FLD_CTRL_COUNT]}]},
+
         # These are just UI state vars to keep track of what has been clicked
         # in the legend.
         {'name': DAT_SELECTED,
@@ -66,3 +73,21 @@ def render_data_ctrl(control_chart_data, state):
              {'trigger': '!shift', 'remove': True},
              {'trigger': '!shift && clicked', 'insert': 'clicked'},
              {'trigger': 'shift && clicked', 'toggle': 'clicked'}]}]
+
+
+def render_data_stats(metric_stats_chart_data, sides):
+    data = [{'name': DAT_STATS,
+             'values': metric_stats_chart_data.to_dict('record')}]
+
+    for sig, label in sides:
+        data.append(\
+            {'name': '%s%s' % (DAT_STATS_SCALE, label),
+             'source': DAT_STATS,
+             'transform': [
+                 {'type': 'aggregate',
+                  'ops': ['min', 'max'],
+                  'fields': [{'signal': sig},
+                             {'signal': sig}],
+                  'as': [FLD_STATS_MIN, FLD_STATS_MAX]}]})
+
+    return data

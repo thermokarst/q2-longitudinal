@@ -265,11 +265,15 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
     if individual_id_column and individual_id_column not in group_columns:
         group_columns += [individual_id_column]
     metric_columns = list(numeric.columns.keys())
+    # Drop the state column since desc stats are NaN, data needs to remain
+    # in the table though because we need to group on it.
+    metric_columns.remove(state_column)
 
     numeric_table = numeric.to_dataframe()
     metric_stats = _summarize_metric_stats(numeric_table, state_column)
 
-    vega_spec = render_spec_volatility(control_chart_data, metric_stats,
+    vega_spec = render_spec_volatility(control_chart_data,
+                                       metric_stats.reset_index(drop=False),
                                        individual_id_column,
                                        state_column, default_group_column,
                                        group_columns, default_metric,

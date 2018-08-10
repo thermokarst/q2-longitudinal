@@ -10,7 +10,10 @@
 from .const import (
     SIG_CTRL_CHART_WIDTH, DAT_GLOBAL_VALS, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0,
     FLD_CTRL_CL3, DAT_INDIVIDUAL, SIG_CTRL_CHART_HEIGHT, SIG_COLOR_SCHEME,
-    FLD_GROUP_BY, SCL_CTRL_X, SCL_CTRL_Y, SCL_CTRL_COLOR)
+    FLD_GROUP_BY, SCL_CTRL_X, SCL_CTRL_Y, SCL_CTRL_COLOR,
+
+    FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS_CHART_WIDTH, SCL_STATS_X
+    )
 
 
 def render_scales_ctrl(state, yscale):
@@ -46,3 +49,15 @@ def render_scales_ctrl(state, yscale):
          'type': 'ordinal',
          'range': {'scheme': {'signal': SIG_COLOR_SCHEME}},
          'domain': {'data': DAT_INDIVIDUAL, 'field': FLD_GROUP_BY}}]
+
+
+def render_scales_stats(side_signal, side_scale_data):
+    return [
+        {'name': SCL_STATS_X,
+         'domain': {'signal': 'if({0} === "Cumulative Average Change", '
+                              '   [-1, 1], '
+                              '   [data("{1}")[0].{2}, data("{1}")[0].{3}])'
+                              .format(side_signal, side_scale_data,
+                                      FLD_STATS_MIN, FLD_STATS_MAX)},
+         'range': [0, {'signal': SIG_STATS_CHART_WIDTH}],
+         'nice': True}]

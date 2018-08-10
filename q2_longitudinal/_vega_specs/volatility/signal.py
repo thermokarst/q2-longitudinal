@@ -13,7 +13,11 @@ from .const import (
     SIG_CTRL_MEAN_SYMBOL_OPACITY, SIG_CTRL_SPG_LINE_THICKNESS,
     SIG_CTRL_SPG_LINE_OPACITY, SIG_CTRL_SPG_SYMBOL_SIZE,
     SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_SHOW_ERROR_BARS, SIG_METRIC,
-    SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS)
+    SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS,
+
+    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, DAT_STATS, SIG_STATS_LEFT,
+    SIG_STATS_RIGHT
+    )
 
 
 def render_signals_ctrl(default_group, group_columns, default_metric,
@@ -25,6 +29,9 @@ def render_signals_ctrl(default_group, group_columns, default_metric,
                  'update': 'containerSize()[0]'}]},
         {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
         {'name': SIG_CTRL_CHART_WIDTH, 'update': '[0, %s]' % SIG_WIDTH},
+        {'name': SIG_STATS_CHART_HEIGHT,
+         'update': '10 * length(data("%s"))' % DAT_STATS},
+        {'name': SIG_STATS_CHART_WIDTH, 'update': '(%s / 2) - 25' % SIG_WIDTH},
 
         # UI WIDGETS
         {'name': SIG_SHOW_ERROR_BARS, 'value': False,
@@ -89,3 +96,16 @@ def render_signals_ctrl_individual():
         {'name': SIG_CTRL_SPG_SYMBOL_OPACITY, 'value': 0.0,
          'bind': {'input': 'range', 'min': 0.0, 'max': 1.0, 'step': 0.01,
                   'element': '#spaghetti-symbol-opacity'}}]
+
+
+def render_signals_stats(sides):
+    opts = ['Cumulative Average Change', 'Variance', 'Mean', 'Median',
+            'Standard Deviation', 'CV (%)']
+    sigs = []
+    for sig, el in sides:
+        sigs.append(\
+            {'name': sig,
+             'value': 'Cumulative Average Change',
+             'bind': {'input': 'select', 'element': '#metric-stats-%s' % el,
+                      'options': opts}})
+    return sigs

@@ -751,6 +751,8 @@ def _summarize_metric_stats(table, state_md_col):
     # sum increase and decrease across states
     stats = pd.DataFrame(index=table.columns)
     stats.index.name = 'id'
+    # Drop the state column since desc stats are NaN
+    stats.drop(labels=[state_md_col], axis=0, inplace=True)
     stats['Cumulative Avg Decrease'] = first_diffs[first_diffs < 0].sum()
     stats['Cumulative Avg Increase'] = first_diffs[first_diffs > 0].sum()
     # collect other descriptive stats
