@@ -32,6 +32,18 @@
     <div class="row">
       <div class="col-lg-12" id="toolbar"></div>
     </div>
+    <div class="row" style="padding-top:5px;">
+      <div class="col-lg-12">
+        <div class="btn-group">
+          <a class="btn btn-default" href="data.tsv" target="_blank" rel="noopener noreferrer">
+            Export Control Chart as TSV
+          </a>
+          <a class="btn btn-default" href="stats.tsv" target="_blank" rel="noopener noreferrer">
+            Export Descriptive Stats as TSV
+          </a>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-lg-12">
         Click the individual group value labels in the legend to toggle
@@ -110,8 +122,6 @@
     toolbar.children('a').each(function() {
       $(this).addClass('btn btn-default');
     });
-    $('<a href="data.tsv" target="_blank" rel="noopener noreferrer" class="btn btn-default">Export as TSV</a>')
-      .prependTo(toolbar);
     toolbar.appendTo('#toolbar');
 
     // Util to mutate elements in-place

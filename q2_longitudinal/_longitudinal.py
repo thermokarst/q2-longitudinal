@@ -23,7 +23,8 @@ from ._utilities import (_get_group_pairs, _extract_distance_distribution,
                          _regplot_subplots_from_dataframe, _load_metadata,
                          _validate_input_values, _validate_input_columns,
                          _nmit, _validate_is_numeric_column,
-                         _tabulate_matrix_ids, _first_differences)
+                         _tabulate_matrix_ids, _first_differences,
+                         _summarize_metric_stats)
 from ._vega_specs import render_spec_volatility
 
 
@@ -265,7 +266,10 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
         group_columns += [individual_id_column]
     metric_columns = list(numeric.columns.keys())
 
-    vega_spec = render_spec_volatility(control_chart_data,
+    numeric_table = numeric.to_dataframe()
+    metric_stats = _summarize_metric_stats(numeric_table, state_column)
+
+    vega_spec = render_spec_volatility(control_chart_data, metric_stats,
                                        individual_id_column,
                                        state_column, default_group_column,
                                        group_columns, default_metric,
@@ -274,6 +278,7 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
     # Order matters here - need to render the template *after* copying the
     # directory tree, otherwise we will overwrite the index.html
     metadata.save(os.path.join(output_dir, 'data.tsv'))
+    qiime2.Metadata(metric_stats).save(os.path.join(output_dir, 'stats.tsv'))
     copy_tree(os.path.join(TEMPLATES, 'volatility'), output_dir)
     index = os.path.join(TEMPLATES, 'volatility', 'index.html')
     q2templates.render(index, output_dir, context={'vega_spec': vega_spec})

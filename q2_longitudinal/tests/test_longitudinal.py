@@ -25,7 +25,8 @@ from q2_longitudinal._utilities import (
     _multiple_group_difference, _per_method_pairwise_stats,
     _multiple_tests_correction, _add_sample_size_to_xtick_labels,
     _temporal_corr, _temporal_distance, _nmit, _validate_is_numeric_column,
-    _tabulate_matrix_ids, _validate_metadata_is_superset)
+    _tabulate_matrix_ids, _validate_metadata_is_superset,
+    _summarize_metric_stats)
 from q2_longitudinal._longitudinal import (
     pairwise_differences, pairwise_distances, linear_mixed_effects, volatility,
     nmit, first_differences, first_distances)
@@ -700,6 +701,25 @@ class TestLongitudinal(TestPluginBase):
         with self.assertRaisesRegex(ValueError, "Missing samples in metadata"):
             _validate_metadata_is_superset(
                 md[md['Time'] == 1], _tabulate_matrix_ids(dm))
+
+    def test_summarize_metric_stats(self):
+        cheap_md = pd.DataFrame({'time': [1, 1, 2, 2, 3, 3]},
+                                index=['s1', 's2', 's3', 's4', 's5', 's6'])
+        t = pd.concat([cheap_md, tab], axis=1, join='inner')
+        metric_stats = _summarize_metric_stats(t, 'time')
+        exp = pd.DataFrame(
+            [[None, None, 0.8, 2., 2., 0.894427, 44.721360],
+             [0., 0.1, 0.016, 0.5, 0.55, 0.126491106, 25.2982213],
+             [-0.05, 0.05, 0.00666666667, 0.33333333333, 0.35, 0.0816496581,
+              24.4948974],
+             [-0.1, 0., 0.00666666667, 0.166666667, 0.15, 0.0816496581,
+              48.9897949],
+             [0., 1., 0.8, 2., 2., 0.894427, 44.721360]],
+            columns=['Cumulative Avg Decrease',
+                     'Cumulative Avg Increase', 'Variance',
+                     'Mean', 'Median', 'Standard Deviation', 'CV (%)'],
+            index=['time', 'o1', 'o2', 'o3', 'individual_id'])
+        pdt.assert_frame_equal(metric_stats, exp, check_names=False)
 
 
 md = pd.DataFrame([(1, 'a', 0.11, 1), (1, 'a', 0.12, 2), (1, 'a', 0.13, 3),
