@@ -15,8 +15,8 @@ from .const import (
     SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_SHOW_ERROR_BARS, SIG_METRIC,
     SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS,
 
-    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, DAT_STATS, SIG_STATS_LEFT,
-    SIG_STATS_RIGHT
+    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, DAT_STATS, SIG_STATS,
+    VAR_STATS_GAP
     )
 
 
@@ -31,7 +31,8 @@ def render_signals_ctrl(default_group, group_columns, default_metric,
         {'name': SIG_CTRL_CHART_WIDTH, 'update': '[0, %s]' % SIG_WIDTH},
         {'name': SIG_STATS_CHART_HEIGHT,
          'update': '10 * length(data("%s"))' % DAT_STATS},
-        {'name': SIG_STATS_CHART_WIDTH, 'update': '(%s / 2) - 25' % SIG_WIDTH},
+        {'name': SIG_STATS_CHART_WIDTH,
+         'update': '(%s / 2) - %d' % (SIG_WIDTH, VAR_STATS_GAP/2)},
 
         # UI WIDGETS
         {'name': SIG_SHOW_ERROR_BARS, 'value': False,
@@ -102,10 +103,11 @@ def render_signals_stats(sides):
     opts = ['Cumulative Average Change', 'Variance', 'Mean', 'Median',
             'Standard Deviation', 'CV (%)']
     sigs = []
-    for sig, el in sides:
-        sigs.append(\
-            {'name': sig,
+    for side in sides:
+        side = side['name']
+        sigs.append(
+            {'name': '%s%s' % (SIG_STATS, side.title()),
              'value': 'Cumulative Average Change',
-             'bind': {'input': 'select', 'element': '#metric-stats-%s' % el,
+             'bind': {'input': 'select', 'element': '#metric-stats-%s' % side,
                       'options': opts}})
     return sigs

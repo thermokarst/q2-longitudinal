@@ -42,8 +42,7 @@ SIG_CTRL_CHART_WIDTH = 'controlChartWidth'
 SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
 SIG_STATS_CHART_WIDTH = 'statsChartWidth'
 SIG_STATS_CHART_HEIGHT = 'statsChartHeight'
-SIG_STATS_LEFT = 'statsLeft'
-SIG_STATS_RIGHT = 'statsRight'
+SIG_STATS = 'stats'
 
 # STYLES
 ###############################################################################
@@ -97,7 +96,11 @@ SCL_STATS_Y = 'y'
 TST_OPACITY = "!length(data('{0}')) || indata('{0}', 'value', datum.value)".format(DAT_SELECTED)  # noqa: E501
 TST_GROUP = "!length(data('{0}')) || indata('{0}', 'value', datum.{1})".format(DAT_SELECTED, FLD_GROUP_BY)  # noqa: E501
 
-# LEGEND
+# LEGENDS
 ###############################################################################
 LEG_CTRL_SYMBOL = 'legendSymbol'
 LEG_CTRL_LABEL = 'legendLabel'
+
+# VARIABLES
+###############################################################################
+VAR_STATS_GAP = 50  # pixels

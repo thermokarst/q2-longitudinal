@@ -11,7 +11,7 @@ import json
 import pandas as pd
 
 from .const import (
-    SIG_METRIC, SIG_STATS_LEFT, DAT_STATS_SCALE, SIG_STATS_RIGHT,
+    SIG_METRIC, SIG_STATS_CHART_WIDTH, VAR_STATS_GAP
     )
 from .axis import render_axes_ctrl, render_axes_stats
 from .legend import render_legends_ctrl
@@ -22,6 +22,11 @@ from .signal import (
     render_signals_ctrl, render_signals_ctrl_individual, render_signals_stats)
 from .scale import render_scales_ctrl, render_scales_stats
 from .data import render_data_ctrl, render_data_stats
+
+
+SIDES = [{'name': 'left', 'x': {'value': 0}},
+         {'name': 'right', 'x': {'signal': SIG_STATS_CHART_WIDTH,
+                                 'offset': VAR_STATS_GAP}}]
 
 
 def render_subplot_ctrl(yscale, state):
@@ -35,16 +40,13 @@ def render_subplot_ctrl(yscale, state):
 
 
 def render_subplot_stats():
-    stats_chart_left = render_marks_stats('Left', 0)
-    stats_chart_left['scales'] = render_scales_stats(SIG_STATS_LEFT,
-                                                     DAT_STATS_SCALE+'Left')
-    stats_chart_left['axes'] = render_axes_stats(SIG_STATS_LEFT)
-
-    stats_chart_right = render_marks_stats('Right', 500)
-    stats_chart_right['scales'] = render_scales_stats(SIG_STATS_RIGHT,
-                                                      DAT_STATS_SCALE+'Right')
-    stats_chart_right['axes'] = render_axes_stats(SIG_STATS_RIGHT)
-    return [stats_chart_left, stats_chart_right]
+    sides = []
+    for side in SIDES:
+        chart = render_marks_stats(side)
+        chart['scales'] = render_scales_stats(side)
+        chart['axes'] = render_axes_stats(side)
+        sides.append(chart)
+    return sides
 
 
 def render_spec_volatility(control_chart_data: pd.DataFrame,
@@ -69,16 +71,13 @@ def render_spec_volatility(control_chart_data: pd.DataFrame,
         # helpful (e.g. can't `bind` in a subplot signal).
         'signals': render_signals_ctrl(default_group, group_columns,
                                        default_metric, metric_columns) + \
-        render_signals_stats([(SIG_STATS_LEFT, 'left'),
-                              (SIG_STATS_RIGHT, 'right')]),
+        render_signals_stats(SIDES),
         'scales': [],
         'marks': [],
         # Add data at root of plot, it is easier to use the built in view
         # accessor to debug values
         'data': render_data_ctrl(control_chart_data, state) + \
-        render_data_stats(metric_stats_chart_data,
-                          [(SIG_STATS_LEFT, 'Left'),
-                           (SIG_STATS_RIGHT, 'Right')]),
+        render_data_stats(metric_stats_chart_data, SIDES),
     }
 
     ctrl_chart = render_subplot_ctrl(yscale, state)

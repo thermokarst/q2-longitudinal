@@ -13,8 +13,7 @@ from .const import (
     FLD_MIN_X, FLD_MAX_X, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL1,
     FLD_CTRL_CL2,
 
-    DAT_STATS, DAT_STATS_SCALE, SIG_STATS_LEFT, FLD_STATS_MIN,
-    FLD_STATS_MAX, SIG_STATS_RIGHT
+    DAT_STATS, DAT_STATS_SCALE, FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS
     )
 
 
@@ -79,15 +78,16 @@ def render_data_stats(metric_stats_chart_data, sides):
     data = [{'name': DAT_STATS,
              'values': metric_stats_chart_data.to_dict('record')}]
 
-    for sig, label in sides:
-        data.append(\
-            {'name': '%s%s' % (DAT_STATS_SCALE, label),
+    for side in sides:
+        side = side['name'].title()
+        data.append(
+            {'name': '%s%s' % (DAT_STATS_SCALE, side),
              'source': DAT_STATS,
              'transform': [
                  {'type': 'aggregate',
                   'ops': ['min', 'max'],
-                  'fields': [{'signal': sig},
-                             {'signal': sig}],
+                  'fields': [{'signal': '%s%s' % (SIG_STATS, side)},
+                             {'signal': '%s%s' % (SIG_STATS, side)}],
                   'as': [FLD_STATS_MIN, FLD_STATS_MAX]}]})
 
     return data

@@ -6,7 +6,7 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from .const import SCL_CTRL_X, SCL_CTRL_Y, SCL_STATS_X
+from .const import SCL_CTRL_X, SCL_CTRL_Y, SCL_STATS_X, SIG_STATS
 
 
 def render_axes_ctrl(state):
@@ -17,7 +17,7 @@ def render_axes_ctrl(state):
          'title': 'Metric Column'}]
 
 
-def render_axes_stats(side_signal):
+def render_axes_stats(side):
     return [
         {'orient': 'top', 'scale': SCL_STATS_X,
-         'title': {'signal': side_signal}}]
+         'title': {'signal': '%s%s' % (SIG_STATS, side['name'].title())}}]

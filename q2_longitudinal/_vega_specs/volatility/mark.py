@@ -40,14 +40,14 @@ def render_marks_ctrl():
          'legends': []}
 
 
-def render_marks_stats(side, x):
+def render_marks_stats(side):
     return \
-        {'description': 'Descriptive Stats (%s)' % side,
-         'name': 'statsChart%s' % side,
+        {'description': 'Descriptive Stats (%s)' % side['name'],
+         'name': 'statsChart%s' % side['name'].title(),
          'type': 'group',
          'encode': {
              'enter': {
-                 'x': {'value': x},
+                 'x': side['x'],
                  'y': {'signal': SIG_CTRL_CHART_HEIGHT, 'offset': 75},
                  'width': {'signal': SIG_STATS_CHART_WIDTH},
                  'height': {'signal': SIG_STATS_CHART_HEIGHT}}},
