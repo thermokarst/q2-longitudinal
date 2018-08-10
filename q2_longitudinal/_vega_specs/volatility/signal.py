@@ -105,9 +105,41 @@ def render_signals_stats(sides):
     sigs = []
     for side in sides:
         side = side['name']
-        sigs.append(
+        sigs.extend([
             {'name': '%s%s' % (SIG_STATS, side.title()),
              'value': 'Cumulative Average Change',
              'bind': {'input': 'select', 'element': '#metric-stats-%s' % side,
-                      'options': opts}})
+                      'options': opts}},
+             # TODO: clean this
+            {
+            'name': 'feature_sort',
+            'value': 'importance',
+            'bind': {
+                'input': 'select',
+                'element': '#sort-features',
+                'options': [
+                    'importance',
+                    'Cumulative Avg Decrease',
+                    'Cumulative Avg Increase',
+                    'Variance',
+                    'Mean',
+                    'Median',
+                    'Standard Deviation',
+                    'CV (%)',
+                ],
+            },
+        },
+        {
+            'name': 'sort_direction',
+            'value': 'descending',
+            'bind': {
+                'input': 'select',
+                'element': '#sort-direction',
+                'options': [
+                    'ascending',
+                    'descending',
+                ],
+            },
+},
+             ])
     return sigs

@@ -43,6 +43,8 @@ SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
 SIG_STATS_CHART_WIDTH = 'statsChartWidth'
 SIG_STATS_CHART_HEIGHT = 'statsChartHeight'
 SIG_STATS = 'stats'
+SIG_STATS_SORT = 'statsSort'
+SIG_STATS_SORT_DIR = 'statsSortDir'
 
 # STYLES
 ###############################################################################
@@ -82,6 +84,7 @@ FLD_GROUP_BY = 'groupByVal'
 FLD_METRIC = 'metricVal'
 FLD_STATS_MIN = 'min'
 FLD_STATS_MAX = 'max'
+FLD_STATS_ID = 'statsSorter'
 
 # SCALES
 ###############################################################################

@@ -13,7 +13,8 @@ from .const import (
     FLD_GROUP_BY, SCL_CTRL_X, SCL_CTRL_Y, SCL_CTRL_COLOR,
 
     FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS_CHART_WIDTH, SCL_STATS_X,
-    SIG_STATS, DAT_STATS_SCALE
+    SIG_STATS, DAT_STATS_SCALE, SCL_STATS_Y, DAT_STATS, FLD_STATS_ID,
+    SIG_STATS_SORT, SIG_STATS_SORT_DIR, SIG_STATS_CHART_HEIGHT
     )
 
 
@@ -53,6 +54,7 @@ def render_scales_ctrl(state, yscale):
 
 
 def render_scales_stats(side):
+    side = side['name'].title()
     return [
         {'name': SCL_STATS_X,
          'domain': {'signal': 'if({0}{4} === "Cumulative Average Change", '
@@ -60,7 +62,14 @@ def render_scales_stats(side):
                               '   [data("{1}{4}")[0].{2},'
                               '    data("{1}{4}")[0].{3}])'
                               .format(SIG_STATS, DAT_STATS_SCALE,
-                                      FLD_STATS_MIN, FLD_STATS_MAX,
-                                      side['name'].title())},
+                                      FLD_STATS_MIN, FLD_STATS_MAX, side)},
          'range': [0, {'signal': SIG_STATS_CHART_WIDTH}],
-         'nice': True}]
+         'nice': True},
+        {'name': SCL_STATS_Y,
+         'type': 'band',
+         'domain': {
+             'data': DAT_STATS, 'field': FLD_STATS_ID,
+             'sort': {'field': {'signal': '%s%s' % (SIG_STATS_SORT, side)},
+                      'order': {'signal': '%s%s' % (SIG_STATS_SORT_DIR, side)},
+                      'op': 'mean'}},
+         'range': [0, {'signal': SIG_STATS_CHART_HEIGHT}]}]
