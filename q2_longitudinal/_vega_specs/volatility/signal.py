@@ -16,7 +16,7 @@ from .const import (
     SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS,
 
     SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, DAT_STATS, SIG_STATS,
-    VAR_STATS_GAP
+    VAR_STATS_GAP, SIG_STATS_SORT, SIG_STATS_SORT_DIR
     )
 
 
@@ -104,42 +104,26 @@ def render_signals_stats(sides):
             'Standard Deviation', 'CV (%)']
     sigs = []
     for side in sides:
-        side = side['name']
+        side_name = side['name']
+        side_title = side_name.title()
         sigs.extend([
-            {'name': '%s%s' % (SIG_STATS, side.title()),
-             'value': 'Cumulative Average Change',
-             'bind': {'input': 'select', 'element': '#metric-stats-%s' % side,
+            {'name': '%s%s' % (SIG_STATS, side_title),
+             'value': side['sort_field'],
+             'bind': {
+                 'input': 'select', 'element': '#metric-stats-%s' % side_name,
                       'options': opts}},
-             # TODO: clean this
-            {
-            'name': 'feature_sort',
-            'value': 'importance',
-            'bind': {
-                'input': 'select',
-                'element': '#sort-features',
-                'options': [
-                    'importance',
-                    'Cumulative Avg Decrease',
-                    'Cumulative Avg Increase',
-                    'Variance',
-                    'Mean',
-                    'Median',
-                    'Standard Deviation',
-                    'CV (%)',
-                ],
-            },
-        },
-        {
-            'name': 'sort_direction',
-            'value': 'descending',
-            'bind': {
-                'input': 'select',
-                'element': '#sort-direction',
-                'options': [
-                    'ascending',
-                    'descending',
-                ],
-            },
-},
-             ])
+            {'name': '%s%s' % (SIG_STATS_SORT, side_title),
+             'value': side['sort_field'],
+             'bind': {
+                 'input': 'select', 'element': '#sort-stats-%s' % side_name,
+                 # TODO: Fix this list list dupe
+                 'options': ['Cumulative Avg Decrease',
+                             'Cumulative Avg Increase', 'Variance', 'Mean',
+                             'Median', 'Standard Deviation', 'CV (%)']}},
+            {'name': '%s%s' % (SIG_STATS_SORT_DIR, side_title),
+             'value': side['sort_dir'],
+             'bind': {
+                 'input': 'select',
+                 'element': '#sort-stats-dir-%s' % side_name,
+                 'options': ['ascending', 'descending']}}])
     return sigs

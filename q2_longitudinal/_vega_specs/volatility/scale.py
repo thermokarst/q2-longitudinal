@@ -58,7 +58,10 @@ def render_scales_stats(side):
     return [
         {'name': SCL_STATS_X,
          'domain': {'signal': 'if({0}{4} === "Cumulative Average Change", '
-                              '   [-1, 1], '
+                              # Obv hardcoding this range is silly, just
+                              # sticking this here for ECAM demonstration
+                              # for @nbokulich
+                              '   [-1000, 1000], '
                               '   [data("{1}{4}")[0].{2},'
                               '    data("{1}{4}")[0].{3}])'
                               .format(SIG_STATS, DAT_STATS_SCALE,

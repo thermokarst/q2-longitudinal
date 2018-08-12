@@ -17,16 +17,23 @@ from .axis import render_axes_ctrl, render_axes_stats
 from .legend import render_legends_ctrl
 from .mark import (
     render_marks_ctrl, render_marks_stats, render_marks_ctrl_global,
-    render_marks_ctrl_grouped, render_marks_ctrl_individual)
+    render_marks_ctrl_grouped, render_marks_ctrl_individual,
+    render_marks_stats_bars)
 from .signal import (
     render_signals_ctrl, render_signals_ctrl_individual, render_signals_stats)
 from .scale import render_scales_ctrl, render_scales_stats
 from .data import render_data_ctrl, render_data_stats
 
 
-SIDES = [{'name': 'left', 'x': {'value': 0}},
-         {'name': 'right', 'x': {'signal': SIG_STATS_CHART_WIDTH,
-                                 'offset': VAR_STATS_GAP}}]
+SIDES = [
+    {'name': 'left',
+     'x': {'value': 0},
+     'sort_field': 'Mean',
+     'sort_dir': 'descending'},
+    {'name': 'right',
+     'x': {'signal': SIG_STATS_CHART_WIDTH, 'offset': VAR_STATS_GAP},
+     'sort_field': 'Cumulative Average Change',
+     'sort_dir': 'descending'}]
 
 
 def render_subplot_ctrl(yscale, state):
@@ -43,6 +50,7 @@ def render_subplot_stats():
     sides = []
     for side in SIDES:
         chart = render_marks_stats(side)
+        chart['marks'] = render_marks_stats_bars(side)
         chart['scales'] = render_scales_stats(side)
         chart['axes'] = render_axes_stats(side)
         sides.append(chart)

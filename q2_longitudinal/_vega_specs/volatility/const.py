@@ -84,7 +84,7 @@ FLD_GROUP_BY = 'groupByVal'
 FLD_METRIC = 'metricVal'
 FLD_STATS_MIN = 'min'
 FLD_STATS_MAX = 'max'
-FLD_STATS_ID = 'statsSorter'
+FLD_STATS_ID = 'id'
 
 # SCALES
 ###############################################################################

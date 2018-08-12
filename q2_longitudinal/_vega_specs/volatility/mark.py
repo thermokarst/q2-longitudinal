@@ -18,7 +18,8 @@ from .const import (
     SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS,
     SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_CTRL_CHART_WIDTH, STY_DASH_A, STY_DASH_B,
 
-    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT
+    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, SIG_STATS, DAT_STATS,
+    SCL_STATS_X, SCL_STATS_Y, FLD_STATS_ID, SIG_METRIC
     )
 
 
@@ -250,3 +251,26 @@ def render_marks_ctrl_individual(individual_id, state):
                           {'test': TST_GROUP,
                            'signal': SIG_CTRL_SPG_SYMBOL_OPACITY},
                           {'value': 0.0}]}}}]}
+
+
+def render_marks_stats_bars(side):
+    side = side['name'].title()
+    sig = '%s%s' % (SIG_STATS, side)
+    test = '%s === "Cumulative Average Change"' % sig
+    return [
+        {'type': 'rect',
+         'from': {'data': DAT_STATS},
+         'encode': {
+             'enter': {'height': {'scale': SCL_STATS_Y, 'band': 1}},
+             'update': {
+                 'tooltip': {'signal': 'datum'},
+                 'x': [{'test': test, 'scale': SCL_STATS_X,
+                        'field': 'Cumulative Avg Decrease'},
+                       {'scale': SCL_STATS_X, 'value': 0}],
+                 'x2': [{'test': test, 'scale': SCL_STATS_X,
+                         'field': 'Cumulative Avg Increase'},
+                        {'scale': SCL_STATS_X, 'field': {'signal': sig}}],
+                 'y': {'scale': SCL_STATS_Y, 'field': FLD_STATS_ID},
+                 'fill': [{'test': '%s === datum.%s' %
+                           (SIG_METRIC, FLD_STATS_ID), 'value': '#FF0000'},
+                          {'value': '#AAAAAA'}]}}}]

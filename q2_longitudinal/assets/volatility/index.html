@@ -86,9 +86,26 @@
       <div class="col-lg-6" id="spaghetti-symbol-opacity"></div>
     </div>
 
+    <hr>
+
+    <div class="row">
+      <div class="col-lg-6">Left</div>
+      <div class="col-lg-6">Right</div>
+    </div>
+
     <div class="row">
       <div class="col-lg-6" id="metric-stats-left"></div>
       <div class="col-lg-6" id="metric-stats-right"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6" id="sort-stats-left"></div>
+      <div class="col-lg-6" id="sort-stats-right"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6" id="sort-stats-dir-left"></div>
+      <div class="col-lg-6" id="sort-stats-dir-right"></div>
     </div>
 
   </div>
@@ -155,8 +172,12 @@
     cleanupEl('#spaghetti-symbol-size', 'Spaghetti scatter size');
     cleanupEl('#mean-symbol-opacity', 'Mean scatter opacity');
     cleanupEl('#spaghetti-symbol-opacity', 'Spaghetti scatter opacity');
-    cleanupEl('#metric-stats-left', 'Descriptive Statistic (Left)', 'select');
-    cleanupEl('#metric-stats-right', 'Descriptive Statistic (Right)', 'select');
+    cleanupEl('#metric-stats-left', 'Descriptive Statistic', 'select');
+    cleanupEl('#metric-stats-right', 'Descriptive Statistic', 'select');
+    cleanupEl('#sort-stats-left', 'Sort Descriptive Statistic By', 'select');
+    cleanupEl('#sort-stats-right', 'Sort Descriptive Statistic By', 'select');
+    cleanupEl('#sort-stats-dir-left', 'Sort Descriptive Statistic Dir', 'select');
+    cleanupEl('#sort-stats-dir-right', 'Sort Descriptive Statistic Dir', 'select');
   });
 </script>
 {% endblock %}
