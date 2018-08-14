@@ -14,7 +14,7 @@ from .const import (
 
     FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS_CHART_WIDTH, SCL_STATS_X,
     SIG_STATS, DAT_STATS_SCALE, SCL_STATS_Y, DAT_STATS, FLD_STATS_ID,
-    SIG_STATS_SORT, SIG_STATS_SORT_DIR, SIG_STATS_CHART_HEIGHT
+    SIG_STATS_SORT, SIG_STATS_SORT_DIR, SIG_STATS_CHART_HEIGHT, DAT_STATS_C_AVG
     )
 
 
@@ -58,14 +58,12 @@ def render_scales_stats(side):
     return [
         {'name': SCL_STATS_X,
          'domain': {'signal': 'if({0}{4} === "Cumulative Average Change", '
-                              # Obv hardcoding this range is silly, just
-                              # sticking this here for ECAM demonstration
-                              # for @nbokulich
-                              '   [-1000, 1000], '
+                              '   [data("{5}")[0].{2}, data("{5}")[0].{3}],'
                               '   [data("{1}{4}")[0].{2},'
                               '    data("{1}{4}")[0].{3}])'
                               .format(SIG_STATS, DAT_STATS_SCALE,
-                                      FLD_STATS_MIN, FLD_STATS_MAX, side)},
+                                      FLD_STATS_MIN, FLD_STATS_MAX, side,
+                                      DAT_STATS_C_AVG)},
          'range': [0, {'signal': SIG_STATS_CHART_WIDTH}],
          'nice': True},
         {'name': SCL_STATS_Y,

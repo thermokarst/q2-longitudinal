@@ -62,6 +62,7 @@ DAT_SELECTED = 'selected'
 DAT_AGG_BY = 'aggBy'
 DAT_STATS = 'metricStats'
 DAT_STATS_SCALE = 'statsScale'
+DAT_STATS_C_AVG = 'statsCAvgMinMax'
 
 # FIELDS
 ###############################################################################
@@ -85,6 +86,8 @@ FLD_METRIC = 'metricVal'
 FLD_STATS_MIN = 'min'
 FLD_STATS_MAX = 'max'
 FLD_STATS_ID = 'id'
+FLD_STATS_AVG_DEC = 'Cumulative Avg Decrease'
+FLD_STATS_AVG_INC = 'Cumulative Avg Increase'
 
 # SCALES
 ###############################################################################

@@ -13,7 +13,8 @@ from .const import (
     FLD_MIN_X, FLD_MAX_X, FLD_MIN_Y, FLD_MAX_Y, FLD_CTRL_CL0, FLD_CTRL_CL1,
     FLD_CTRL_CL2,
 
-    DAT_STATS, DAT_STATS_SCALE, FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS
+    DAT_STATS, DAT_STATS_SCALE, FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS,
+    DAT_STATS_C_AVG, FLD_STATS_AVG_INC, FLD_STATS_AVG_DEC
     )
 
 
@@ -76,7 +77,17 @@ def render_data_ctrl(control_chart_data, state):
 
 def render_data_stats(metric_stats_chart_data, sides):
     data = [{'name': DAT_STATS,
-             'values': metric_stats_chart_data.to_dict('record')}]
+             'values': metric_stats_chart_data.to_dict('record')},
+            # This gets used to set the initial values for the x-axis extent
+            # when the selected stat is the cumulative average stats.
+            {'name': DAT_STATS_C_AVG,
+             'source': DAT_STATS,
+             'transform': [
+                 {'type': 'aggregate',
+                  'ops': ['min', 'max'],
+                  'fields': [FLD_STATS_AVG_DEC, FLD_STATS_AVG_INC],
+                  'as': [FLD_STATS_MIN, FLD_STATS_MAX]},
+              ]}]
 
     for side in sides:
         side = side['name'].title()
@@ -88,6 +99,7 @@ def render_data_stats(metric_stats_chart_data, sides):
                   'ops': ['min', 'max'],
                   'fields': [{'signal': '%s%s' % (SIG_STATS, side)},
                              {'signal': '%s%s' % (SIG_STATS, side)}],
+                  # These fields will be `undefined` for cumulative avg stats
                   'as': [FLD_STATS_MIN, FLD_STATS_MAX]}]})
 
     return data

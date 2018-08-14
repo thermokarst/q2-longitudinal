@@ -28,6 +28,7 @@ def render_signals_ctrl(default_group, group_columns, default_metric,
          'on': [{'events': {'source': 'window', 'type': 'resize'},
                  'update': 'containerSize()[0]'}]},
         {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
+        # TODO: does this signal need to exist, or can I just inline it?
         {'name': SIG_CTRL_CHART_WIDTH, 'update': '[0, %s]' % SIG_WIDTH},
         {'name': SIG_STATS_CHART_HEIGHT,
          'update': '10 * length(data("%s"))' % DAT_STATS},
@@ -100,6 +101,7 @@ def render_signals_ctrl_individual():
 
 
 def render_signals_stats(sides):
+    # TODO: get this list dynamically
     opts = ['Cumulative Average Change', 'Variance', 'Mean', 'Median',
             'Standard Deviation', 'CV (%)']
     sigs = []
@@ -111,7 +113,7 @@ def render_signals_stats(sides):
              'value': side['sort_field'],
              'bind': {
                  'input': 'select', 'element': '#metric-stats-%s' % side_name,
-                      'options': opts}},
+                 'options': opts}},
             {'name': '%s%s' % (SIG_STATS_SORT, side_title),
              'value': side['sort_field'],
              'bind': {
