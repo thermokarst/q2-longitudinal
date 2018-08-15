@@ -18,7 +18,7 @@ from .const import (
     SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS,
     SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_CTRL_CHART_WIDTH, STY_DASH_A, STY_DASH_B,
 
-    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, SIG_STATS, DAT_MD_STATS,
+    SIG_STATS_CHART_WIDTH, SIG_STATS_MD_CHART_HEIGHT, SIG_STATS, DAT_MD_STATS,
     SCL_STATS_X, SCL_STATS_Y, FLD_STATS_ID, SIG_METRIC
     )
 
@@ -49,9 +49,9 @@ def render_marks_stats(side):
          'encode': {
              'enter': {
                  'x': side['x'],
-                 'y': {'signal': SIG_CTRL_CHART_HEIGHT, 'offset': 75},
+                 'y': side['y'],
                  'width': {'signal': SIG_STATS_CHART_WIDTH},
-                 'height': {'signal': SIG_STATS_CHART_HEIGHT}}},
+                 'height': {'signal': SIG_STATS_MD_CHART_HEIGHT}}},
          'marks': [],
          'scales': [],
          'axes': [],
@@ -254,12 +254,13 @@ def render_marks_ctrl_individual(individual_id, state):
 
 
 def render_marks_stats_bars(side):
+    data = side['data']
     side = side['name'].title()
     sig = '%s%s' % (SIG_STATS, side)
     test = '%s === "Cumulative Average Change"' % sig
     return [
         {'type': 'rect',
-         'from': {'data': DAT_MD_STATS},
+         'from': {'data': data},
          'encode': {
              'enter': {'height': {'scale': SCL_STATS_Y, 'band': 1}},
              'update': {

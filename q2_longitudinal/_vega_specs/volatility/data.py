@@ -14,7 +14,8 @@ from .const import (
     FLD_CTRL_CL2,
 
     DAT_MD_STATS, DAT_MD_STATS_SCALE, FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS,
-    DAT_MD_STATS_C_AVG, FLD_STATS_AVG_INC, FLD_STATS_AVG_DEC
+    DAT_MD_STATS_C_AVG, FLD_STATS_AVG_INC, FLD_STATS_AVG_DEC, DAT_TABLE_STATS,
+    DAT_TABLE_STATS_C_AVG
     )
 
 
@@ -80,6 +81,8 @@ def render_data_stats(metric_stats_chart_data, metric_table_stats_chart_data,
     # TODO: start wiring this up
     data = [{'name': DAT_MD_STATS,
              'values': metric_stats_chart_data.to_dict('record')},
+            {'name': DAT_TABLE_STATS,
+             'values': metric_table_stats_chart_data.to_dict('record')},
             # This gets used to set the initial values for the x-axis extent
             # when the selected stat is the cumulative average stats.
             {'name': DAT_MD_STATS_C_AVG,
@@ -89,12 +92,21 @@ def render_data_stats(metric_stats_chart_data, metric_table_stats_chart_data,
                   'ops': ['min', 'max'],
                   'fields': [FLD_STATS_AVG_DEC, FLD_STATS_AVG_INC],
                   'as': [FLD_STATS_MIN, FLD_STATS_MAX]},
+              ]},
+            {'name': DAT_TABLE_STATS_C_AVG,
+             'source': DAT_TABLE_STATS,
+             'transform': [
+                 {'type': 'aggregate',
+                  'ops': ['min', 'max'],
+                  'fields': [FLD_STATS_AVG_DEC, FLD_STATS_AVG_INC],
+                  'as': [FLD_STATS_MIN, FLD_STATS_MAX]},
               ]}]
 
     for side in sides:
+        data_scale = side['data_scale']
         side = side['name'].title()
         data.append(
-            {'name': '%s%s' % (DAT_MD_STATS_SCALE, side),
+            {'name': '%s%s' % (data_scale, side),
              'source': DAT_MD_STATS,
              'transform': [
                  {'type': 'aggregate',

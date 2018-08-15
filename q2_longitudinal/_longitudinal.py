@@ -273,7 +273,7 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
     if table is not None:
         # TODO: var names
         feature_ids = table.columns.values.tolist()
-        numeric_table_table = numeric_table[feature_ids]
+        numeric_table_table = numeric_table[feature_ids + [state_column]]
         numeric_cols = numeric_table.columns.values.tolist()
         numeric_ids = [c for c in numeric_cols if c not in feature_ids]
         numeric_md_table = numeric_table[numeric_ids]
@@ -296,7 +296,8 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
     # directory tree, otherwise we will overwrite the index.html
     metadata.save(os.path.join(output_dir, 'data.tsv'))
     # TODO: save table (should I join the two?)
-    # qiime2.Metadata(metric_md_stats).save(os.path.join(output_dir, 'stats.tsv'))
+    # qiime2.Metadata(metric_md_stats).save(os.path.join(output_dir,
+    #                                                    'stats.tsv'))
     copy_tree(os.path.join(TEMPLATES, 'volatility'), output_dir)
     index = os.path.join(TEMPLATES, 'volatility', 'index.html')
     q2templates.render(index, output_dir, context={'vega_spec': vega_spec})

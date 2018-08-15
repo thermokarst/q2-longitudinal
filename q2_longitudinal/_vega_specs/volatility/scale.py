@@ -14,7 +14,8 @@ from .const import (
 
     FLD_STATS_MIN, FLD_STATS_MAX, SIG_STATS_CHART_WIDTH, SCL_STATS_X,
     SIG_STATS, DAT_MD_STATS_SCALE, SCL_STATS_Y, DAT_MD_STATS, FLD_STATS_ID,
-    SIG_STATS_SORT, SIG_STATS_SORT_DIR, SIG_STATS_CHART_HEIGHT, DAT_MD_STATS_C_AVG
+    SIG_STATS_SORT, SIG_STATS_SORT_DIR, SIG_STATS_MD_CHART_HEIGHT,
+    DAT_MD_STATS_C_AVG
     )
 
 
@@ -54,23 +55,23 @@ def render_scales_ctrl(state, yscale):
 
 
 def render_scales_stats(side):
-    side = side['name'].title()
+    name = side['name'].title()
     return [
         {'name': SCL_STATS_X,
-         'domain': {'signal': 'if({0}{4} === "Cumulative Average Change", '
-                              '   [data("{5}")[0].{2}, data("{5}")[0].{3}],'
-                              '   [data("{1}{4}")[0].{2},'
-                              '    data("{1}{4}")[0].{3}])'
-                              .format(SIG_STATS, DAT_MD_STATS_SCALE,
-                                      FLD_STATS_MIN, FLD_STATS_MAX, side,
-                                      DAT_MD_STATS_C_AVG)},
+         'domain': {'signal': 'if({2}{5} === "Cumulative Average Change", '
+                              '   [data("{4}")[0].{2}, data("{4}")[0].{3}],'
+                              '   [data("{1}{5}")[0].{2},'
+                              '    data("{1}{5}")[0].{3}])'
+                              .format(SIG_STATS, side['data_scale'],
+                                      FLD_STATS_MIN, FLD_STATS_MAX,
+                                      DAT_MD_STATS_C_AVG, name)},
          'range': [0, {'signal': SIG_STATS_CHART_WIDTH}],
          'nice': True},
         {'name': SCL_STATS_Y,
          'type': 'band',
          'domain': {
              'data': DAT_MD_STATS, 'field': FLD_STATS_ID,
-             'sort': {'field': {'signal': '%s%s' % (SIG_STATS_SORT, side)},
-                      'order': {'signal': '%s%s' % (SIG_STATS_SORT_DIR, side)},
+             'sort': {'field': {'signal': '%s%s' % (SIG_STATS_SORT, name)},
+                      'order': {'signal': '%s%s' % (SIG_STATS_SORT_DIR, name)},
                       'op': 'mean'}},
-         'range': [0, {'signal': SIG_STATS_CHART_HEIGHT}]}]
+         'range': [0, {'signal': SIG_STATS_MD_CHART_HEIGHT}]}]

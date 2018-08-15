@@ -15,8 +15,9 @@ from .const import (
     SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_SHOW_ERROR_BARS, SIG_METRIC,
     SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS,
 
-    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, DAT_MD_STATS, SIG_STATS,
-    VAR_STATS_GAP, SIG_STATS_SORT, SIG_STATS_SORT_DIR
+    SIG_STATS_CHART_WIDTH, SIG_STATS_MD_CHART_HEIGHT, DAT_MD_STATS, SIG_STATS,
+    VAR_STATS_GAP, SIG_STATS_SORT, SIG_STATS_SORT_DIR,
+    SIG_STATS_TABLE_CHART_HEIGHT, SIG_STATS_TABLE_CHART_OFFSET, DAT_TABLE_STATS
     )
 
 
@@ -30,10 +31,15 @@ def render_signals_ctrl(default_group, group_columns, default_metric,
         {'name': SIG_CTRL_CHART_HEIGHT, 'value': 400},
         # TODO: does this signal need to exist, or can I just inline it?
         {'name': SIG_CTRL_CHART_WIDTH, 'update': '[0, %s]' % SIG_WIDTH},
-        {'name': SIG_STATS_CHART_HEIGHT,
+        {'name': SIG_STATS_MD_CHART_HEIGHT,
          'update': '10 * length(data("%s"))' % DAT_MD_STATS},
         {'name': SIG_STATS_CHART_WIDTH,
          'update': '(%s / 2) - %d' % (SIG_WIDTH, VAR_STATS_GAP/2)},
+        {'name': SIG_STATS_TABLE_CHART_HEIGHT,
+         'update': '10 * length(data("%s"))' % DAT_TABLE_STATS},
+        {'name': SIG_STATS_TABLE_CHART_OFFSET,
+         'update': '%s + %s' % (SIG_CTRL_CHART_HEIGHT,
+                                SIG_STATS_MD_CHART_HEIGHT)},
 
         # UI WIDGETS
         {'name': SIG_SHOW_ERROR_BARS, 'value': False,

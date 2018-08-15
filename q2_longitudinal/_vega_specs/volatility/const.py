@@ -41,7 +41,9 @@ SIG_HEIGHT = 'height'  # this is a special signal in vega
 SIG_CTRL_CHART_WIDTH = 'controlChartWidth'
 SIG_CTRL_CHART_HEIGHT = 'controlChartHeight'
 SIG_STATS_CHART_WIDTH = 'statsChartWidth'
-SIG_STATS_CHART_HEIGHT = 'statsChartHeight'
+SIG_STATS_MD_CHART_HEIGHT = 'statsChartMDHeight'
+SIG_STATS_TABLE_CHART_HEIGHT = 'statsChartTableHeight'
+SIG_STATS_TABLE_CHART_OFFSET = 'statsChartTableOffset'
 SIG_STATS = 'stats'
 SIG_STATS_SORT = 'statsSort'
 SIG_STATS_SORT_DIR = 'statsSortDir'
@@ -61,8 +63,11 @@ DAT_SPAGHETTIS = 'spaghettis'
 DAT_SELECTED = 'selected'
 DAT_AGG_BY = 'aggBy'
 DAT_MD_STATS = 'metricMDStats'
+DAT_TABLE_STATS = 'metricTableStats'
 DAT_MD_STATS_SCALE = 'statsMDScale'
+DAT_TABLE_STATS_SCALE = 'statsTableScale'
 DAT_MD_STATS_C_AVG = 'statsMDCumulAvgMinMax'
+DAT_TABLE_STATS_C_AVG = 'statsTableCumulAvgMinMax'
 
 # FIELDS
 ###############################################################################

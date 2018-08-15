@@ -10,8 +10,11 @@ import json
 
 import pandas as pd
 
+# TODO: Sort
 from .const import (
-    SIG_METRIC, SIG_STATS_CHART_WIDTH, VAR_STATS_GAP
+    SIG_METRIC, SIG_STATS_CHART_WIDTH, VAR_STATS_GAP, SIG_CTRL_CHART_HEIGHT,
+    SIG_STATS_TABLE_CHART_OFFSET, DAT_MD_STATS, DAT_TABLE_STATS,
+    DAT_MD_STATS_C_AVG, DAT_TABLE_STATS_C_AVG
     )
 from .axis import render_axes_ctrl, render_axes_stats
 from .legend import render_legends_ctrl
@@ -26,13 +29,27 @@ from .data import render_data_ctrl, render_data_stats
 
 
 SIDES = [
-    {'name': 'left',
+    {'name': 'leftMD',
      'x': {'value': 0},
+     'y': {'signal': SIG_CTRL_CHART_HEIGHT, 'offset': 75},
+     'data': DAT_MD_STATS,
+     'data_scale': DAT_MD_STATS_C_AVG,
      'sort_field': 'Mean',
      'sort_dir': 'descending'},
-    {'name': 'right',
+    {'name': 'rightMD',
      'x': {'signal': SIG_STATS_CHART_WIDTH, 'offset': VAR_STATS_GAP},
+     'y': {'signal': SIG_CTRL_CHART_HEIGHT, 'offset': 75},
+     'data': DAT_MD_STATS,
+     'data_scale': DAT_MD_STATS_C_AVG,
      'sort_field': 'Cumulative Average Change',
+     'sort_dir': 'descending'},
+    # TODO: add these subplots only if data is present
+    {'name': 'leftTable',
+     'x': {'value': 0},
+     'y': {'signal': SIG_STATS_TABLE_CHART_OFFSET, 'offset': 125},
+     'data': DAT_TABLE_STATS,
+     'data_scale': DAT_TABLE_STATS_C_AVG,
+     'sort_field': 'Mean',
      'sort_dir': 'descending'}]
 
 
@@ -87,7 +104,7 @@ def render_spec_volatility(control_chart_data: pd.DataFrame,
         # accessor to debug values
         'data': render_data_ctrl(control_chart_data, state) + \
         render_data_stats(metric_md_stats_chart_data,
-            metric_table_stats_chart_data, SIDES),
+                          metric_table_stats_chart_data, SIDES),
     }
 
     ctrl_chart = render_subplot_ctrl(yscale, state)
