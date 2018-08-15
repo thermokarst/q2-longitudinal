@@ -58,7 +58,8 @@ def render_subplot_stats():
 
 
 def render_spec_volatility(control_chart_data: pd.DataFrame,
-                           metric_stats_chart_data: pd.DataFrame,
+                           metric_md_stats_chart_data: pd.DataFrame,
+                           metric_table_stats_chart_data: pd.DataFrame,
                            individual_id: str, state: str,
                            default_group: str, group_columns: list,
                            default_metric: str, metric_columns: list,
@@ -85,7 +86,8 @@ def render_spec_volatility(control_chart_data: pd.DataFrame,
         # Add data at root of plot, it is easier to use the built in view
         # accessor to debug values
         'data': render_data_ctrl(control_chart_data, state) + \
-        render_data_stats(metric_stats_chart_data, SIDES),
+        render_data_stats(metric_md_stats_chart_data,
+            metric_table_stats_chart_data, SIDES),
     }
 
     ctrl_chart = render_subplot_ctrl(yscale, state)

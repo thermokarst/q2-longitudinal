@@ -18,7 +18,7 @@ from .const import (
     SIG_CTRL_SPG_SYMBOL_OPACITY, FLD_CTRL_COUNT, SIG_SHOW_ERROR_BARS,
     SIG_SHOW_GLOBAL_CTRL_LIMS, SIG_CTRL_CHART_WIDTH, STY_DASH_A, STY_DASH_B,
 
-    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, SIG_STATS, DAT_STATS,
+    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, SIG_STATS, DAT_MD_STATS,
     SCL_STATS_X, SCL_STATS_Y, FLD_STATS_ID, SIG_METRIC
     )
 
@@ -259,7 +259,7 @@ def render_marks_stats_bars(side):
     test = '%s === "Cumulative Average Change"' % sig
     return [
         {'type': 'rect',
-         'from': {'data': DAT_STATS},
+         'from': {'data': DAT_MD_STATS},
          'encode': {
              'enter': {'height': {'scale': SCL_STATS_Y, 'band': 1}},
              'update': {

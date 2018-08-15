@@ -15,7 +15,7 @@ from .const import (
     SIG_CTRL_SPG_SYMBOL_OPACITY, SIG_WIDTH, SIG_SHOW_ERROR_BARS, SIG_METRIC,
     SIG_GROUP, SIG_SHOW_GLOBAL_MEAN, SIG_SHOW_GLOBAL_CTRL_LIMS,
 
-    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, DAT_STATS, SIG_STATS,
+    SIG_STATS_CHART_WIDTH, SIG_STATS_CHART_HEIGHT, DAT_MD_STATS, SIG_STATS,
     VAR_STATS_GAP, SIG_STATS_SORT, SIG_STATS_SORT_DIR
     )
 
@@ -31,7 +31,7 @@ def render_signals_ctrl(default_group, group_columns, default_metric,
         # TODO: does this signal need to exist, or can I just inline it?
         {'name': SIG_CTRL_CHART_WIDTH, 'update': '[0, %s]' % SIG_WIDTH},
         {'name': SIG_STATS_CHART_HEIGHT,
-         'update': '10 * length(data("%s"))' % DAT_STATS},
+         'update': '10 * length(data("%s"))' % DAT_MD_STATS},
         {'name': SIG_STATS_CHART_WIDTH,
          'update': '(%s / 2) - %d' % (SIG_WIDTH, VAR_STATS_GAP/2)},
 

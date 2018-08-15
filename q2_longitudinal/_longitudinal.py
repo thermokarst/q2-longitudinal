@@ -270,19 +270,33 @@ def volatility(output_dir: str, metadata: qiime2.Metadata,
     metric_columns.remove(state_column)
 
     numeric_table = numeric.to_dataframe()
-    metric_stats = _summarize_metric_stats(numeric_table, state_column)
+    if table is not None:
+        # TODO: var names
+        feature_ids = table.columns.values.tolist()
+        numeric_table_table = numeric_table[feature_ids]
+        numeric_cols = numeric_table.columns.values.tolist()
+        numeric_ids = [c for c in numeric_cols if c not in feature_ids]
+        numeric_md_table = numeric_table[numeric_ids]
+        metric_table_stats = _summarize_metric_stats(
+            numeric_table_table, state_column).reset_index(drop=False)
+    else:
+        metric_table_stats = None
+        numeric_md_table = numeric_table
 
-    vega_spec = render_spec_volatility(control_chart_data,
-                                       metric_stats.reset_index(drop=False),
-                                       individual_id_column,
-                                       state_column, default_group_column,
-                                       group_columns, default_metric,
-                                       metric_columns, yscale)
+    metric_md_stats = _summarize_metric_stats(
+        numeric_md_table, state_column).reset_index(drop=False)
+
+    vega_spec = render_spec_volatility(control_chart_data, metric_md_stats,
+                                       metric_table_stats,
+                                       individual_id_column, state_column,
+                                       default_group_column, group_columns,
+                                       default_metric, metric_columns, yscale)
 
     # Order matters here - need to render the template *after* copying the
     # directory tree, otherwise we will overwrite the index.html
     metadata.save(os.path.join(output_dir, 'data.tsv'))
-    qiime2.Metadata(metric_stats).save(os.path.join(output_dir, 'stats.tsv'))
+    # TODO: save table (should I join the two?)
+    # qiime2.Metadata(metric_md_stats).save(os.path.join(output_dir, 'stats.tsv'))
     copy_tree(os.path.join(TEMPLATES, 'volatility'), output_dir)
     index = os.path.join(TEMPLATES, 'volatility', 'index.html')
     q2templates.render(index, output_dir, context={'vega_spec': vega_spec})
