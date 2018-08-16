@@ -58,7 +58,7 @@ def render_scales_stats(side):
     name = side['name'].title()
     return [
         {'name': SCL_STATS_X,
-         'domain': {'signal': 'if({2}{5} === "Cumulative Average Change", '
+         'domain': {'signal': 'if({0}{5} === "Cumulative Average Change", '
                               '   [data("{4}")[0].{2}, data("{4}")[0].{3}],'
                               '   [data("{1}{5}")[0].{2},'
                               '    data("{1}{5}")[0].{3}])'
@@ -71,7 +71,8 @@ def render_scales_stats(side):
          'type': 'band',
          'domain': {
              'data': DAT_MD_STATS, 'field': FLD_STATS_ID,
-             'sort': {'field': {'signal': '%s%s' % (SIG_STATS_SORT, name)},
-                      'order': {'signal': '%s%s' % (SIG_STATS_SORT_DIR, name)},
-                      'op': 'mean'}},
+             # 'sort': {'field': {'signal': '%s%s' % (SIG_STATS_SORT, name)},
+             #          'order': {'signal': '%s%s' % (SIG_STATS_SORT_DIR, name)},
+             #          'op': 'mean'}},
+             },
          'range': [0, {'signal': SIG_STATS_MD_CHART_HEIGHT}]}]

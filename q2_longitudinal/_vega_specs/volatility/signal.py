@@ -119,19 +119,19 @@ def render_signals_stats(sides):
              'value': side['sort_field'],
              'bind': {
                  'input': 'select', 'element': '#metric-stats-%s' % side_name,
-                 'options': opts}},
-            {'name': '%s%s' % (SIG_STATS_SORT, side_title),
-             'value': side['sort_field'],
-             'bind': {
-                 'input': 'select', 'element': '#sort-stats-%s' % side_name,
-                 # TODO: Fix this list list dupe
-                 'options': ['Cumulative Avg Decrease',
-                             'Cumulative Avg Increase', 'Variance', 'Mean',
-                             'Median', 'Standard Deviation', 'CV (%)']}},
-            {'name': '%s%s' % (SIG_STATS_SORT_DIR, side_title),
-             'value': side['sort_dir'],
-             'bind': {
-                 'input': 'select',
-                 'element': '#sort-stats-dir-%s' % side_name,
-                 'options': ['ascending', 'descending']}}])
+                 'options': opts}}])
+            # {'name': '%s%s' % (SIG_STATS_SORT, side_title),
+            #  'value': side['sort_field'],
+            #  'bind': {
+            #      'input': 'select', 'element': '#sort-stats-%s' % side_name,
+            #      # TODO: Fix this list list dupe
+            #      'options': ['Cumulative Avg Decrease',
+            #                  'Cumulative Avg Increase', 'Variance', 'Mean',
+            #                  'Median', 'Standard Deviation', 'CV (%)']}},
+            # {'name': '%s%s' % (SIG_STATS_SORT_DIR, side_title),
+            #  'value': side['sort_dir'],
+            #  'bind': {
+            #      'input': 'select',
+            #      'element': '#sort-stats-dir-%s' % side_name,
+            #      'options': ['ascending', 'descending']}}])
     return sigs

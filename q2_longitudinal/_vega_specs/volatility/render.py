@@ -42,14 +42,6 @@ SIDES = [
      'data': DAT_MD_STATS,
      'data_scale': DAT_MD_STATS_C_AVG,
      'sort_field': 'Cumulative Average Change',
-     'sort_dir': 'descending'},
-    # TODO: add these subplots only if data is present
-    {'name': 'leftTable',
-     'x': {'value': 0},
-     'y': {'signal': SIG_STATS_TABLE_CHART_OFFSET, 'offset': 125},
-     'data': DAT_TABLE_STATS,
-     'data_scale': DAT_TABLE_STATS_C_AVG,
-     'sort_field': 'Mean',
      'sort_dir': 'descending'}]
 
 
